@@ -1,0 +1,49 @@
+# =============== #
+# Android Project #
+# =============== #
+
+# Gradle files
+.gradle/
+build/
+
+# Local configuration file (SDK 路徑)
+local.properties
+
+# IntelliJ / Android Studio
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Generated files
+gen/
+out/
+
+# Logs
+*.log
+
+# OS system files
+.DS_Store
+Thumbs.db
+
+# Keystore files
+*.jks
+*.keystore
+
+# Android specific
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Google Services
+google-services.json
+
+# Other caches
+*.class
+*.apk
+*.ap_
+*.dex
+
+# Gradle cache
+.gradle/
+
