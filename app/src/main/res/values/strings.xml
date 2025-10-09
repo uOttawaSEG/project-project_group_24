@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">RegisterActivity</string>
+    <string name="select_program">Select your program</string>
+    <string-array name="programs_array">
+        <item>@string/select_program</item>
+        <item>Computer Science</item>
+        <item>Software Engineering</item>
+        <item>Information Technology</item>
+        <item>Electrical Engineering</item>
+    </string-array>
+</resources>
