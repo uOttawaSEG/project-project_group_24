@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -10,9 +11,8 @@
         android:orientation="vertical">
 
         <TextView
+            android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/registerTitle"
             android:text="Tutor Registration"
             android:textSize="22sp"
             android:textStyle="bold"
@@ -20,91 +20,114 @@
 
         <!-- First Name -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tutorFirstNameLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="First Name">
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tutorFirstName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/editFirstName"
                 android:inputType="textPersonName" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Last Name -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tutorLastNameLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Last Name">
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tutorLastName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/editLastName"
                 android:inputType="textPersonName" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Email -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tutorEmailLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email">
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tutorEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/editEmail"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Password -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tutorPasswordLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"
             app:passwordToggleEnabled="true">
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tutorPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/editPassword"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Phone -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tutorPhoneLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Phone Number">
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tutorPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/editPhone"
                 android:inputType="phone" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!--Highest Degree-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
+        <!-- Highest Degree -->
+        <TextView
+            android:text="Highest Degree"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Highest degree">
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/editDegree"
-                android:inputType="textShortMessage" />
-        </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginTop="8dp" />
 
-        <!-- Program -->
         <Spinner
-            android:id="@+id/spinnerProgram"
+            android:id="@+id/spinnerDegree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Courses Offered -->
+        <TextView
+            android:text="Courses Offered"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
+
+        <CheckBox
+            android:id="@+id/checkCourse1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:spinnerMode="dropdown"/>
+            android:text="ITI1121 - Introduction to Computer Science II" />
 
+        <CheckBox
+            android:id="@+id/checkCourse2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CSI2110 - Data Structures and Algorithms" />
+
+        <CheckBox
+            android:id="@+id/checkCourse3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ELG2138 - Digital Systems" />
 
         <!-- Register Button -->
         <Button
-            android:id="@+id/btnRegister"
+            android:id="@+id/btnTutorRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Register"
+            android:text="Register as Tutor"
             android:layout_marginTop="16dp" />
+
     </LinearLayout>
 </ScrollView>

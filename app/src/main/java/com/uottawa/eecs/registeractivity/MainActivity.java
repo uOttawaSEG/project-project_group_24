@@ -1,24 +1,32 @@
 package com.uottawa.eecs.registeractivity;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.activity.EdgeToEdge;
+import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Button btnStudent, btnTutor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        btnStudent = findViewById(R.id.btnStudent);
+        btnTutor = findViewById(R.id.btnTutor);
+
+        // 跳到學生註冊
+        btnStudent.setOnClickListener(v -> {
+            Intent i = new Intent(MainActivity.this, RegisterActivity.class);
+            startActivity(i);
+        });
+
+        // 跳到導師註冊
+        btnTutor.setOnClickListener(v -> {
+            Intent i = new Intent(MainActivity.this, TutorRegisterActivity.class);
+            startActivity(i);
         });
     }
 }
