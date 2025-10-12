@@ -1,6 +1,6 @@
 public class Course
 {
-    static int coursecount;
+    static int coursecount = 1;
     Student[] slots;
     final long id = coursecount;
     final Tutor tutor;
