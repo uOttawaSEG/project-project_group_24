@@ -62,7 +62,7 @@ public class FirebaseManager implements FirebaseCallback{
 
 
     public void addCourse(Course course, FirebaseCallback callback) {
-        String courseId = course.getCourseId();
+        String courseId = course.id;
 
         db.collection("courses")
                 .document(courseId)
@@ -80,9 +80,9 @@ public class FirebaseManager implements FirebaseCallback{
         Map<String, Object> map = new HashMap<>();
         map.put("firstName", tutor.getFirstName());
         map.put("lastName", tutor.getLastName());
-        map.put("email", tutor.getEmail());
         map.put("degree", tutor.getDegree());
-        map.put("courses", tutor.getCourses());
+        map.put("courses", tutor.courses);
+        map.put("phoneNumber", tutor.getPhoneNumber());
         return map;
     }
 
@@ -90,9 +90,8 @@ public class FirebaseManager implements FirebaseCallback{
     private Map<String, Object> toMap(Course course) {
         Map<String, Object> map = new HashMap<>();
 
-        map.put("id", course.getCourseId());
-        map.put("tutor", course.getTutor());
-        map.put("slots", course.getSlots());
+\        map.put("tutor", course.tutor);
+        map.put("slots", course.slots);
 
         return map;
     }
@@ -102,7 +101,6 @@ public class FirebaseManager implements FirebaseCallback{
         Map<String, Object> map = new HashMap<>();
         map.put("firstName", student.getFirstName());
         map.put("lastName", student.getLastName());
-        map.put("email", student.getEmail());
         map.put("program", student.getProgram());
         return map;
     }
@@ -173,10 +171,12 @@ public class FirebaseManager implements FirebaseCallback{
 
         String firstName = (String) data.get("firstName");
         String lastName = (String) data.get("lastName");
-        String email = (String) data.get("email");
+        String email = (String) data.get("id");
         String program = (String) data.get("program");
+        String phoneNumber = (String) data.get("phoneNumber");
         Student student = new Student(email, null);
         student.setProgram(program);
+        student.phoneNumber = phoneNumber;
         student.firstName = firstName;
         student.lastName = lastName;
         return student;
@@ -185,8 +185,9 @@ public class FirebaseManager implements FirebaseCallback{
     private Tutor convertToTutorObject(Map<String, Object> data) {
         String firstName = (String) data.get("firstName");
         String lastName = (String) data.get("lastName");
-        String email = (String) data.get("email");
+        String email = (String) data.get("id");
         String degree = (String) data.get("degree");
+        String phoneNumber = (String) data.get("phoneNumber");
 
         @SuppressWarnings("unchecked")
         ArrayList<String> coursesList =(ArrayList<String>) data.get("courses");
@@ -195,9 +196,10 @@ public class FirebaseManager implements FirebaseCallback{
         Tutor tutor = new Tutor(email, null);
 
         tutor.firstName = firstName;
+        tutor.phoneNumber = phoneNumber;
         tutor.lastName = lastName;
         tutor.courses = courses;
-        tutor.degree = degree;
+        tutor.setDegree(degree);
 
         return tutor;
     }
