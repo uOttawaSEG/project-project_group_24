@@ -19,10 +19,12 @@ android {
 dependencies {
     // Firebase BoM ensures compatible versions
     implementation(platform("com.google.firebase:firebase-bom:34.3.0"))
-
+    implementation("com.google.firebase:firebase-firestore")
     // Add Firebase products you want
     implementation("com.google.firebase:firebase-analytics")    // optional
     implementation("com.google.firebase:firebase-database-ktx") // Realtime Database
     implementation("com.google.firebase:firebase-auth-ktx")     // optional Auth
     implementation("com.google.firebase:firebase-firestore-ktx") // optional Firestore
 }
+
+apply plugin: 'com.google.gms.google-services'
