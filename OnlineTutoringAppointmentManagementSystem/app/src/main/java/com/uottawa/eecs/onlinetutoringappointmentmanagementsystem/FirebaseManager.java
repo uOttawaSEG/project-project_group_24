@@ -91,7 +91,7 @@ public class FirebaseManager implements FirebaseCallback{
     private Map<String, Object> toMap(Course course) {
         Map<String, Object> map = new HashMap<>();
 
-\        map.put("tutor", course.tutor);
+        map.put("tutor", course.tutor);
         map.put("slots", course.slots);
 
         return map;
