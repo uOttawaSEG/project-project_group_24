@@ -1,3 +1,4 @@
+package com.uottawa.eecs.onlinetutoringappointmentmanagementsystem;
 public class Course
 {
     static int coursecount = 1;
