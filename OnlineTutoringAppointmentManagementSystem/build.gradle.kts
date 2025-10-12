@@ -1,30 +1,5 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    id("com.android.application") version "8.13.0"
+    id("com.android.application") version "8.13.0" apply false
     id("com.google.gms.google-services") version "4.4.4" apply false
 }
-
-android {
-    namespace = "com.uottawa.eecs.onlinetutoringappointmentmanagementsystem"
-    compileSdk = 34 // your compile SDK
-    defaultConfig {
-        applicationId = "com.example.tutorstudent" // your package name
-        minSdk = 21
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
-    }
-}
-
-dependencies {
-    // Firebase BoM ensures compatible versions
-    implementation(platform("com.google.firebase:firebase-bom:34.3.0"))
-    implementation("com.google.firebase:firebase-firestore")
-    // Add Firebase products you want
-    implementation("com.google.firebase:firebase-analytics")    // optional
-    implementation("com.google.firebase:firebase-database-ktx") // Realtime Database
-    implementation("com.google.firebase:firebase-auth-ktx")     // optional Auth
-    implementation("com.google.firebase:firebase-firestore-ktx") // optional Firestore
-}
-
-apply(plugin = "com.google.gms.google-services")

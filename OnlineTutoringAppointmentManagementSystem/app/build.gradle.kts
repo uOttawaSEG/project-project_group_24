@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
-    id("com.google.gms.google-services") version "4.4.4" apply false
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -46,8 +46,8 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     // Add Firebase products you want
     implementation("com.google.firebase:firebase-analytics")    // optional
-    implementation("com.google.firebase:firebase-database-ktx") // Realtime Database
-    implementation("com.google.firebase:firebase-auth-ktx")     // optional Auth
-    implementation("com.google.firebase:firebase-firestore-ktx") // optional Firestore
+    implementation("com.google.firebase:firebase-database") // Realtime Database
+    implementation("com.google.firebase:firebase-auth")     // optional Auth
 }
-apply plugin: 'com.google.gms.google-services'
+
+//apply(plugin = "com.google.gms.google-services")
