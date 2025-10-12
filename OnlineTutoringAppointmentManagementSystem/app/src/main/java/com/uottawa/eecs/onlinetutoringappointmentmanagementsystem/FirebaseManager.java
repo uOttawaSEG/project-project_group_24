@@ -66,7 +66,7 @@ public class FirebaseManager{
         long courseId = course.id;
 
         db.collection("courses")
-                .document(courseId)
+                .document(String.valueOf(courseId))
                 .set(toMap(course))
                 .addOnSuccessListener(aVoid -> callback.onSuccess())
                 .addOnFailureListener(e -> callback.onFailure(
