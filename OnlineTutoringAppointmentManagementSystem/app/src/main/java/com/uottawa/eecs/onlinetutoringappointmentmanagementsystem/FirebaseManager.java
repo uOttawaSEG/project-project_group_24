@@ -5,8 +5,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
 
-public class FirebaseManager implements FirebaseCallBack{
+public class FirebaseManager implements FirebaseCallback{
     private FirebaseAuth auth;
     private FirebaseFirestore db;
 
@@ -31,10 +32,9 @@ public class FirebaseManager implements FirebaseCallBack{
         auth.createUserWithEmailAndPassword(student.getEmail(), password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        // 2. Write non-sensitive profile data to the 'students' collection
-                        db.collection("students") // <--- Changed to plural for best practice
+                        db.collection("student")
                                 .document(student.getEmail())
-                                .set(toMap(student)) // <--- toMap must NOT include the password
+                                .set(toMap(student))
                                 .addOnSuccessListener(aVoid -> callback.onSuccess())
                                 .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
                     } else {
@@ -43,13 +43,13 @@ public class FirebaseManager implements FirebaseCallBack{
                 });
     }
 
-    public void registerTutor(Student student,FirebaseCallback callback) {
-        auth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword())
+    public void registerTutor(Tutor tutor,String password,FirebaseCallback callback) {
+        auth.createUserWithEmailAndPassword(tutor.getEmail(), password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         db.collection("tutor")
-                                .document(user.getEmail())
-                                .set(toMap(user))
+                                .document(tutor.getEmail())
+                                .set(toMap(tutor))
                                 .addOnSuccessListener(aVoid -> callback.onSuccess())
                                 .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
                     } else {
@@ -58,57 +58,158 @@ public class FirebaseManager implements FirebaseCallBack{
                 });
     }
 
-    public void addCourse(Student student,FirebaseCallback callback) {
-        auth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword())
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        db.collection("tutor")
-                                .document(user.getEmail())
-                                .set(toMap(user))
-                                .addOnSuccessListener(aVoid -> callback.onSuccess())
-                                .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
-                    } else {
-                        callback.onFailure(task.getException().getMessage());
-                    }
-                });
+
+    public void addCourse(Course course, FirebaseCallback callback) {
+        String courseId = course.getCourseId();
+
+        db.collection("courses")
+                .document(courseId)
+                .set(course.toMap())
+                .addOnSuccessListener(aVoid -> callback.onSuccess())
+                .addOnFailureListener(e -> callback.onFailure(
+                        "Failed to create new course: " + e.getMessage()));
     }
 
-    //
-    public boolean loginUser(String email, String password, FirebaseCallback callback) {
-        auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        callback.onSuccess();
-                        return true;
-                    } else {
-                        callback.onFailure(task.getException().getMessage());
-                        return false
-                    }
-                });
-    }
 
+
+
+    //converts Tutor to a map to add to database
     private Map<String, Object> toMap(Tutor tutor) {
         Map<String, Object> map = new HashMap<>();
         map.put("firstName", tutor.getFirstName());
         map.put("lastName", tutor.getLastName());
         map.put("email", tutor.getEmail());
-
+        map.put("degree", tutor.getDegree());
         map.put("courses", tutor.getCourses());
-
-
+        return map;
     }
 
-    private Map<String, Object> toMap(Stuent student) {
+    //converts Course to a map to add to database
+    private Map<String, Object> toMap(Course course) {
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("id", course.getCourseId());
+        map.put("tutor", course.getTutor());
+        map.put("slots", course.getSlots());
+
+        return map;
+    }
+
+    //converts Student to a map to add to database
+    private Map<String, Object> toMap(Student student) {
         Map<String, Object> map = new HashMap<>();
         map.put("firstName", student.getFirstName());
         map.put("lastName", student.getLastName());
         map.put("email", student.getEmail());
-        map.put("program", student.getProgram())
+        map.put("program", student.getProgram());
         return map;
     }
+
+    public void loginTutor(String email, String password, Callback callback) {
+
+        auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(authTask -> {
+                    if (authTask.isSuccessful()) {
+
+                        fetchTutorProfile(email, callback);
+                    } else {
+
+                        callback.onFailure(authTask.getException().getMessage());
+                    }
+                });
+    }
+
+    private void fetchTutorProfile(String email, Callback callback) {
+
+        db.collection("tutor")
+                .document(email)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+
+                        Tutor tutor = convertToTutorObject(documentSnapshot.getData());
+
+                        callback.onSuccess(tutor);
+
+                    } else {
+                        callback.onSuccess(null);
+                    }
+                })
+                .addOnFailureListener(e -> callback.onFailure(
+                        "Failed to login tutor: " + e.getMessage()));
+
+    }
+
+    public void loginStudent(String email, String password, Callback callback) {
+        auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(authTask -> {
+                    if (authTask.isSuccessful()) {
+                        fetchStudentProfile(email, callback);
+                    } else {
+                        callback.onFailure(authTask.getException().getMessage());
+                    }
+                });
+    }
+
+    private void fetchStudentProfile(String email, Callback callback) {
+        db.collection("student")
+                .document(email)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Student student = convertToStudentObject(documentSnapshot.getData());
+                        callback.onSuccess(student);
+                    } else {
+                        callback.onSuccess(null);
+                    }
+                })
+                .addOnFailureListener(e -> callback.onFailure(
+                        "Database fetch failed: " + e.getMessage()));
+    }
+
+    private Student convertToStudentObject(Map<String, Object> data) {
+
+        String firstName = (String) data.get("firstName");
+        String lastName = (String) data.get("lastName");
+        String email = (String) data.get("email");
+        String program = (String) data.get("program");
+        Student student = new Student(email, null);
+        student.setProgram(program);
+        student.firstName = firstName;
+        student.lastName = lastName;
+        return student;
+    }
+
+    private Tutor convertToTutorObject(Map<String, Object> data) {
+        String firstName = (String) data.get("firstName");
+        String lastName = (String) data.get("lastName");
+        String email = (String) data.get("email");
+        String degree = (String) data.get("degree");
+
+        @SuppressWarnings("unchecked")
+        ArrayList<String> coursesList =(ArrayList<String>) data.get("courses");
+
+        String[] courses = coursesList.toArray(new String[0]);
+        Tutor tutor = new Tutor(email, null);
+
+        tutor.firstName = firstName;
+        tutor.lastName = lastName;
+        tutor.courses = courses;
+        tutor.degree = degree;
+
+        return tutor;
+    }
+
 
     public interface FirebaseCallback {
         void onSuccess();
         void onFailure(String errorMessage);
     }
+
+    public interface Callback {
+        void onSuccess(User user);
+        void onFailure(String error);
+    }
+
+
 }
