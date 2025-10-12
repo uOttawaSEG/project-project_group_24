@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.ArrayList;
 
 //this class deals with the interactions with the database
-public class FirebaseManager implements FirebaseCallback{
+public class FirebaseManager{
     private FirebaseAuth auth;
     private FirebaseFirestore db;
 
@@ -179,7 +179,7 @@ public class FirebaseManager implements FirebaseCallback{
         String lastName = (String) data.get("lastName");
         String email = (String) data.get("id");
         String program = (String) data.get("program");
-        String phoneNumber = (String) data.get("phoneNumber");
+        long phoneNumber = (long) data.get("phoneNumber");
         Student student = new Student(email, null);
         student.setProgram(program);
         student.phoneNumber = phoneNumber;
@@ -194,7 +194,7 @@ public class FirebaseManager implements FirebaseCallback{
         String lastName = (String) data.get("lastName");
         String email = (String) data.get("id");
         String degree = (String) data.get("degree");
-        String phoneNumber = (String) data.get("phoneNumber");
+        long phoneNumber = (long) data.get("phoneNumber");
 
         @SuppressWarnings("unchecked")
         ArrayList<String> coursesList =(ArrayList<String>) data.get("courses");
