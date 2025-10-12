@@ -63,11 +63,11 @@ public class FirebaseManager{
 
    //call this method when creating a new Course, takes in a student and adds it to the database
     public void addCourse(Course course, FirebaseCallback callback) {
-        String courseId = course.id;
+        long courseId = course.id;
 
         db.collection("courses")
                 .document(courseId)
-                .set(course.toMap())
+                .set(toMap(course))
                 .addOnSuccessListener(aVoid -> callback.onSuccess())
                 .addOnFailureListener(e -> callback.onFailure(
                         "Failed to create new course: " + e.getMessage()));
@@ -199,7 +199,7 @@ public class FirebaseManager{
         @SuppressWarnings("unchecked")
         ArrayList<Course> coursesList =(ArrayList<Course>) data.get("courses");
 
-        Course[] courses = coursesList.toArray(new String[0]);
+        Course[] courses = coursesList.toArray(new Course[0]);
         Tutor tutor = new Tutor(email, null);
 
         tutor.firstName = firstName;
