@@ -1,6 +1,8 @@
 package com.uottawa.eecs.onlinetutoringappointmentmanagementsystem;
 import DatabaseReference database;
 
+import DatabaseReference database;
+
 public abstract class User implements IUser
 {
     String firstName,lastName,email;
