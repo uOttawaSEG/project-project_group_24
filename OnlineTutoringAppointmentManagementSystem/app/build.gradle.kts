@@ -50,4 +50,4 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")     // optional Auth
     implementation("com.google.firebase:firebase-firestore-ktx") // optional Firestore
 }
-apply plugin: 'com.google.gms.google-services'
+apply(plugin = "com.google.gms.google-services")
