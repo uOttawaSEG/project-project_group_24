@@ -197,9 +197,9 @@ public class FirebaseManager{
         long phoneNumber = (long) data.get("phoneNumber");
 
         @SuppressWarnings("unchecked")
-        ArrayList<String> coursesList =(ArrayList<String>) data.get("courses");
+        ArrayList<Course> coursesList =(ArrayList<Course>) data.get("courses");
 
-        String[] courses = coursesList.toArray(new String[0]);
+        Course[] courses = coursesList.toArray(new String[0]);
         Tutor tutor = new Tutor(email, null);
 
         tutor.firstName = firstName;
