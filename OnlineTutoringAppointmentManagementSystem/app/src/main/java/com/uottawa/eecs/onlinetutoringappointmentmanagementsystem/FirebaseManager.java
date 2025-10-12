@@ -25,11 +25,29 @@ public class FirebaseManager implements FirebaseCallBack{
 
     }
 
-    public void registerStudent(Student student,FirebaseCallback callback) {
+    //call this method when creating a new Student
+    public void registerStudent(Student student, String password, FirebaseCallback callback) {
+
+        auth.createUserWithEmailAndPassword(student.getEmail(), password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // 2. Write non-sensitive profile data to the 'students' collection
+                        db.collection("students") // <--- Changed to plural for best practice
+                                .document(student.getEmail())
+                                .set(toMap(student)) // <--- toMap must NOT include the password
+                                .addOnSuccessListener(aVoid -> callback.onSuccess())
+                                .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+                    } else {
+                        callback.onFailure(task.getException().getMessage());
+                    }
+                });
+    }
+
+    public void registerTutor(Student student,FirebaseCallback callback) {
         auth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword())
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        db.collection("student")
+                        db.collection("tutor")
                                 .document(user.getEmail())
                                 .set(toMap(user))
                                 .addOnSuccessListener(aVoid -> callback.onSuccess())
@@ -40,7 +58,7 @@ public class FirebaseManager implements FirebaseCallBack{
                 });
     }
 
-    public void registerTutor(Student student,FirebaseCallback callback) {
+    public void addCourse(Student student,FirebaseCallback callback) {
         auth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword())
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -82,10 +100,10 @@ public class FirebaseManager implements FirebaseCallBack{
 
     private Map<String, Object> toMap(Stuent student) {
         Map<String, Object> map = new HashMap<>();
-        map.put("firstName", user.getFirstName());
-        map.put("lastName", user.getLastName());
-        map.put("email", user.getEmail());
-
+        map.put("firstName", student.getFirstName());
+        map.put("lastName", student.getLastName());
+        map.put("email", student.getEmail());
+        map.put("program", student.getProgram())
         return map;
     }
 
