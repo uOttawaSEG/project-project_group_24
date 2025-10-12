@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
 
+//this class deals with the interactions with the database
 public class FirebaseManager implements FirebaseCallback{
     private FirebaseAuth auth;
     private FirebaseFirestore db;
@@ -26,7 +27,7 @@ public class FirebaseManager implements FirebaseCallback{
 
     }
 
-    //call this method when creating a new Student
+    //call this method when creating a new Student, takes in a student and adds it to the database
     public void registerStudent(Student student, String password, FirebaseCallback callback) {
 
         auth.createUserWithEmailAndPassword(student.getEmail(), password)
@@ -43,6 +44,7 @@ public class FirebaseManager implements FirebaseCallback{
                 });
     }
 
+    ///
     public void registerTutor(Tutor tutor,String password,FirebaseCallback callback) {
         auth.createUserWithEmailAndPassword(tutor.getEmail(), password)
                 .addOnCompleteListener(task -> {
