@@ -4,6 +4,7 @@
 public abstract class User implements IUser
 {
     String firstName,lastName,email;
+    long phoneNumber;
 
     //Prompts User to create an account
     public User()
@@ -30,5 +31,11 @@ public abstract class User implements IUser
     }
     public void logOut(){}
 
+    public long getPhoneNumber() {
+        return phoneNumber;
+    }
 
+    public void setPhoneNumber(long phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }
