@@ -1,5 +1,5 @@
-//package com.uottawa.eecs.onlinetutoringappointmentmanagementsystem;
-//import DatabaseReference database;
+package com.uottawa.eecs.onlinetutoringappointmentmanagementsystem;
+import DatabaseReference database;
 
 public abstract class User implements IUser
 {

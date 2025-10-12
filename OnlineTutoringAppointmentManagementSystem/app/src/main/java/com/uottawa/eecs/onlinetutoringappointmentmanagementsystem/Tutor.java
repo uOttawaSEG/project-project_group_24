@@ -1,4 +1,4 @@
-//package com.uottawa.eecs.onlinetutoringappointmentmanagementsystem;
+package com.uottawa.eecs.onlinetutoringappointmentmanagementsystem;
 
 public class Tutor extends User
 {

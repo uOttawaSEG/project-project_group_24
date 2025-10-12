@@ -44,7 +44,8 @@ public class FirebaseManager implements FirebaseCallback{
                 });
     }
 
-    ///
+    //call this method when creating a new Tutor, takes in a student and adds it to the database
+
     public void registerTutor(Tutor tutor,String password,FirebaseCallback callback) {
         auth.createUserWithEmailAndPassword(tutor.getEmail(), password)
                 .addOnCompleteListener(task -> {
@@ -60,7 +61,7 @@ public class FirebaseManager implements FirebaseCallback{
                 });
     }
 
-
+   //call this method when creating a new Course, takes in a student and adds it to the database
     public void addCourse(Course course, FirebaseCallback callback) {
         String courseId = course.id;
 
@@ -105,6 +106,7 @@ public class FirebaseManager implements FirebaseCallback{
         return map;
     }
 
+    //logs in tutor by validating email and password
     public void loginTutor(String email, String password, Callback callback) {
 
         auth.signInWithEmailAndPassword(email, password)
@@ -119,6 +121,7 @@ public class FirebaseManager implements FirebaseCallback{
                 });
     }
 
+//fetches tutor from database given email
     private void fetchTutorProfile(String email, Callback callback) {
 
         db.collection("tutor")
@@ -140,6 +143,7 @@ public class FirebaseManager implements FirebaseCallback{
 
     }
 
+    //logs in student by validating email and password
     public void loginStudent(String email, String password, Callback callback) {
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(authTask -> {
@@ -151,6 +155,7 @@ public class FirebaseManager implements FirebaseCallback{
                 });
     }
 
+    //fetches student from database given email
     private void fetchStudentProfile(String email, Callback callback) {
         db.collection("student")
                 .document(email)
@@ -167,6 +172,7 @@ public class FirebaseManager implements FirebaseCallback{
                         "Database fetch failed: " + e.getMessage()));
     }
 
+    //takes map from database and converts it to a student object
     private Student convertToStudentObject(Map<String, Object> data) {
 
         String firstName = (String) data.get("firstName");
@@ -182,6 +188,7 @@ public class FirebaseManager implements FirebaseCallback{
         return student;
     }
 
+    //takes map from database and converts it to a tutor object
     private Tutor convertToTutorObject(Map<String, Object> data) {
         String firstName = (String) data.get("firstName");
         String lastName = (String) data.get("lastName");
