@@ -1,4 +1,5 @@
-package com.uottawa.eecs.onlinetutoringappointmentmanagementsystem;
+//package com.uottawa.eecs.onlinetutoringappointmentmanagementsystem;
+//import DatabaseReference database;
 
 public abstract class User implements IUser
 {
@@ -9,10 +10,12 @@ public abstract class User implements IUser
     {}
     //Calls on AuthenticateUser to login into account
     public User(String email, String pass)
-    {}
+    {
+
+    }
     //Compare login info with database then log user in
-    public boolean AuthenticateUser(String email,String pass)
-    {}
+    public boolean authenticateUser(String email,String pass)
+    {return true; }//TODO
 
     public String getFirstName() {
         return firstName;
@@ -25,5 +28,7 @@ public abstract class User implements IUser
     public String getEmail() {
         return email;
     }
+    public void logOut(){}
+
 
 }

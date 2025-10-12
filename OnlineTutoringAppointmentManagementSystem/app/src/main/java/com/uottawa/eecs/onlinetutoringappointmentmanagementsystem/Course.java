@@ -1,25 +1,27 @@
 public class Course
 {
-    static coursecount;
+    static int coursecount;
     Student[] slots;
     final long id = coursecount;
     final Tutor tutor;
     int filledslots;
-    public Course()
+    public Course(Tutor t)
     {
         coursecount++;
-        slots = Students[5];
+        slots = new Student[5];
+        tutor = t;
     }
-    public Course(int slotcap)
+    public Course(Tutor t,int slotcap)
     {
         coursecount++;
-        slots = Students[slotcap];
+        slots = new Student[slotcap];
+        tutor = t;
     }
     public void fillSlot(Student s)
     {
-        if(filledslots<slots.length())
+        if(filledslots<slots.length)
         {
-            slot[filledslots] = s;
+            slots[filledslots] = s;
             filledslots++;
         }
     }
