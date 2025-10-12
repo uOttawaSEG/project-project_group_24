@@ -1,11 +1,11 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    alias(libs.plugins.android.application) apply false
-    id("com.android.application")
-    id("com.google.gms.google-services")
+    id("com.android.application") version "8.13.0"
+    id("com.google.gms.google-services") version "4.4.4" apply false
 }
 
 android {
+    namespace = "com.uottawa.eecs.onlinetutoringappointmentmanagementsystem"
     compileSdk = 34 // your compile SDK
     defaultConfig {
         applicationId = "com.example.tutorstudent" // your package name
@@ -27,4 +27,4 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore-ktx") // optional Firestore
 }
 
-apply plugin: 'com.google.gms.google-services'
+apply(plugin = "com.google.gms.google-services")
