@@ -36,14 +36,10 @@ captures/
 .cxx/
 
 # Google Services
-OnlineTutoringAppointmentManagementSystem/app/src/google-services.json
+app/src/google-services.json
 
 # Other caches
 *.class
 *.apk
 *.ap_
 *.dex
-
-# Gradle cache
-.gradle/
-

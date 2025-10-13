@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "RegisterActivity"
+rootProject.name = "Online Tutoring Appointment Management System"
 include(":app")
