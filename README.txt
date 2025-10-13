@@ -5,7 +5,7 @@ Members:
 Amoye, Abaoyowa
 Kang, Minsuk	//verified git push&pull
 Moussa, Abdoussalam
-Shan, Ken
+Shan, Ken // UI/UX
 Shanmuhesan, Abishan//testing my git push
 
 Admin:
