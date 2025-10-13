@@ -35,9 +35,6 @@ captures/
 .externalNativeBuild/
 .cxx/
 
-# Google Services
-app/src/google-services.json
-
 # Other caches
 *.class
 *.apk
