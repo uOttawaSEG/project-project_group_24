@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
@@ -10,18 +11,18 @@
         android:id="@+id/txtWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:gravity="center"
         android:text="Welcome to the Online Tutoring Appointment System"
         android:textSize="20sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_marginBottom="40dp" />
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/btnStudent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Register as Student"
-        android:layout_marginBottom="20dp" />
+        android:layout_marginBottom="20dp"
+        android:text="Register as Student" />
 
     <Button
         android:id="@+id/btnTutor"
