@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
 
     private Button btnStudent, btnTutor;
+    //dev_aiden_kang: add arbitrary admin button, should be removed later.
+    private Button btnAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,5 +30,14 @@ public class MainActivity extends AppCompatActivity {
             Intent i = new Intent(MainActivity.this, TutorRegisterActivity.class);
             startActivity(i);
         });
+
+        //dev_aiden_kang: add admin button for demo(after D2, you can delete)
+        btnAdmin = findViewById(R.id.btnAdmin);
+        btnAdmin.setOnClickListener(v -> {
+            Intent i = new Intent(MainActivity.this, WelcomeActivity.class);
+            i.putExtra("role", "administrator");
+            startActivity(i);
+        });
+
     }
 }
