@@ -20,8 +20,9 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btnStudent, btnTutor;
+    private Button btnStudent, btnTutor, btnAdmin;
     private FirebaseFirestore db;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +39,13 @@ public class MainActivity extends AppCompatActivity {
 
         btnTutor.setOnClickListener(v -> {
             Intent i = new Intent(MainActivity.this, TutorRegisterActivity.class);
+            startActivity(i);
+        });
+		
+		btnAdmin = findViewById(R.id.btnAdmin);
+        btnAdmin.setOnClickListener(v -> {
+            Intent i = new Intent(MainActivity.this, WelcomeActivity.class);
+            i.putExtra("role", "administrator");
             startActivity(i);
         });
 
