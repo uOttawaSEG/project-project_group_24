@@ -35,15 +35,8 @@ captures/
 .externalNativeBuild/
 .cxx/
 
-# Google Services
-OnlineTutoringAppointmentManagementSystem/app/src/google-services.json
-
 # Other caches
 *.class
 *.apk
 *.ap_
 *.dex
-
-# Gradle cache
-.gradle/
-
