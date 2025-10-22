@@ -8,27 +8,39 @@ import java.util.Map;
 import java.util.ArrayList;
 
 //this class deals with the interactions with the database
-public class FirebaseManager{
+public final class FirebaseManager {
+    private static FirebaseManager instance;
     private FirebaseAuth auth;
     private FirebaseFirestore db;
 
-    public FirebaseManager() {
+    private FirebaseManager() {
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
     }
 
-  //needs to be implemented
-    public void onSuccess(){
+    public static FirebaseManager getInstance() {
+        if (instance == null) {
+            instance = new FirebaseManager();
+        }
+        return instance;
+    }
+
+    //needs to be implemented
+    public void onSuccess() {
+
+    }
+
+    public void onSuccess(User u) {
 
     }
 
     //needs to be implemented
-    public void addOnFailure(String errorMessage){
+    public void onFailure(String errorMessage){
 
     }
 
     //call this method when creating a new Student, takes in a student and adds it to the database
-    public void registerStudent(Student student, String password, FirebaseCallback callback) {
+    public void registerStudent(Student student, String password) {
 
         auth.createUserWithEmailAndPassword(student.getEmail(), password)
                 .addOnCompleteListener(task -> {
@@ -36,40 +48,40 @@ public class FirebaseManager{
                         db.collection("student")
                                 .document(student.getEmail())
                                 .set(toMap(student))
-                                .addOnSuccessListener(aVoid -> callback.onSuccess())
-                                .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+                                .addOnSuccessListener(aVoid -> this.onSuccess())
+                                .addOnFailureListener(e -> this.onFailure(e.getMessage()));
                     } else {
-                        callback.onFailure(task.getException().getMessage());
+                        this.onFailure(task.getException().getMessage());
                     }
                 });
     }
 
     //call this method when creating a new Tutor, takes in a student and adds it to the database
 
-    public void registerTutor(Tutor tutor,String password,FirebaseCallback callback) {
+    public void registerTutor(Tutor tutor, String password) {
         auth.createUserWithEmailAndPassword(tutor.getEmail(), password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         db.collection("tutor")
                                 .document(tutor.getEmail())
                                 .set(toMap(tutor))
-                                .addOnSuccessListener(aVoid -> callback.onSuccess())
-                                .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+                                .addOnSuccessListener(aVoid -> this.onSuccess())
+                                .addOnFailureListener(e -> this.onFailure(e.getMessage()));
                     } else {
-                        callback.onFailure(task.getException().getMessage());
+                        this.onFailure(task.getException().getMessage());
                     }
                 });
     }
 
    //call this method when creating a new Course, takes in a student and adds it to the database
-    public void addCourse(Course course, FirebaseCallback callback) {
+    public void addCourse(Course course) {
         long courseId = course.id;
 
         db.collection("courses")
                 .document(String.valueOf(courseId))
                 .set(toMap(course))
-                .addOnSuccessListener(aVoid -> callback.onSuccess())
-                .addOnFailureListener(e -> callback.onFailure(
+                .addOnSuccessListener(aVoid -> this.onSuccess())
+                .addOnFailureListener(e -> this.onFailure(
                         "Failed to create new course: " + e.getMessage()));
     }
 
@@ -107,22 +119,22 @@ public class FirebaseManager{
     }
 
     //logs in tutor by validating email and password
-    public void loginTutor(String email, String password, Callback callback) {
+    public void loginTutor(String email, String password) {
 
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(authTask -> {
                     if (authTask.isSuccessful()) {
 
-                        fetchTutorProfile(email, callback);
+                        fetchTutorProfile(email);
                     } else {
 
-                        callback.onFailure(authTask.getException().getMessage());
+                        this.onFailure(authTask.getException().getMessage());
                     }
                 });
     }
 
 //fetches tutor from database given email
-    private void fetchTutorProfile(String email, Callback callback) {
+    private void fetchTutorProfile(String email) {
 
         db.collection("tutor")
                 .document(email)
@@ -132,43 +144,43 @@ public class FirebaseManager{
 
                         Tutor tutor = convertToTutorObject(documentSnapshot.getData());
 
-                        callback.onSuccess(tutor);
+                        this.onSuccess(tutor);
 
                     } else {
-                        callback.onSuccess(null);
+                        this.onSuccess(null);
                     }
                 })
-                .addOnFailureListener(e -> callback.onFailure(
+                .addOnFailureListener(e -> this.onFailure(
                         "Failed to login tutor: " + e.getMessage()));
 
     }
 
     //logs in student by validating email and password
-    public void loginStudent(String email, String password, Callback callback) {
+    public void loginStudent(String email, String password) {
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(authTask -> {
                     if (authTask.isSuccessful()) {
-                        fetchStudentProfile(email, callback);
+                        fetchStudentProfile(email);
                     } else {
-                        callback.onFailure(authTask.getException().getMessage());
+                        this.onFailure(authTask.getException().getMessage());
                     }
                 });
     }
 
     //fetches student from database given email
-    private void fetchStudentProfile(String email, Callback callback) {
+    private void fetchStudentProfile(String email) {
         db.collection("student")
                 .document(email)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         Student student = convertToStudentObject(documentSnapshot.getData());
-                        callback.onSuccess(student);
+                        this.onSuccess(student);
                     } else {
-                        callback.onSuccess(null);
+                        this.onSuccess(null);
                     }
                 })
-                .addOnFailureListener(e -> callback.onFailure(
+                .addOnFailureListener(e -> this.onFailure(
                         "Database fetch failed: " + e.getMessage()));
     }
 
@@ -210,17 +222,5 @@ public class FirebaseManager{
 
         return tutor;
     }
-
-
-    public interface FirebaseCallback {
-        void onSuccess();
-        void onFailure(String errorMessage);
-    }
-
-    public interface Callback {
-        void onSuccess(User user);
-        void onFailure(String error);
-    }
-
 
 }

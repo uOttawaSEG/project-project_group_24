@@ -67,7 +67,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void setupClickListeners() {
         btnRegister.setOnClickListener(v -> {
-            if (validateForm()) {
+            if (processForm()) {
                 Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show();
 
                 Intent i = new Intent(RegisterActivity.this, WelcomeActivity.class);
@@ -79,8 +79,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private boolean validateForm() {
-        boolean ok = true;
+    private boolean processForm() {
 
         clearErrors();
 
@@ -93,30 +92,32 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (firstName.isEmpty()) {
             firstNameLayout.setError("First name required");
-            ok = false;
+            return false;
         }
         if (lastName.isEmpty()) {
             lastNameLayout.setError("Last name required");
-            ok = false;
+            return false;
         }
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             emailLayout.setError("Invalid email");
-            ok = false;
+            return false;
         }
         if (password.length() < 6) {
             passwordLayout.setError("Password must be at least 6 characters");
-            ok = false;
+            return false;
         }
         if (!phone.matches("\\d{10}")) {
             phoneLayout.setError("Phone must be 10 digits");
-            ok = false;
+            return false;
         }
         if (program == null || program.toString().toLowerCase().contains("select")) {
             Toast.makeText(this, "Please select your program", Toast.LENGTH_SHORT).show();
-            ok = false;
+            return false;
         }
 
-        return ok;
+        FirebaseManager.getInstance().registerStudent(new Student(email, password), password);
+
+        return true;
     }
 
     private void clearErrors() {
