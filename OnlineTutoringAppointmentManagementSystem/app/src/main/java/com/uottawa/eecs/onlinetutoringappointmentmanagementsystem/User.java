@@ -2,6 +2,7 @@ package com.uottawa.eecs.onlinetutoringappointmentmanagementsystem;
 
 public abstract class User implements IUser
 {
+    FirebaseManager database = new FirebaseManager();
     String firstName,lastName,email;
     long phoneNumber;
 
@@ -36,5 +37,9 @@ public abstract class User implements IUser
 
     public void setPhoneNumber(long phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public FirebaseManager getDatabase() {
+        return database;
     }
 }
