@@ -7,23 +7,38 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * AdminRequestListFragment
+ *
+ * Usage：
+ *   - AdminRequestListFragment.newPending()   // (status == "PENDING")
+ *   - AdminRequestListFragment.newRejected()  // (status == "REJECTED")
+ *
+ * D2 domain：
+ *   - Admin can see Pending request、Approve or Reject
+ *   - Admin can let someone in Rejected list go back to Approve
+ *   - after Approve will not go back to Rejected。
+ */
 public class AdminRequestListFragment extends Fragment
         implements RegistrationRequestAdapter.OnActionListener {
 
+    // ==== Constants / args ====
     private static final String ARG_MODE = "mode";
-    private RegistrationRequestAdapter adapter;
-    private TextView emptyView, header;
-    private ProgressBar progress;
 
     public static AdminRequestListFragment newPending() {
         return newInstance(RegistrationRequestAdapter.Mode.PENDING);
@@ -39,94 +54,186 @@ public class AdminRequestListFragment extends Fragment
         return f;
     }
 
-    @Nullable @Override
-    public View onCreateView(@NonNull LayoutInflater inf, @Nullable ViewGroup c, @Nullable Bundle s) {
-        View v = inf.inflate(R.layout.fragment_admin_request_list, c, false);
-        RecyclerView recycler = v.findViewById(R.id.recycler);
-        emptyView = v.findViewById(R.id.emptyView);
+    // ==== UI refs ====
+    private TextView header;
+    private TextView emptyView;
+    private ProgressBar progress;
+    private RecyclerView recycler;
+
+    // ==== Data / adapter ====
+    private RegistrationRequestAdapter adapter;
+    private RegistrationRequestAdapter.Mode mode;
+
+    // ==== Firestore ====
+    private FirebaseFirestore db;
+    private ListenerRegistration listenerReg;
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inf,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
+        View v = inf.inflate(R.layout.fragment_admin_request_list, container, false);
+
         header = v.findViewById(R.id.header);
+        emptyView = v.findViewById(R.id.emptyView);
         progress = v.findViewById(R.id.progress);
+        recycler = v.findViewById(R.id.recycler);
 
-        RegistrationRequestAdapter.Mode mode =
-                RegistrationRequestAdapter.Mode.valueOf(requireArguments().getString(ARG_MODE));
+        // get Fragment mode (PENDING or REJECTED)
+        mode = RegistrationRequestAdapter.Mode.valueOf(
+                requireArguments().getString(ARG_MODE));
 
-        header.setText(mode == RegistrationRequestAdapter.Mode.PENDING ?
-                "Pending Registration Requests" : "Rejected Registration Requests");
+        header.setText(
+                mode == RegistrationRequestAdapter.Mode.PENDING
+                        ? "Pending Registration Requests"
+                        : "Rejected Registration Requests"
+        );
 
+        // RecyclerView setup
         adapter = new RegistrationRequestAdapter(mode, this);
         recycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        recycler.addItemDecoration(new DividerItemDecoration(getContext(), RecyclerView.VERTICAL));
+        recycler.addItemDecoration(
+                new DividerItemDecoration(getContext(), RecyclerView.VERTICAL)
+        );
         recycler.setAdapter(adapter);
 
-        loadData(mode);
+        // Firestore init
+        db = FirebaseFirestore.getInstance();
+
+        // get data from DB
+        startListeningForData();
+
         return v;
     }
 
-    private void loadData(RegistrationRequestAdapter.Mode mode) {
-        progress.setVisibility(View.VISIBLE);
-
-        // TODO: becoming read from DB/Firebase. This is a demo.
-        recyclerPost(() -> {
-            List<RegistrationRequest> data = mockData(mode);
-            adapter.submit(data);
-            progress.setVisibility(View.GONE);
-            emptyView.setVisibility(data.isEmpty() ? View.VISIBLE : View.GONE);
-        });
-    }
-
-    private List<RegistrationRequest> mockData(RegistrationRequestAdapter.Mode mode) {
-        if (mode == RegistrationRequestAdapter.Mode.PENDING) {
-            RegistrationRequest s = new RegistrationRequest();
-            s.id = "S1"; s.role = RegistrationRequest.Role.STUDENT;
-            s.firstName = "Ken"; s.lastName = "Shan";
-            s.email = "ken@uottawa.ca"; s.phone = "6130000000";
-            s.programOfStudy = "Software Engineering";
-
-            RegistrationRequest t = new RegistrationRequest();
-            t.id = "T1"; t.role = RegistrationRequest.Role.TUTOR;
-            t.firstName = "Alex"; t.lastName = "Lee";
-            t.email = "alex@uottawa.ca"; t.phone = "6131111111";
-            t.highestDegree = "Master";
-            t.coursesOffered = Arrays.asList("ITI1121", "CSI2110");
-
-            return new ArrayList<>(Arrays.asList(s, t));
-        } else {
-            RegistrationRequest r = new RegistrationRequest();
-            r.id = "R1"; r.role = RegistrationRequest.Role.STUDENT;
-            r.firstName = "Mina"; r.lastName = "Wu";
-            r.email = "mina@uottawa.ca"; r.phone = "6132222222";
-            r.programOfStudy = "Computer Science";
-            r.status = RegistrationRequest.Status.REJECTED;
-            return new ArrayList<>(Arrays.asList(r));
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // stop Firestore listen，avoid memory leak
+        if (listenerReg != null) {
+            listenerReg.remove();
+            listenerReg = null;
         }
     }
 
-    private void recyclerPost(Runnable r) {
-        // switch to UI execute
-        if (getView() != null) getView().post(r);
+    /**
+     * listen from Firestore's registrationRequests/{doc} relay on status
+     * mode = PENDING   → status == "PENDING"
+     * mode = REJECTED  → status == "REJECTED"
+     *
+     * D2 ：
+     * - Pending list：waiting for Admin do Approve or Reject。
+     * - Rejected list：people in Rejected list, Admin can still Approve。
+     */
+    private void startListeningForData() {
+        progress.setVisibility(View.VISIBLE);
+
+        String wantedStatus = (mode == RegistrationRequestAdapter.Mode.PENDING)
+                ? "PENDING"
+                : "REJECTED";
+
+        // if there is a listening, remove it first
+        if (listenerReg != null) {
+            listenerReg.remove();
+            listenerReg = null;
+        }
+
+        listenerReg = db.collection("registrationRequests")
+                .whereEqualTo("status", wantedStatus)
+                .addSnapshotListener((snap, err) -> {
+                    progress.setVisibility(View.GONE);
+
+                    if (err != null) {
+                        Toast.makeText(
+                                getContext(),
+                                "DB error: " + err.getMessage(),
+                                Toast.LENGTH_SHORT
+                        ).show();
+                        return;
+                    }
+
+                    if (snap == null || snap.isEmpty()) {
+                        adapter.submit(new ArrayList<>());
+                        emptyView.setVisibility(View.VISIBLE);
+                        return;
+                    }
+
+                    List<RegistrationRequest> list = new ArrayList<>();
+                    for (QueryDocumentSnapshot doc : snap) {
+                        RegistrationRequest r = doc.toObject(RegistrationRequest.class);
+                        // keep Firestore docId, after we need to use on approve/reject
+                        r.id = doc.getId();
+                        list.add(r);
+                    }
+
+                    adapter.submit(list);
+                    emptyView.setVisibility(list.isEmpty() ? View.VISIBLE : View.GONE);
+                });
     }
 
-    // === Adapter callbacks ===
-    @Override public void onApprove(RegistrationRequest req, int pos) {
-        Toast.makeText(getContext(), "Approved: " + req.fullName(), Toast.LENGTH_SHORT).show();
-        // TODO: call background update state；remove from list after success
-        removeAt(pos);
-    }
-    @Override public void onReject(RegistrationRequest req, int pos) {
-        Toast.makeText(getContext(), "Rejected: " + req.fullName(), Toast.LENGTH_SHORT).show();
-        // TODO: call background update state；remove from list after success（ Rejected page can see）
-        removeAt(pos);
-    }
-    @Override public void onItemClick(RegistrationRequest req, int pos) {
-        // TODO: to detail page or BottomSheet
-        Toast.makeText(getContext(), "Open: " + req.fullName(), Toast.LENGTH_SHORT).show();
+    // =========================================================================
+    // Adapter callback: Approve
+    // =========================================================================
+    @Override
+    public void onApprove(RegistrationRequest req, int position) {
+        // - in Pending list click Approve → status: "APPROVED"
+        // - in Rejected list click Approve → status: "APPROVED"
+        //
+        //  D2 ：
+        //   * Admin can approve Pending
+        //   * Admin can make Rejected become Approved
+        //   * If Approved happened, then Rejected will not allow(UI will not show Reject button)
+
+        updateStatus(req, "APPROVED", "Approved: " + req.fullName());
     }
 
-    private void removeAt(int pos) {
-        // reload
-        RegistrationRequestAdapter.Mode mode =
-                RegistrationRequestAdapter.Mode.valueOf(requireArguments().getString(ARG_MODE));
-        loadData(mode);
+    // =========================================================================
+    // Adapter callback: Reject
+    // =========================================================================
+    @Override
+    public void onReject(RegistrationRequest req, int position) {
+        // only Pending list would show Reject button
+        // Then -> status = "REJECTED"
+        // After that it would disappear in Pending list, and then show in Rejected list
+
+        updateStatus(req, "REJECTED", "Rejected: " + req.fullName());
+    }
+
+    @Override
+    public void onItemClick(RegistrationRequest req, int position) {
+        // this can pop up BottomSheet to shows more detail (phone number、Program、Degree、Courses)
+        Toast.makeText(getContext(),
+                "Open detail for " + req.fullName(),
+                Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Firestore update function
+     * @param req  which request
+     * @param newStatus "APPROVED" / "REJECTED"
+     * @param successMsg after success toast the word will show
+     */
+    private void updateStatus(RegistrationRequest req, String newStatus, String successMsg) {
+        if (db == null) return;
+        progress.setVisibility(View.VISIBLE);
+
+        db.collection("registrationRequests")
+                .document(req.id)
+                .update("status", newStatus)
+                .addOnSuccessListener(unused -> {
+                    progress.setVisibility(View.GONE);
+                    Toast.makeText(getContext(), successMsg, Toast.LENGTH_SHORT).show();
+                    // here do not need remove adapter by ourself
+                    // because snapshotListener will do that -> startListeningForData()'s listenerReg
+                    // will make a new form adapter.submit(...)
+                })
+                .addOnFailureListener(e -> {
+                    progress.setVisibility(View.GONE);
+                    Toast.makeText(getContext(),
+                            "Error updating status: " + e.getMessage(),
+                            Toast.LENGTH_SHORT).show();
+                });
     }
 }
-
