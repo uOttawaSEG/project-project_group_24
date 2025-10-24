@@ -23,6 +23,7 @@
         <activity android:name=".RegisterActivity"/>
         <activity android:name=".WelcomeActivity"/>
         <activity android:name=".TutorRegisterActivity" />
+        <activity android:name=".AdminHomeActivity"/>
 
     </application>
 
