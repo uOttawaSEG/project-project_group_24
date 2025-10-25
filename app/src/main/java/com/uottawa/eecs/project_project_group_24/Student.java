@@ -7,7 +7,8 @@ public class Student extends User
     public Student(String email, String pass, boolean newuser)
     {
         super(email,pass);
-        if (newuser) getDatabase().registerStudent
+        if (newuser) getDatabase().registerStudent(this,pass);
+        else getDatabase().loginStudent(email,pass);
     }
 
     public void rateTutor(Tutor t){}

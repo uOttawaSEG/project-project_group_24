@@ -1,8 +1,8 @@
 package com.uottawa.eecs.project_project_group_24;
 
-public abstract class User implements IUser
+public class User implements IUser
 {
-    FirebaseManager database = new FirebaseManager();
+    FirebaseManager database = FirebaseManager.getInstance();
     String firstName,lastName,email;
     long phoneNumber;
 
