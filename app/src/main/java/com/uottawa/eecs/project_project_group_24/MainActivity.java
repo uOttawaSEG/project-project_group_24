@@ -29,6 +29,12 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+        Button btnLogin = findViewById(R.id.btnLoginMain);
+        btnLogin.setOnClickListener(v -> {
+            Intent i = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(i);
+        });
+
         btnStudent = findViewById(R.id.btnStudent);
         btnTutor = findViewById(R.id.btnTutor);
 
