@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 
@@ -36,6 +37,43 @@ public final class FirebaseManager {
 
     //needs to be implemented
     public void onFailure(String errorMessage){
+
+    }
+
+    //when sending new registration to the database
+    public void addRegistrationRequest(RegistrationRequest registrationRequest){
+                        db.collection("student")
+                                .document(registrationRequest.getId())
+                                .set(toMap(registrationRequest))
+                                .addOnSuccessListener(aVoid -> this.onSuccess())
+                                .addOnFailureListener(e -> this.onFailure(e.getMessage()));
+
+    }
+
+    //this is called when the administrator approves or rejects a request, this will update the status to firebase
+    //takes id to identity the request, but needs email and role to update information in student and tutor collections
+    public void updateRegistrationStatus(String id, String email,String role,String newStatus) {
+        db.collection("registrationRequests")
+                .document(id) // the document ID, e.g. johndoe67@gmail.com
+                .update("status", newStatus)
+                .addOnSuccessListener(aVoid -> this.onSuccess())
+                .addOnFailureListener(e -> this.onFailure(e.getMessage()));
+
+        if(role.equalsIgnoreCase("student")){
+            db.collection("student")
+                    .document(email) // the document ID, e.g. johndoe67@gmail.com
+                    .update("status", newStatus)
+                    .addOnSuccessListener(aVoid -> this.onSuccess())
+                    .addOnFailureListener(e -> this.onFailure(e.getMessage()));
+        }
+
+        else if(role.equalsIgnoreCase("tutor")){
+            db.collection("tutor")
+                    .document(email) // the document ID, e.g. johndoe67@gmail.com
+                    .update("status", newStatus)
+                    .addOnSuccessListener(aVoid -> this.onSuccess())
+                    .addOnFailureListener(e -> this.onFailure(e.getMessage()));
+        }
 
     }
 
@@ -85,8 +123,26 @@ public final class FirebaseManager {
                         "Failed to create new course: " + e.getMessage()));
     }
 
+    //takes the registration request and converts it to a map
+    private Map<String, Object> toMap(RegistrationRequest request) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("role", request.getRole());
+        map.put("firstName", request.getFirstName());
+        map.put("lastName", request.getLastName());
+        map.put("email", request.getEmail());
+        map.put("phone", request.getPhone());
+        map.put("status", request.getStatus());
+        if(request.getRole().equalsIgnoreCase("tutor")){
+            map.put("highestDegree", request.getHighestDegree());
+            map.put("coursesOffered", request.getCoursesOffered());
+        }
 
+        else if(request.getRole().equalsIgnoreCase("student")){
+            map.put("programOfStudy", request.getProgramOfStudy());
+        }
 
+        return map;
+    }
 
     //converts Tutor to a map to add to database
     private Map<String, Object> toMap(Tutor tutor) {
@@ -206,6 +262,40 @@ public final class FirebaseManager {
                         "Database fetch failed: " + e.getMessage()));
     }
 
+    private RegistrationRequest convertToRequestObject(Map<String, Object> data) {
+        String role = (String) data.get("role");
+        String firstName = (String) data.get("firstName");
+        String lastName = (String) data.get("lastName");
+        String id = (String) data.get("id");
+        String email = (String) data.get("email");
+        String phone = (String) data.get("phone");
+        String status = (String) data.get("status");
+        RegistrationRequest request = new RegistrationRequest(firstName, lastName, email, role, status);
+        request.setId(id);
+        request.setPhone(phone);
+        if(role.equalsIgnoreCase("tutor")){
+            String highestDegree = (String) data.get("highestDegree");
+            String[] cO = (String[]) data.get("coursesOffered");
+            List<String> coursesOffered = new ArrayList<>();
+            for(int i = 0; i<cO.length; i++){
+                coursesOffered.add(cO[i]);
+            }
+
+            request.setCoursesOffered(coursesOffered);
+            request.setHighestDegree(highestDegree);
+        }
+
+        else if(role.equalsIgnoreCase("student")){
+            String programOfStudy = (String) data.get("programOfStudy");
+            request.setProgramOfStudy(programOfStudy);
+        }
+
+
+
+        return request;
+    }
+
+
     //takes map from database and converts it to a student object
     private Student convertToStudentObject(Map<String, Object> data) {
 
@@ -214,7 +304,7 @@ public final class FirebaseManager {
         String email = (String) data.get("id");
         String program = (String) data.get("program");
         long phoneNumber = (long) data.get("phoneNumber");
-        String status = (String) data.get("STATUS");
+        String status = (String) data.get("status");
         boolean newuser = false;
 
         if(status.equalsIgnoreCase("PENDING")){

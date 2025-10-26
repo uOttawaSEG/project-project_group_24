@@ -34,6 +34,15 @@ public class RegistrationRequest {
         this.status = "PENDING";
     }
 
+    //in case administrator wants to see previously approved or rejected requests
+    public RegistrationRequest(String firstName, String lastName, String email, String role, String status) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.role = role;
+        this.status = status;
+    }
+
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
