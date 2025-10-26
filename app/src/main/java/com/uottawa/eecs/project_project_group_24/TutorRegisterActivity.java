@@ -77,6 +77,7 @@ public class TutorRegisterActivity extends AppCompatActivity {
         String phone = tutorPhone.getText().toString().trim();
         String degree = spinnerDegree.getSelectedItem().toString();
 
+
         if (firstName.isEmpty()) {
             tutorFirstNameLayout.setError("First name required");
             ok = false;
