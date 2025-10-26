@@ -8,7 +8,7 @@ public class Tutor extends User
     {
         super();
         if (newuser) {
-            setStatus("PENDING");
+            setStatus(requestStatus.PendingStudent);
             getDatabase().registerTutor(this, pass);
         }
     }

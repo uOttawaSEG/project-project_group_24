@@ -8,7 +8,7 @@ public class Student extends User
         super(email,pass);
 
         if (newuser){
-            setStatus("PENDING");
+            setStatus(requestStatus.PendingTutor);
             getDatabase().registerStudent(this,pass);}
         else getDatabase().loginStudent(email,pass);
     }

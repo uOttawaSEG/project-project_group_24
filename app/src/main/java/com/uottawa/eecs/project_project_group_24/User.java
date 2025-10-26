@@ -3,14 +3,18 @@ package com.uottawa.eecs.project_project_group_24;
 public class User implements IUser
 {
     FirebaseManager database = FirebaseManager.getInstance();
-    String firstName,lastName,email, status;
+    String firstName,lastName,email;
+    requestStatus status;
     //status temporary till requestStatus done
-
+    public enum requestStatus {AcceptedStudent,RejectedStudent,PendingStudent,
+        ApprovedTutor,RejectedTutor, PendingTutor};
     long phoneNumber;
 
     //Prompts User to create an account
     public User()
     {}
+
+
     //Calls on AuthenticateUser to login into account
     public User(String email, String pass)
     {
@@ -32,7 +36,7 @@ public class User implements IUser
         return email;
     }
 
-    public String getStatus() {
+    public requestStatus getStatus() {
         return status;
     }
     public void logOut(){}
@@ -44,7 +48,7 @@ public class User implements IUser
     public void setPhoneNumber(long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-    public void setStatus(String status) {
+    public void setStatus(requestStatus status) {
         this.status = status;
     }
 

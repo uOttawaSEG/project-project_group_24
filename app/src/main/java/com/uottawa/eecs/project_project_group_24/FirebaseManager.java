@@ -96,6 +96,7 @@ public final class FirebaseManager {
         map.put("degree", tutor.getDegree());
         map.put("courses", tutor.courses);
         map.put("phoneNumber", tutor.getPhoneNumber());
+        map.put("status", tutor.getStatus());
         return map;
     }
 
@@ -115,6 +116,7 @@ public final class FirebaseManager {
         map.put("firstName", student.getFirstName());
         map.put("lastName", student.getLastName());
         map.put("program", student.getProgram());
+      //  if(student.getStatus()== User.requestStatus.PendingStudent)
         map.put("status", student.getStatus());
         return map;
     }
