@@ -40,12 +40,40 @@ public final class FirebaseManager {
 
     }
 
+    //when sending new registration to the database
     public void addRegistrationRequest(RegistrationRequest registrationRequest){
                         db.collection("student")
                                 .document(registrationRequest.getId())
                                 .set(toMap(registrationRequest))
                                 .addOnSuccessListener(aVoid -> this.onSuccess())
                                 .addOnFailureListener(e -> this.onFailure(e.getMessage()));
+
+    }
+
+    //this is called when the administrator approves or rejects a request, this will update the status to firebase
+    //takes id to identity the request, but needs email and role to update information in student and tutor collections
+    public void updateRegistrationStatus(String id, String email,String role,String newStatus) {
+        db.collection("registrationRequests")
+                .document(id) // the document ID, e.g. johndoe67@gmail.com
+                .update("status", newStatus)
+                .addOnSuccessListener(aVoid -> this.onSuccess())
+                .addOnFailureListener(e -> this.onFailure(e.getMessage()));
+
+        if(role.equalsIgnoreCase("student")){
+            db.collection("student")
+                    .document(email) // the document ID, e.g. johndoe67@gmail.com
+                    .update("status", newStatus)
+                    .addOnSuccessListener(aVoid -> this.onSuccess())
+                    .addOnFailureListener(e -> this.onFailure(e.getMessage()));
+        }
+
+        else if(role.equalsIgnoreCase("tutor")){
+            db.collection("tutor")
+                    .document(email) // the document ID, e.g. johndoe67@gmail.com
+                    .update("status", newStatus)
+                    .addOnSuccessListener(aVoid -> this.onSuccess())
+                    .addOnFailureListener(e -> this.onFailure(e.getMessage()));
+        }
 
     }
 
