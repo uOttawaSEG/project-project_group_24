@@ -115,6 +115,7 @@ public final class FirebaseManager {
         map.put("firstName", student.getFirstName());
         map.put("lastName", student.getLastName());
         map.put("program", student.getProgram());
+        map.put("status", student.getStatus());
         return map;
     }
 

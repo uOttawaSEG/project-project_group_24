@@ -3,7 +3,9 @@ package com.uottawa.eecs.project_project_group_24;
 public class User implements IUser
 {
     FirebaseManager database = FirebaseManager.getInstance();
-    String firstName,lastName,email;
+    String firstName,lastName,email, status;
+    //APPROVED, PENDING, REJECTED are the 3 options for status
+
     long phoneNumber;
 
     //Prompts User to create an account
@@ -29,6 +31,10 @@ public class User implements IUser
     public String getEmail() {
         return email;
     }
+
+    public String getStatus() {
+        return status;
+    }
     public void logOut(){}
 
     public long getPhoneNumber() {
@@ -38,6 +44,10 @@ public class User implements IUser
     public void setPhoneNumber(long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
 
     public FirebaseManager getDatabase() {
         return database;

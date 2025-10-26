@@ -115,7 +115,7 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
 
-        FirebaseManager.getInstance().registerStudent(new Student(email, password), password);
+        FirebaseManager.getInstance().registerStudent(new Student(email, password, false), password);
 
         return true;
     }
