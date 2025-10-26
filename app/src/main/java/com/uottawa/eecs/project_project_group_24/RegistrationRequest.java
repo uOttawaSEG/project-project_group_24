@@ -17,7 +17,7 @@ public class RegistrationRequest {
     private String email;
     private String phone;
 
-    private String role;             // "STUDENT" / "TUTOR"
+    private Role role;             // "STUDENT" / "TUTOR"
     private String programOfStudy;   // Student
     private String highestDegree;    // Tutor
     private List<String> coursesOffered;
@@ -26,7 +26,7 @@ public class RegistrationRequest {
 
     public RegistrationRequest() {}
 
-    public RegistrationRequest(String firstName, String lastName, String email, String role) {
+    public RegistrationRequest(String firstName, String lastName, String email, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -50,8 +50,8 @@ public class RegistrationRequest {
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public Role getRole() { return role; }
+    public void setRole(Role role) { this.role = role; }
 
     public String getProgramOfStudy() { return programOfStudy; }
     public void setProgramOfStudy(String programOfStudy) { this.programOfStudy = programOfStudy; }
