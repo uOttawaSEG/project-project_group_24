@@ -5,6 +5,7 @@ public class User implements IUser
     FirebaseManager database = FirebaseManager.getInstance();
     String firstName,lastName,email;
     long phoneNumber;
+    private boolean requested_register;
 
     //Prompts User to create an account
     public User()
@@ -42,4 +43,13 @@ public class User implements IUser
     public FirebaseManager getDatabase() {
         return database;
     }
+    public void StudentRegister()
+    {
+        Administrator.receiveRequest(this,RegistrationRequest.Role.STUDENT);
+    }
+    public void TutorRegister()
+    {
+        Administrator.receiveRequest(this,RegistrationRequest.Role.TUTOR);
+    }
+
 }
