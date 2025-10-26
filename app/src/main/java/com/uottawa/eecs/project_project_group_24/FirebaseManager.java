@@ -192,7 +192,7 @@ public final class FirebaseManager {
         String email = (String) data.get("id");
         String program = (String) data.get("program");
         long phoneNumber = (long) data.get("phoneNumber");
-        Student student = new Student(email, null);
+        Student student = new Student(email, null,false);
         student.setProgram(program);
         student.phoneNumber = phoneNumber;
         student.firstName = firstName;

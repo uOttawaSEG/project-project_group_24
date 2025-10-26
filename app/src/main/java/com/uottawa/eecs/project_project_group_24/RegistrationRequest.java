@@ -17,23 +17,31 @@ public class RegistrationRequest {
     private String email;
     private String phone;
 
-    private String role;             // "STUDENT" / "TUTOR"
+    private Role role;             // "STUDENT" / "TUTOR"
     private String programOfStudy;   // Student
     private String highestDegree;    // Tutor
     private List<String> coursesOffered;
 
-    private String status;           // "PENDING", "REJECTED", "APPROVED"
+    private Status status;           // "PENDING", "REJECTED", "APPROVED"
 
-    public RegistrationRequest() {}
 
-    public RegistrationRequest(String firstName, String lastName, String email, String role) {
+    public RegistrationRequest(String firstName, String lastName, String email, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.role = role;
-        this.status = "PENDING";
+        this.status = Status.PENDING;
     }
 
+    public void AcceptRequest()
+    {
+        status = Status.APPROVED;
+    }
+
+    public void RejectRequest()
+    {
+        status = Status.REJECTED;
+    }
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
@@ -50,8 +58,8 @@ public class RegistrationRequest {
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public String getRole() { return role.name(); }
+    public void setRole(String role) { this.role = Role.valueOf(role); }
 
     public String getProgramOfStudy() { return programOfStudy; }
     public void setProgramOfStudy(String programOfStudy) { this.programOfStudy = programOfStudy; }
@@ -62,8 +70,8 @@ public class RegistrationRequest {
     public List<String> getCoursesOffered() { return coursesOffered; }
     public void setCoursesOffered(List<String> coursesOffered) { this.coursesOffered = coursesOffered; }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public String getStatus() { return status.name(); }
+    public void setStatus(String status) { this.status = Status.valueOf(status); }
 
     // ========= Helper =========
     public String getFullName() {

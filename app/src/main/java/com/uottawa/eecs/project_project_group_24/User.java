@@ -16,7 +16,7 @@ public class User implements IUser
     }
     //Compare login info with database then log user in
     public boolean authenticateUser(String email,String pass)
-    {return true; }//TODO
+    {return true;}//TODO
 
     public String getFirstName() {
         return firstName;
