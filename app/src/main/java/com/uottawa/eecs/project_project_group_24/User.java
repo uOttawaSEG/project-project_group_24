@@ -4,7 +4,7 @@ public class User implements IUser
 {
     FirebaseManager database = FirebaseManager.getInstance();
     String firstName,lastName,email, status;
-    //APPROVED, PENDING, REJECTED are the 3 options for status
+    //status temporary till requestStatus done
 
     long phoneNumber;
 
