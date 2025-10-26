@@ -7,7 +7,7 @@ public class User implements IUser
     requestStatus status;
     //status temporary till requestStatus done
     public enum requestStatus {AcceptedStudent,RejectedStudent,PendingStudent,
-        ApprovedTutor,RejectedTutor, PendingTutor};
+        AcceptedTutor,RejectedTutor, PendingTutor};
     long phoneNumber;
 
     //Prompts User to create an account

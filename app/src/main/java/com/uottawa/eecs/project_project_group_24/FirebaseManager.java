@@ -96,7 +96,17 @@ public final class FirebaseManager {
         map.put("degree", tutor.getDegree());
         map.put("courses", tutor.courses);
         map.put("phoneNumber", tutor.getPhoneNumber());
-        map.put("status", tutor.getStatus());
+        if(tutor.getStatus()== User.requestStatus.PendingTutor){
+            map.put("status", "PENDING");
+        }
+
+        else if(tutor.getStatus()== User.requestStatus.AcceptedTutor){
+            map.put("status", "ACCEPTED");
+        }
+
+        else if(tutor.getStatus()== User.requestStatus.RejectedTutor){
+            map.put("status", "REJECTED");
+        }
         return map;
     }
 
@@ -116,8 +126,17 @@ public final class FirebaseManager {
         map.put("firstName", student.getFirstName());
         map.put("lastName", student.getLastName());
         map.put("program", student.getProgram());
-      //  if(student.getStatus()== User.requestStatus.PendingStudent)
-        map.put("status", student.getStatus());
+        if(student.getStatus()== User.requestStatus.PendingStudent){
+            map.put("status", "PENDING");
+        }
+
+        else if(student.getStatus()== User.requestStatus.AcceptedStudent){
+            map.put("status", "ACCEPTED");
+        }
+
+        else if(student.getStatus()== User.requestStatus.RejectedStudent){
+            map.put("status", "REJECTED");
+        }
         return map;
     }
 
@@ -197,7 +216,8 @@ public final class FirebaseManager {
         long phoneNumber = (long) data.get("phoneNumber");
         String status = (String) data.get("STATUS");
         boolean newuser = false;
-        if(status.equalsIgnoreCase("pending")){
+
+        if(status.equalsIgnoreCase("PENDING")){
             newuser = true;
         }
         Student student = new Student(email, null, newuser);
@@ -205,6 +225,18 @@ public final class FirebaseManager {
         student.phoneNumber = phoneNumber;
         student.firstName = firstName;
         student.lastName = lastName;
+
+        if(status.equalsIgnoreCase("PENDING")){
+            student.setStatus(User.requestStatus.PendingStudent);
+        }
+
+        else if(status.equalsIgnoreCase("ACCEPTED")){
+            student.setStatus(User.requestStatus.AcceptedStudent);
+        }
+
+        else if(status.equalsIgnoreCase("REJECTED")){
+            student.setStatus(User.requestStatus.RejectedStudent);
+        }
         return student;
     }
 
@@ -222,7 +254,7 @@ public final class FirebaseManager {
 
         Course[] courses = coursesList.toArray(new Course[0]);
         boolean newuser = false;
-        if(status.equalsIgnoreCase("pending")){
+        if(status.equalsIgnoreCase("PENDING")){
             newuser = true;
         }
         Tutor tutor = new Tutor(email, null, newuser);
@@ -232,7 +264,17 @@ public final class FirebaseManager {
         tutor.lastName = lastName;
         tutor.courses = courses;
         tutor.setDegree(degree);
+        if(status.equalsIgnoreCase("PENDING")){
+            tutor.setStatus(User.requestStatus.PendingTutor);
+        }
 
+        else if(status.equalsIgnoreCase("ACCEPTED")){
+            tutor.setStatus(User.requestStatus.AcceptedTutor);
+        }
+
+        else if(status.equalsIgnoreCase("REJECTED")){
+            tutor.setStatus(User.requestStatus.RejectedTutor);
+        }
         return tutor;
     }
 
