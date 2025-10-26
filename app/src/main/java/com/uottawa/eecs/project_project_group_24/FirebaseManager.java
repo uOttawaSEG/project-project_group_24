@@ -242,7 +242,9 @@ public final class FirebaseManager {
         String email = (String) data.get("email");
         String phone = (String) data.get("phone");
         String status = (String) data.get("status");
-
+        RegistrationRequest request = new RegistrationRequest(firstName, lastName, email, role, status);
+        request.setId(id);
+        request.setPhone(phone);
         if(role.equalsIgnoreCase("tutor")){
             String highestDegree = (String) data.get("highestDegree");
             String[] cO = (String[]) data.get("coursesOffered");
@@ -250,14 +252,17 @@ public final class FirebaseManager {
             for(int i = 0; i<cO.length; i++){
                 coursesOffered.add(cO[i]);
             }
+
+            request.setCoursesOffered(coursesOffered);
+            request.setHighestDegree(highestDegree);
         }
 
         else if(role.equalsIgnoreCase("student")){
             String programOfStudy = (String) data.get("programOfStudy");
+            request.setProgramOfStudy(programOfStudy);
         }
 
-        RegistrationRequest request = new RegistrationRequest();
-        
+
 
         return request;
     }
