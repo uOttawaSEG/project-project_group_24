@@ -10,6 +10,15 @@ public class Node<E> {
         previous = p;
     }
 
+    public Node<E> removeNode()
+    {
+        if(previous!=null) previous.setNext(next);
+        if(next!=null) next.setPrevious(previous);
+        next = null;
+        previous = null;
+        return this;
+    }
+
     public Node<E> getNext() {
         return next;
     }
