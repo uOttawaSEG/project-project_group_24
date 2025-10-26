@@ -45,12 +45,12 @@ public class RegistrationRequestAdapter
 
     @Override public void onBindViewHolder(@NonNull VH h, int pos) {
         RegistrationRequest r = items.get(pos);
-        h.txtNameRole.setText(r.getFullName() + " — " + (r.getRole() == RegistrationRequest.Role.STUDENT ? "Student" : "Tutor"));
+        h.txtNameRole.setText(r.getFullName() + " — " + (r.getRole().toLowerCase()));
         h.txtEmail.setText(r.getEmail());
         h.txtPhone.setText(r.getPhone() == null ? "" : r.getPhone());
 
         // show Program or Degree/Courses
-        if (r.getRole() == RegistrationRequest.Role.STUDENT) {
+        if (r.getRole().equalsIgnoreCase("STUDENT")) {
             h.txtExtra.setText("Program: " + (r.getProgramOfStudy() == null ? "-" : r.getProgramOfStudy()));
         } else {
             String courses = (r.getCoursesOffered() == null || r.getCoursesOffered().isEmpty())
