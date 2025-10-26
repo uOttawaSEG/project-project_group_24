@@ -55,6 +55,7 @@ public class TutorRegisterActivity extends AppCompatActivity {
 
         btnTutorRegister.setOnClickListener(v -> {
             if (validateTutor()) {
+
                 Toast.makeText(this, "Tutor registration successful!", Toast.LENGTH_SHORT).show();
 
 
@@ -76,7 +77,7 @@ public class TutorRegisterActivity extends AppCompatActivity {
         String password = tutorPassword.getText().toString().trim();
         String phone = tutorPhone.getText().toString().trim();
         String degree = spinnerDegree.getSelectedItem().toString();
-
+        String status = "PENDING";
 
         if (firstName.isEmpty()) {
             tutorFirstNameLayout.setError("First name required");
@@ -106,9 +107,13 @@ public class TutorRegisterActivity extends AppCompatActivity {
             Toast.makeText(this, "Please select at least one course", Toast.LENGTH_SHORT).show();
             ok = false;
         }
+        FirebaseManager.getInstance().registerTutor(new Tutor(email, password, true), password);
+
 
         return ok;
     }
+
+
 
     private void clearErrors() {
         tutorFirstNameLayout.setError(null);

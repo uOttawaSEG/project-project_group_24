@@ -213,12 +213,17 @@ public final class FirebaseManager {
         String email = (String) data.get("id");
         String degree = (String) data.get("degree");
         long phoneNumber = (long) data.get("phoneNumber");
+        String status = (String) data.get("status");
 
         @SuppressWarnings("unchecked")
         ArrayList<Course> coursesList =(ArrayList<Course>) data.get("courses");
 
         Course[] courses = coursesList.toArray(new Course[0]);
-        Tutor tutor = new Tutor(email, null);
+        boolean newuser = false;
+        if(status.equalsIgnoreCase("pending")){
+            newuser = true;
+        }
+        Tutor tutor = new Tutor(email, null, newuser);
 
         tutor.firstName = firstName;
         tutor.phoneNumber = phoneNumber;

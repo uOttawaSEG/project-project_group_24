@@ -6,10 +6,10 @@ public class Student extends User
     public Student(String email, String pass, boolean newuser)
     {
         super(email,pass);
-        if(newuser == true){
+
+        if (newuser){
             setStatus("PENDING");
-        }
-        if (newuser) getDatabase().registerStudent(this,pass);
+            getDatabase().registerStudent(this,pass);}
         else getDatabase().loginStudent(email,pass);
     }
 
