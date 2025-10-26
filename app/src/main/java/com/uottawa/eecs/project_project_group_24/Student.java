@@ -3,11 +3,13 @@ package com.uottawa.eecs.project_project_group_24;
 public class Student extends User
 {
     String program;//enrolled program
-
     public Student(String email, String pass, boolean newuser)
     {
         super(email,pass);
-        if (newuser) getDatabase().registerStudent(this,pass);
+
+        if (newuser){
+            setStatus(requestStatus.PendingTutor);
+            getDatabase().registerStudent(this,pass);}
         else getDatabase().loginStudent(email,pass);
     }
 
@@ -16,7 +18,6 @@ public class Student extends User
     public String getProgram() {
         return program;
     }
-
     public void setProgram(String program) {
         this.program = program;
     }

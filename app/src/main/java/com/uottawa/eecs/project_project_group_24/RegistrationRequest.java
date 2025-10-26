@@ -38,6 +38,15 @@ public class RegistrationRequest {
         status = Status.APPROVED;
     }
 
+    //in case administrator wants to see previously approved or rejected requests
+    public RegistrationRequest(String firstName, String lastName, String email, String role, String status) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.role = role;
+        this.status = status;
+    }
+
     public void RejectRequest()
     {
         status = Status.REJECTED;

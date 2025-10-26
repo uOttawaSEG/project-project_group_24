@@ -115,8 +115,12 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
 
-        FirebaseManager.getInstance().registerStudent(new Student(email, password), password);
-
+        FirebaseManager.getInstance().registerStudent(new Student(email, password, true), password);
+        RegistrationRequest request = new RegistrationRequest(firstName, lastName, email, "STUDENT", "PENDING");
+        request.setProgramOfStudy((String)program);
+        request.setId(email);
+        request.setPhone(phone);
+        FirebaseManager.getInstance().addRegistrationRequest(request);
         return true;
     }
 

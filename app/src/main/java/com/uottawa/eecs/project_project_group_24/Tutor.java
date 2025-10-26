@@ -4,9 +4,13 @@ public class Tutor extends User
 {
     String degree;
     Course[] courses;
-    public Tutor(String email, String pass)
+    public Tutor(String email, String pass, boolean newuser)
     {
         super();
+        if (newuser) {
+            setStatus(requestStatus.PendingStudent);
+            getDatabase().registerTutor(this, pass);
+        }
     }
 
     public String getDegree() {
@@ -16,4 +20,6 @@ public class Tutor extends User
     public void setDegree(String degree) {
         this.degree = degree;
     }
+
+
 }
