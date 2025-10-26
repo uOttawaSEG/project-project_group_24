@@ -164,7 +164,7 @@ public class AdminRequestListFragment extends Fragment
                     for (QueryDocumentSnapshot doc : snap) {
                         RegistrationRequest r = doc.toObject(RegistrationRequest.class);
                         // keep Firestore docId, after we need to use on approve/reject
-                        r.id = doc.getId();
+                        r.setId(doc.getId());
                         list.add(r);
                     }
 
@@ -186,7 +186,7 @@ public class AdminRequestListFragment extends Fragment
         //   * Admin can make Rejected become Approved
         //   * If Approved happened, then Rejected will not allow(UI will not show Reject button)
 
-        updateStatus(req, "APPROVED", "Approved: " + req.fullName());
+        updateStatus(req, "APPROVED", "Approved: " + req.getFullName());
     }
 
     // =========================================================================
@@ -198,14 +198,14 @@ public class AdminRequestListFragment extends Fragment
         // Then -> status = "REJECTED"
         // After that it would disappear in Pending list, and then show in Rejected list
 
-        updateStatus(req, "REJECTED", "Rejected: " + req.fullName());
+        updateStatus(req, "REJECTED", "Rejected: " + req.getFullName());
     }
 
     @Override
     public void onItemClick(RegistrationRequest req, int position) {
         // this can pop up BottomSheet to shows more detail (phone number、Program、Degree、Courses)
         Toast.makeText(getContext(),
-                "Open detail for " + req.fullName(),
+                "Open detail for " + req.getFullName(),
                 Toast.LENGTH_SHORT).show();
     }
 
@@ -220,7 +220,7 @@ public class AdminRequestListFragment extends Fragment
         progress.setVisibility(View.VISIBLE);
 
         db.collection("registrationRequests")
-                .document(req.id)
+                .document(req.getId())
                 .update("status", newStatus)
                 .addOnSuccessListener(unused -> {
                     progress.setVisibility(View.GONE);

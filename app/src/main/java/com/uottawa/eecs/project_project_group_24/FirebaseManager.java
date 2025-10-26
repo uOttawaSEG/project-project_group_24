@@ -132,12 +132,12 @@ public final class FirebaseManager {
         map.put("email", request.getEmail());
         map.put("phone", request.getPhone());
         map.put("status", request.getStatus());
-        if(request.getRole().equalsIgnoreCase("tutor")){
+        if(request.getRole().equalsIgnoreCase("TUTOR")){
             map.put("highestDegree", request.getHighestDegree());
             map.put("coursesOffered", request.getCoursesOffered());
         }
 
-        else if(request.getRole().equalsIgnoreCase("student")){
+        else if(request.getRole().equalsIgnoreCase("STUDENT")){
             map.put("programOfStudy", request.getProgramOfStudy());
         }
 
@@ -273,7 +273,7 @@ public final class FirebaseManager {
         RegistrationRequest request = new RegistrationRequest(firstName, lastName, email, role, status);
         request.setId(id);
         request.setPhone(phone);
-        if(role.equalsIgnoreCase("tutor")){
+        if(role.equalsIgnoreCase("TUTOR")){
             String highestDegree = (String) data.get("highestDegree");
             String[] cO = (String[]) data.get("coursesOffered");
             List<String> coursesOffered = new ArrayList<>();

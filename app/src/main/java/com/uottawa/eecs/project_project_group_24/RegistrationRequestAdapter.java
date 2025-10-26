@@ -45,17 +45,17 @@ public class RegistrationRequestAdapter
 
     @Override public void onBindViewHolder(@NonNull VH h, int pos) {
         RegistrationRequest r = items.get(pos);
-        h.txtNameRole.setText(r.fullName() + " — " + (r.role == RegistrationRequest.Role.STUDENT ? "Student" : "Tutor"));
-        h.txtEmail.setText(r.email);
-        h.txtPhone.setText(r.phone == null ? "" : r.phone);
+        h.txtNameRole.setText(r.getFullName() + " — " + (r.getRole().toLowerCase()));
+        h.txtEmail.setText(r.getEmail());
+        h.txtPhone.setText(r.getPhone() == null ? "" : r.getPhone());
 
         // show Program or Degree/Courses
-        if (r.role == RegistrationRequest.Role.STUDENT) {
-            h.txtExtra.setText("Program: " + (r.programOfStudy == null ? "-" : r.programOfStudy));
+        if (r.getRole().equalsIgnoreCase("STUDENT")) {
+            h.txtExtra.setText("Program: " + (r.getProgramOfStudy() == null ? "-" : r.getProgramOfStudy()));
         } else {
-            String courses = (r.coursesOffered == null || r.coursesOffered.isEmpty())
-                    ? "-" : String.join(", ", r.coursesOffered);
-            h.txtExtra.setText("Degree: " + (r.highestDegree == null ? "-" : r.highestDegree)
+            String courses = (r.getCoursesOffered() == null || r.getCoursesOffered().isEmpty())
+                    ? "-" : String.join(", ", r.getCoursesOffered());
+            h.txtExtra.setText("Degree: " + (r.getHighestDegree() == null ? "-" : r.getHighestDegree())
                     + "  •  Courses: " + courses);
         }
 
