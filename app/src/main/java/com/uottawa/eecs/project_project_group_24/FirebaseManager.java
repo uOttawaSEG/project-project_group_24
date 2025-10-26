@@ -192,7 +192,12 @@ public final class FirebaseManager {
         String email = (String) data.get("id");
         String program = (String) data.get("program");
         long phoneNumber = (long) data.get("phoneNumber");
-        Student student = new Student(email, null);
+        String status = (String) data.get("STATUS");
+        boolean newuser = false;
+        if(status.equalsIgnoreCase("pending")){
+            newuser = true;
+        }
+        Student student = new Student(email, null, newuser);
         student.setProgram(program);
         student.phoneNumber = phoneNumber;
         student.firstName = firstName;
