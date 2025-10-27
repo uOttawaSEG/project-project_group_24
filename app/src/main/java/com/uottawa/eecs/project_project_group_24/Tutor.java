@@ -6,7 +6,7 @@ public class Tutor extends User
     Course[] courses;
     public Tutor(String email, String pass, boolean newuser)
     {
-        super();
+        super(email, pass);
         if (newuser) {
             setStatus(requestStatus.PendingStudent);
             getDatabase().registerTutor(this, pass);
