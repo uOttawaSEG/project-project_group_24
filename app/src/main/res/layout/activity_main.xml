@@ -17,18 +17,18 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/btnStudent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:text="Register as Student" />
+<!--    <Button-->
+<!--        android:id="@+id/btnStudent"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginBottom="20dp"-->
+<!--        android:text="Register as Student" />-->
 
-    <Button
-        android:id="@+id/btnTutor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Register as Tutor" />
+<!--    <Button-->
+<!--        android:id="@+id/btnTutor"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Register as Tutor" />-->
 
     <Button
         android:id="@+id/btnAdmin"
