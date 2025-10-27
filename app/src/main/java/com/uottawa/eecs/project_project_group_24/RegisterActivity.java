@@ -18,8 +18,8 @@ import com.google.android.material.textfield.TextInputLayout;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private TextInputLayout firstNameLayout, lastNameLayout, emailLayout, passwordLayout, phoneLayout;
-    private TextInputEditText editFirstName, editLastName, editEmail, editPassword, editPhone;
+    private TextInputLayout firstNameLayout, lastNameLayout, emailLayout, passwordLayout, phoneLayout, roleLayout;
+    private TextInputEditText editFirstName, editLastName, editEmail, editPassword, editPhone, editRole;
     private Spinner spinnerProgram;
     private Button btnRegister;
 
