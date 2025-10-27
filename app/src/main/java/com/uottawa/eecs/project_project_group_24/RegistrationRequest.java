@@ -9,6 +9,7 @@ import java.util.List;
 public class RegistrationRequest {
 
     public enum Status { PENDING, REJECTED, APPROVED }
+    public enum Role{STUDENT,TUTOR}
 
     private String id;
     private String firstName;
@@ -36,9 +37,13 @@ public class RegistrationRequest {
     {
         status = Status.APPROVED;
     }
+    public void RejectRequest()
+    {
+        status = Status.REJECTED;
+    }
 
     //in case administrator wants to see previously approved or rejected requests
-    public RegistrationRequest(String firstName, String lastName, String email, String role, String status) {
+    public RegistrationRequest(String firstName, String lastName, String email, Role role, Status status) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -46,10 +51,7 @@ public class RegistrationRequest {
         this.status = status;
     }
 
-    public void RejectRequest()
-    {
-        status = Status.REJECTED;
-    }
+
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
