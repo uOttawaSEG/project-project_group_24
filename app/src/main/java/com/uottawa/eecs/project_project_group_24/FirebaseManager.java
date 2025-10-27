@@ -3,6 +3,7 @@ package com.uottawa.eecs.project_project_group_24;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -368,6 +369,15 @@ public final class FirebaseManager {
             tutor.setStatus(User.requestStatus.RejectedTutor);
         }
         return tutor;
+    }
+    public Map<String,Object> getUserData(String email)
+    {
+        Map<String,Object> tmp = null;
+        DocumentSnapshot tmp2 = db.collection("user")
+                .document(email)
+                .get().getResult();
+        if(tmp2!=null) tmp = tmp2.getData();
+        return tmp;
     }
 
 }

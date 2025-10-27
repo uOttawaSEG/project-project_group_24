@@ -1,9 +1,11 @@
 package com.uottawa.eecs.project_project_group_24;
 
+import java.util.Map;
+
 public class User implements IUser
 {
     FirebaseManager database = FirebaseManager.getInstance();
-    String firstName,lastName,email;
+    String firstName,lastName,email,password;
     requestStatus status;
     //status temporary till requestStatus done
     public enum requestStatus {AcceptedStudent,RejectedStudent,PendingStudent,
@@ -11,15 +13,19 @@ public class User implements IUser
     long phoneNumber;
     private boolean requested_register;
 
-    //Prompts User to create an account
-    public User()
-    {}
-
 
     //Calls on AuthenticateUser to login into account
     public User(String email, String pass)
     {
         this.email = email;
+        this.password = pass;
+        Map<String,Object> tmp = database.getUserData(email);
+        firstName = String.valueOf(tmp.get("firstName"));
+        lastName = String.valueOf(tmp.get("lastName"));
+        phoneNumber = (long) tmp.get("phoneNumber");
+
+
+
     }
     //Compare login info with database then log user in
     public boolean authenticateUser(String email,String pass)
@@ -35,6 +41,10 @@ public class User implements IUser
 
     public String getEmail() {
         return email;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public requestStatus getStatus() {
