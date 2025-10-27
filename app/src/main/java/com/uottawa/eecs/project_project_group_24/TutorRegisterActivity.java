@@ -108,7 +108,7 @@ public class TutorRegisterActivity extends AppCompatActivity {
             ok = false;
         }
         FirebaseManager.getInstance().registerTutor(new Tutor(email, password, true), password);
-        RegistrationRequest request = new RegistrationRequest(firstName, lastName, email, "TUTOR", status);
+        RegistrationRequest request = new RegistrationRequest(firstName, lastName, email, RegistrationRequest.Role.TUTOR, RegistrationRequest.Status.valueOf(status));
         request.setId(email);
         request.setPhone(phone);
         request.setHighestDegree(degree);

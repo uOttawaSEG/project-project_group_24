@@ -270,7 +270,7 @@ public final class FirebaseManager {
         String email = (String) data.get("email");
         String phone = (String) data.get("phone");
         String status = (String) data.get("status");
-        RegistrationRequest request = new RegistrationRequest(firstName, lastName, email, role, status);
+        RegistrationRequest request = new RegistrationRequest(firstName, lastName, email, RegistrationRequest.Role.valueOf(role), RegistrationRequest.Status.valueOf(status));
         request.setId(id);
         request.setPhone(phone);
         if(role.equalsIgnoreCase("TUTOR")){
@@ -311,7 +311,6 @@ public final class FirebaseManager {
             newuser = true;
         }
         Student student = new Student(email, null, newuser);
-        Student student = new Student(email, null,false);
         student.setProgram(program);
         student.phoneNumber = phoneNumber;
         student.firstName = firstName;
