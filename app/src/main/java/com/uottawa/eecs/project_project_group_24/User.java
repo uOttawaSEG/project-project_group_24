@@ -53,6 +53,13 @@ public class User implements IUser
         this.status = status;
     }
 
+    public void setFirstName(String firstName){
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName){
+        this.lastName = lastName;
+    }
 
     public FirebaseManager getDatabase() {
         return database;

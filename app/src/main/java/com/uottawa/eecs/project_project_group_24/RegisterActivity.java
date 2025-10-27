@@ -106,7 +106,7 @@ public class RegisterActivity extends AppCompatActivity {
             passwordLayout.setError("Password must be at least 6 characters");
             return false;
         }
-        if (!phone.matches("\\d{10}")) {
+        if (!phone.matches("d{10}")) {
             phoneLayout.setError("Phone must be 10 digits");
             return false;
         }
@@ -115,12 +115,20 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
 
-        FirebaseManager.getInstance().registerStudent(new Student(email, password, true), password);
+
+        Student student = new Student(email, password, true);
+        student.setFirstName(firstName);
+        student.setLastName(lastName);
+        student.setPhoneNumber(Long.parseLong(phone));
+        student.setProgram((String)program);
+
+        FirebaseManager.getInstance().registerStudent(student, password);
         RegistrationRequest request = new RegistrationRequest(firstName, lastName, email, RegistrationRequest.Role.STUDENT, RegistrationRequest.Status.PENDING);
         request.setProgramOfStudy((String)program);
         request.setId(email);
         request.setPhone(phone);
         FirebaseManager.getInstance().addRegistrationRequest(request);
+        //student.StudentRegister();
         return true;
     }
 
