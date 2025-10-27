@@ -38,6 +38,8 @@ public final class FirebaseManager {
 
     }
 
+
+
     //needs to be implemented
     public void onFailure(String errorMessage){
         Log.e("Register", "Auth failed: " + errorMessage);
@@ -248,6 +250,19 @@ public final class FirebaseManager {
                 });
     }
 
+    public Map<String, Object> loginUser(String email, String password) {
+        Map<String, Object> userData = null;
+        auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(authTask -> {
+                    if (authTask.isSuccessful()) {
+                        findUser(email);
+                    } else {
+                        this.onFailure(authTask.getException().getMessage());
+                    }
+                });
+        return null;
+    }
+
     //fetches student from database given email
     private void fetchStudentProfile(String email) {
         db.collection("student")
@@ -370,14 +385,28 @@ public final class FirebaseManager {
         }
         return tutor;
     }
-    public Map<String,Object> getUserData(String email)
+    public Map<String,Object> getUserData(String email, String collectionName)
     {
         Map<String,Object> tmp = null;
-        DocumentSnapshot tmp2 = db.collection("user")
+        DocumentSnapshot tmp2 = db.collection(collectionName)
                 .document(email)
                 .get().getResult();
         if(tmp2!=null) tmp = tmp2.getData();
         return tmp;
+    }
+
+    public Map<String, Object>  findUser(String email){
+        boolean found = false;
+        Map<String, Object> userData = null;
+        String[] collections = {"user", "student", "tutor", "admin"};
+        for(int i = 0; i < collections.length; i++){
+            Map<String, Object> temp = getUserData(email, collections[i]);
+            if(temp != null){
+
+            }
+        }
+
+    return null;
     }
 
 }

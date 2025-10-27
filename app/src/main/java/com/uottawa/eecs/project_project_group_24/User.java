@@ -19,7 +19,7 @@ public class User implements IUser
     {
         this.email = email;
         this.password = pass;
-        Map<String,Object> tmp = database.getUserData(email);
+        Map<String,Object> tmp = database.getUserData(email, "user");
         firstName = String.valueOf(tmp.get("firstName"));
         lastName = String.valueOf(tmp.get("lastName"));
         phoneNumber = (long) tmp.get("phoneNumber");
@@ -32,6 +32,7 @@ public class User implements IUser
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         requested_register = false;
+
     }
     //Compare login info with database then log user in
     public boolean authenticateUser(String email,String pass)

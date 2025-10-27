@@ -61,7 +61,9 @@ public class LoginActivity extends AppCompatActivity {
         loginProgress.setVisibility(View.VISIBLE);
         btnLogin.setEnabled(false);
 
-        db.collection("registrationRequests")
+
+
+        db.collection("student")
                 .whereEqualTo("email", email)
                 .limit(1)
                 .get()
