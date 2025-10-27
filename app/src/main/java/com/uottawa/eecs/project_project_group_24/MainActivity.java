@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btnStudent, btnTutor, btnAdmin, btnGeneral;
+    private Button btnGeneral;
     private FirebaseFirestore db;
 	
     @Override
@@ -35,26 +35,26 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
         });
 
-        btnStudent = findViewById(R.id.btnStudent);
-        btnTutor = findViewById(R.id.btnTutor);
+//        btnStudent = findViewById(R.id.btnStudent);
+//        btnTutor = findViewById(R.id.btnTutor);
         btnGeneral = findViewById(R.id.btnGeneralRegister);
 
-        btnStudent.setOnClickListener(v -> {
-            Intent i = new Intent(MainActivity.this, RegisterActivity.class);
-            startActivity(i);
-        });
+//        btnStudent.setOnClickListener(v -> {
+//            Intent i = new Intent(MainActivity.this, RegisterActivity.class);
+//            startActivity(i);
+//        });
 
-        btnTutor.setOnClickListener(v -> {
-            Intent i = new Intent(MainActivity.this, TutorRegisterActivity.class);
-            startActivity(i);
-        });
+//        btnTutor.setOnClickListener(v -> {
+//            Intent i = new Intent(MainActivity.this, TutorRegisterActivity.class);
+//            startActivity(i);
+//        });
 		
-		btnAdmin = findViewById(R.id.btnAdmin);
-        btnAdmin.setOnClickListener(v -> {
-            Intent i = new Intent(MainActivity.this, WelcomeActivity.class);
-            i.putExtra("role", "administrator");
-            startActivity(i);
-        });
+//		btnAdmin = findViewById(R.id.btnAdmin);
+//        btnAdmin.setOnClickListener(v -> {
+//            Intent i = new Intent(MainActivity.this, WelcomeActivity.class);
+//            i.putExtra("role", "administrator");
+//            startActivity(i);
+//        });
 
         btnGeneral.setOnClickListener(v -> {
             Intent i = new Intent(MainActivity.this, RegisterActivity.class);

@@ -22,7 +22,7 @@
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="wrap_content"-->
 <!--        android:layout_marginBottom="20dp"-->
-<!--        android:text="Register as Student" />-->
+<!--        android:text="Register" />-->
 
 <!--    <Button-->
 <!--        android:id="@+id/btnTutor"-->
@@ -30,11 +30,11 @@
 <!--        android:layout_height="wrap_content"-->
 <!--        android:text="Register as Tutor" />-->
 
-    <Button
-        android:id="@+id/btnAdmin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="admin" />
+<!--    <Button-->
+<!--        android:id="@+id/btnAdmin"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="admin" />-->
 
     <Button
         android:id="@+id/btnLoginMain"

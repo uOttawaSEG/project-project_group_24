@@ -14,7 +14,7 @@
             android:id="@+id/registerTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Student Registration"
+            android:text="Registration"
             android:textStyle="bold"
             android:textSize="22sp"
             android:layout_marginBottom="16dp" />
@@ -86,16 +86,6 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Program of Study -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Program of study"
-            android:layout_marginTop="8dp" />
-        <Spinner
-            android:id="@+id/spinnerProgram"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:spinnerMode="dropdown" />
 
         <!-- Register -->
         <Button

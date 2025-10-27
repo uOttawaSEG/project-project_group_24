@@ -15,7 +15,7 @@ public class User implements IUser
 
 
     //Calls on AuthenticateUser to login into account
-    public User(String email, String pass)
+    public User(String email, String pass)//login
     {
         this.email = email;
         this.password = pass;
@@ -23,9 +23,15 @@ public class User implements IUser
         firstName = String.valueOf(tmp.get("firstName"));
         lastName = String.valueOf(tmp.get("lastName"));
         phoneNumber = (long) tmp.get("phoneNumber");
-
-
-
+    }
+    public User(String email,String pass,String firstName,String lastName,long phoneNumber)//register
+    {
+        this.email = email;
+        this.password = pass;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        requested_register = false;
     }
     //Compare login info with database then log user in
     public boolean authenticateUser(String email,String pass)

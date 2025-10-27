@@ -29,7 +29,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register); // 對應 res/layout/activity_register.xml
 
         bindViews();
-        setupProgramSpinner();
+//        setupProgramSpinner();
         setupClickListeners();
     }
 
@@ -46,24 +46,24 @@ public class RegisterActivity extends AppCompatActivity {
         editPassword    = findViewById(R.id.editPassword);
         editPhone       = findViewById(R.id.editPhone);
 
-        spinnerProgram  = findViewById(R.id.spinnerProgram);
+//        spinnerProgram  = findViewById(R.id.spinnerProgram);
         btnRegister     = findViewById(R.id.btnRegister);
     }
 
-    private void setupProgramSpinner() {
-        ArrayAdapter<CharSequence> adapter;
-        try {
-            adapter = ArrayAdapter.createFromResource(
-                    this, R.array.programs_array, android.R.layout.simple_spinner_item);
-        } catch (Exception ignore) {
-            adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,
-                    new String[]{"Select your program", "Computer Science", "Software Engineering",
-                            "Information Technology", "Electrical Engineering"});
-        }
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerProgram.setAdapter(adapter);
-        spinnerProgram.setSelection(0);
-    }
+//    private void setupProgramSpinner() {
+//        ArrayAdapter<CharSequence> adapter;
+//        try {
+//            adapter = ArrayAdapter.createFromResource(
+//                    this, R.array.programs_array, android.R.layout.simple_spinner_item);
+//        } catch (Exception ignore) {
+//            adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,
+//                    new String[]{"Select your program", "Computer Science", "Software Engineering",
+//                            "Information Technology", "Electrical Engineering"});
+//        }
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinnerProgram.setAdapter(adapter);
+//        spinnerProgram.setSelection(0);
+//    }
 
     private void setupClickListeners() {
         btnRegister.setOnClickListener(v -> {
@@ -88,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
         String email     = getText(editEmail);
         String password  = getText(editPassword);
         String phone     = getText(editPhone);
-        Object program   = spinnerProgram.getSelectedItem();
+//        Object program   = spinnerProgram.getSelectedItem();
 
         if (firstName.isEmpty()) {
             firstNameLayout.setError("First name required");
@@ -110,21 +110,21 @@ public class RegisterActivity extends AppCompatActivity {
             phoneLayout.setError("Phone must be 10 digits");
             return false;
         }
-        if (program == null || program.toString().toLowerCase().contains("select")) {
-            Toast.makeText(this, "Please select your program", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+//        if (program == null || program.toString().toLowerCase().contains("select")) {
+//            Toast.makeText(this, "Please select your program", Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
 
-
+        User user = new User(email,password);
         Student student = new Student(email, password, true);
         student.setFirstName(firstName);
         student.setLastName(lastName);
         student.setPhoneNumber(Long.parseLong(phone));
-        student.setProgram((String)program);
+//        student.setProgram((String)program);
 
         FirebaseManager.getInstance().registerStudent(student, password);
         RegistrationRequest request = new RegistrationRequest(firstName, lastName, email, RegistrationRequest.Role.STUDENT, RegistrationRequest.Status.PENDING);
-        request.setProgramOfStudy((String)program);
+//        request.setProgramOfStudy((String)program);
         request.setId(email);
         request.setPhone(phone);
         FirebaseManager.getInstance().addRegistrationRequest(request);
