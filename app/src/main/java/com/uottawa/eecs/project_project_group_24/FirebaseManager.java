@@ -1,5 +1,7 @@
 package com.uottawa.eecs.project_project_group_24;
 
+import android.util.Log;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -37,7 +39,7 @@ public final class FirebaseManager {
 
     //needs to be implemented
     public void onFailure(String errorMessage){
-
+        Log.e("Register", "Auth failed: " + errorMessage);
     }
 
     //when sending new registration to the database
