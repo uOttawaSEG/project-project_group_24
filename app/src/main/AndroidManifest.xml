@@ -12,6 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RegisterActivity">
         <activity
+            android:name=".UserHomeActivity"
+            android:exported="false"
+            android:theme="@style/Theme.RegisterActivity" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -20,12 +24,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterActivity"/>
+        <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".WelcomeActivity"/>
+        <activity android:name=".WelcomeActivity" />
         <activity android:name=".TutorRegisterActivity" />
-        <activity android:name=".AdminHomeActivity"/>
-
+        <activity android:name=".AdminHomeActivity" />
     </application>
 
 </manifest>
