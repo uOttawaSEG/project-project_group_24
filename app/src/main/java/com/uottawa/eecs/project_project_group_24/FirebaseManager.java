@@ -81,6 +81,21 @@ public final class FirebaseManager {
         }
 
     }
+    public void registerUser(User user,String password)
+    {
+        auth.createUserWithEmailAndPassword(user.getEmail(), password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        db.collection("user")
+                                .document(user.getEmail())
+                                .set(toMap(user))
+                                .addOnSuccessListener(aVoid -> this.onSuccess())
+                                .addOnFailureListener(e -> this.onFailure(e.getMessage()));
+                    } else {
+                        this.onFailure(task.getException().getMessage());
+                    }
+                });
+    }
 
     //call this method when creating a new Student, takes in a student and adds it to the database
     public void registerStudent(Student student, String password) {
@@ -171,6 +186,24 @@ public final class FirebaseManager {
         return map;
     }
 
+    private Map<String, Object> toMap(User user) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("firstName", user.getFirstName());
+        map.put("lastName", user.getLastName());
+        map.put("phoneNumber", user.getPhoneNumber());
+        if(user.getStatus()== User.requestStatus.PendingTutor){
+            map.put("status", "PENDING");
+        }
+
+        else if(user.getStatus()== User.requestStatus.AcceptedTutor){
+            map.put("status", "ACCEPTED");
+        }
+
+        else if(user.getStatus()== User.requestStatus.RejectedTutor){
+            map.put("status", "REJECTED");
+        }
+        return map;
+    }
     //converts Course to a map to add to database
     private Map<String, Object> toMap(Course course) {
         Map<String, Object> map = new HashMap<>();

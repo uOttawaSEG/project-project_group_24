@@ -71,7 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show();
 
                 Intent i = new Intent(RegisterActivity.this, WelcomeActivity.class);
-                i.putExtra("role", "Student");
+                i.putExtra("role", "User");
                 startActivity(i);
 
                 finish();
@@ -106,8 +106,8 @@ public class RegisterActivity extends AppCompatActivity {
             passwordLayout.setError("Password must be at least 6 characters");
             return false;
         }
-        if (!phone.matches("d{10}")) {
-            phoneLayout.setError("Phone must be 10 digits");
+        if (phone.length()!=10) {
+            phoneLayout.setError("Phone must be 10 digits ");
             return false;
         }
 //        if (program == null || program.toString().toLowerCase().contains("select")) {
@@ -115,19 +115,19 @@ public class RegisterActivity extends AppCompatActivity {
 //            return false;
 //        }
 
-        User user = new User(email,password);
-        Student student = new Student(email, password, true);
-        student.setFirstName(firstName);
-        student.setLastName(lastName);
-        student.setPhoneNumber(Long.parseLong(phone));
+        User user = new User(email,password,firstName,lastName,Long.parseLong(phone));
+//        Student student = new Student(email, password, true);
+//        user.setFirstName(firstName);
+//        user.setLastName(lastName);
+//        user.setPhoneNumber(Long.parseLong(phone));
 //        student.setProgram((String)program);
 
-        FirebaseManager.getInstance().registerStudent(student, password);
-        RegistrationRequest request = new RegistrationRequest(firstName, lastName, email, RegistrationRequest.Role.STUDENT, RegistrationRequest.Status.PENDING);
+        FirebaseManager.getInstance().registerUser(user, password);
+//        RegistrationRequest request = new RegistrationRequest(firstName, lastName, email, RegistrationRequest.Role.STUDENT, RegistrationRequest.Status.PENDING);
 //        request.setProgramOfStudy((String)program);
-        request.setId(email);
-        request.setPhone(phone);
-        FirebaseManager.getInstance().addRegistrationRequest(request);
+//        request.setId(email);
+//        request.setPhone(phone);
+//        FirebaseManager.getInstance().addRegistrationRequest(request);
         //student.StudentRegister();
         return true;
     }
