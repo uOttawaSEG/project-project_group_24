@@ -63,18 +63,27 @@ public class LoginActivity extends AppCompatActivity {
         loginProgress.setVisibility(View.VISIBLE);
         btnLogin.setEnabled(false);
 
+        FirebaseManager fbManager = FirebaseManager.getInstance();
 
+        fbManager.loginUser(email, password);
+        if (fbManager.getAdmin() == true) {
+            Intent i = new Intent(LoginActivity.this, AdminHomeActivity.class);
+            startActivity(i);
+        } else if (fbManager.getLoggedIn() == true) {
+            Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
+            startActivity(i);
+        }
 
-        db.collection("student")
-                .whereEqualTo("email", email)
-                .limit(1)
-                .get()
-                .addOnSuccessListener(this::handleLoginQueryResult)
-                .addOnFailureListener(e -> {
-                    loginProgress.setVisibility(View.GONE);
-                    btnLogin.setEnabled(true);
-                    loginMessage.setText("Error connecting to server: " + e.getMessage());
-                });
+//        db.collection("student")
+//                .whereEqualTo("email", email)
+//                .limit(1)
+//                .get()
+//                .addOnSuccessListener(this::handleLoginQueryResult)
+//                .addOnFailureListener(e -> {
+//                    loginProgress.setVisibility(View.GONE);
+//                    btnLogin.setEnabled(true);
+//                    loginMessage.setText("Error connecting to server: " + e.getMessage());
+//                });
     }
 
     private void handleLoginQueryResult(QuerySnapshot snap) {

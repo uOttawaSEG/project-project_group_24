@@ -2,9 +2,16 @@ package com.uottawa.eecs.project_project_group_24;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +23,9 @@ public final class FirebaseManager {
     private static FirebaseManager instance;
     private FirebaseAuth auth;
     private FirebaseFirestore db;
+
+    private Boolean admin = false;
+    private Boolean loggedIn = false;
 
     private FirebaseManager() {
         auth = FirebaseAuth.getInstance();
@@ -286,17 +296,18 @@ public final class FirebaseManager {
                 });
     }
 
-    public Map<String, Object> loginUser(String email, String password) {
-        Map<String, Object> userData = null;
+    public Boolean loginUser(String email, String password) {
+        Map<String, Object> userData = new HashMap<>();
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(authTask -> {
                     if (authTask.isSuccessful()) {
-                        findUser(email);
+                        isAdmin(email);
+                        loggedIn = true;
                     } else {
                         this.onFailure(authTask.getException().getMessage());
                     }
                 });
-        return null;
+        return admin;
     }
 
     //fetches student from database given email
@@ -431,6 +442,22 @@ public final class FirebaseManager {
         return tmp;
     }
 
+    public void isAdmin(String email) {
+        db.collection("admin").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    if (task.getResult().exists()){
+                        admin = true;
+                    } else{
+                        admin = false;
+                    }
+                }
+            }
+        });
+
+    }
+
     public Map<String, Object>  findUser(String email){
         boolean found = false;
         Map<String, Object> userData = null;
@@ -443,6 +470,20 @@ public final class FirebaseManager {
         }
 
     return null;
+    }
+
+    public Boolean getAdmin() {
+        return admin;
+    }
+
+    public Boolean getLoggedIn() {
+        return loggedIn;
+    }
+
+    public void logout() {
+        auth.signOut();
+        loggedIn = false;
+        admin = false;
     }
 
 }

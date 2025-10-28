@@ -19,6 +19,10 @@ public class WelcomeActivity extends AppCompatActivity {
         text.setText("Welcome! You are logged in as " + role);
 
         Button logoff = findViewById(R.id.btnLogoff);
-        logoff.setOnClickListener(v -> finish());
+        logoff.setOnClickListener(v -> {
+            FirebaseManager fbmanager = FirebaseManager.getInstance();
+            fbmanager.logout();
+            finish();
+        });
     }
 }
