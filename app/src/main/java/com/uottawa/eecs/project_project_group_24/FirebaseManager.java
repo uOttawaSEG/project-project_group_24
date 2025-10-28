@@ -191,6 +191,9 @@ public final class FirebaseManager {
         map.put("firstName", user.getFirstName());
         map.put("lastName", user.getLastName());
         map.put("phoneNumber", user.getPhoneNumber());
+        map.put("email",user.getEmail());
+//        map.put("requested_register",user.get)
+
         if(user.getStatus()== User.requestStatus.PendingTutor){
             map.put("status", "PENDING");
         }

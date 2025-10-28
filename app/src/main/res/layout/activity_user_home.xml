@@ -18,14 +18,14 @@
         android:textStyle="bold" />
 
     <Button
-        android:id="@+id/btnLoginMain"
+        android:id="@+id/btnTutorRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="Tutor" />
 
     <Button
-        android:id="@+id/btnGeneralRegister"
+        android:id="@+id/btnStudentRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Student" />

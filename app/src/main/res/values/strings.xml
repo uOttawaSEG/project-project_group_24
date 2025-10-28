@@ -1,12 +1,18 @@
 <resources>
     <string name="app_name">RegisterActivity</string>
     <string name="select_program">Select your program</string>
+    <string name="select_degree">Select your degree</string>
     <string-array name="programs_array">
         <item>@string/select_program</item>
         <item>Computer Science</item>
         <item>Software Engineering</item>
         <item>Information Technology</item>
         <item>Electrical Engineering</item>
+    </string-array>
+    <string-array name="degree_array">
+        <item>@string/select_degree</item>
+        <item>Bachelor\'s Degree</item>
+        <item>Master\'s Degree</item>
     </string-array>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>

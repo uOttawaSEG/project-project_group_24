@@ -22,6 +22,7 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputEditText editFirstName, editLastName, editEmail, editPassword, editPhone, editRole;
     private Spinner spinnerProgram;
     private Button btnRegister;
+    User logged_user;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,8 +71,10 @@ public class RegisterActivity extends AppCompatActivity {
             if (processForm()) {
                 Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show();
 
-                Intent i = new Intent(RegisterActivity.this, WelcomeActivity.class);
+                Intent i = new Intent(RegisterActivity.this, UserHomeActivity.class);
                 i.putExtra("role", "User");
+                i.putExtra("email",logged_user.getEmail());
+                i.putExtra("password",logged_user.getPassword());
                 startActivity(i);
 
                 finish();
@@ -116,6 +119,7 @@ public class RegisterActivity extends AppCompatActivity {
 //        }
 
         User user = new User(email,password,firstName,lastName,Long.parseLong(phone));
+        logged_user = user;
 //        Student student = new Student(email, password, true);
 //        user.setFirstName(firstName);
 //        user.setLastName(lastName);

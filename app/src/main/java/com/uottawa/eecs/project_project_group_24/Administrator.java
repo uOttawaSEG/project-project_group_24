@@ -10,9 +10,11 @@ public class Administrator extends User{
         super(email,pass);
     }
 
-    public static void receiveRequest(User u, RegistrationRequest.Role role)
+    public static RegistrationRequest receiveRequest(User u, RegistrationRequest.Role role)
     {
-        PendingRequests.Enqueue(new RegistrationRequest(u.getFirstName(),u.getLastName(),u.getEmail(), role));
+        RegistrationRequest tmp =new RegistrationRequest(u.getFirstName(),u.getLastName(),u.getEmail(), role);
+        PendingRequests.Enqueue(tmp);
+        return tmp;
     }
 
     public void registerRequest(Node<RegistrationRequest> n)

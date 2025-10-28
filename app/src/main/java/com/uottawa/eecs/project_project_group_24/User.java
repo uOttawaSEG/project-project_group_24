@@ -8,7 +8,8 @@ public class User implements IUser
     String firstName,lastName,email,password;
     requestStatus status;
     //status temporary till requestStatus done
-    public enum requestStatus {AcceptedStudent,RejectedStudent,PendingStudent,
+    public enum requestStatus {Undecided,
+        AcceptedStudent,RejectedStudent,PendingStudent,
         AcceptedTutor,RejectedTutor, PendingTutor};
     long phoneNumber;
     private boolean requested_register;
@@ -34,6 +35,7 @@ public class User implements IUser
         requested_register = false;
 
     }
+
     //Compare login info with database then log user in
     public boolean authenticateUser(String email,String pass)
     {return true;}//TODO
@@ -84,6 +86,7 @@ public class User implements IUser
     public void StudentRegister()
     {
         Administrator.receiveRequest(this,RegistrationRequest.Role.STUDENT);
+
     }
     public void TutorRegister()
     {

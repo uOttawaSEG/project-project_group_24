@@ -20,24 +20,26 @@ public class TutorRegisterActivity extends AppCompatActivity {
     private Spinner spinnerDegree;
     private CheckBox checkCourse1, checkCourse2, checkCourse3;
     private Button btnTutorRegister;
+    String email,password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tutor_register);
+        password = getIntent().getStringExtra("password");
+        email = getIntent().getStringExtra("email");
 
+//        tutorFirstNameLayout = findViewById(R.id.tutorFirstNameLayout);
+//        tutorLastNameLayout = findViewById(R.id.tutorLastNameLayout);
+//        tutorEmailLayout = findViewById(R.id.tutorEmailLayout);
+//        tutorPasswordLayout = findViewById(R.id.tutorPasswordLayout);
+//        tutorPhoneLayout = findViewById(R.id.tutorPhoneLayout);
 
-        tutorFirstNameLayout = findViewById(R.id.tutorFirstNameLayout);
-        tutorLastNameLayout = findViewById(R.id.tutorLastNameLayout);
-        tutorEmailLayout = findViewById(R.id.tutorEmailLayout);
-        tutorPasswordLayout = findViewById(R.id.tutorPasswordLayout);
-        tutorPhoneLayout = findViewById(R.id.tutorPhoneLayout);
-
-        tutorFirstName = findViewById(R.id.tutorFirstName);
-        tutorLastName = findViewById(R.id.tutorLastName);
-        tutorEmail = findViewById(R.id.tutorEmail);
-        tutorPassword = findViewById(R.id.tutorPassword);
-        tutorPhone = findViewById(R.id.tutorPhone);
+//        tutorFirstName = findViewById(R.id.tutorFirstName);
+//        tutorLastName = findViewById(R.id.tutorLastName);
+//        tutorEmail = findViewById(R.id.tutorEmail);
+//        tutorPassword = findViewById(R.id.tutorPassword);
+//        tutorPhone = findViewById(R.id.tutorPhone);
 
         spinnerDegree = findViewById(R.id.spinnerDegree);
         checkCourse1 = findViewById(R.id.checkCourse1);
@@ -71,46 +73,47 @@ public class TutorRegisterActivity extends AppCompatActivity {
         boolean ok = true;
         clearErrors();
 
-        String firstName = tutorFirstName.getText().toString().trim();
-        String lastName = tutorLastName.getText().toString().trim();
-        String email = tutorEmail.getText().toString().trim();
-        String password = tutorPassword.getText().toString().trim();
-        String phone = tutorPhone.getText().toString().trim();
+//        String firstName = tutorFirstName.getText().toString().trim();
+//        String lastName = tutorLastName.getText().toString().trim();
+//        String email = tutorEmail.getText().toString().trim();
+//        String password = tutorPassword.getText().toString().trim();
+//        String phone = tutorPhone.getText().toString().trim();
         String degree = spinnerDegree.getSelectedItem().toString();
         String status = "PENDING";
 
-        if (firstName.isEmpty()) {
-            tutorFirstNameLayout.setError("First name required");
-            ok = false;
-        }
-        if (lastName.isEmpty()) {
-            tutorLastNameLayout.setError("Last name required");
-            ok = false;
-        }
-        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            tutorEmailLayout.setError("Invalid email");
-            ok = false;
-        }
-        if (password.length() < 6) {
-            tutorPasswordLayout.setError("Password must be at least 6 characters");
-            ok = false;
-        }
-        if (!phone.matches("\\d{10}")) {
-            tutorPhoneLayout.setError("Phone must be 10 digits");
-            ok = false;
-        }
+//        if (firstName.isEmpty()) {
+//            tutorFirstNameLayout.setError("First name required");
+//            ok = false;
+//        }
+//        if (lastName.isEmpty()) {
+//            tutorLastNameLayout.setError("Last name required");
+//            ok = false;
+//        }
+//        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+//            tutorEmailLayout.setError("Invalid email");
+//            ok = false;
+//        }
+//        if (password.length() < 6) {
+//            tutorPasswordLayout.setError("Password must be at least 6 characters");
+//            ok = false;
+//        }
+//        if (!phone.matches("\\d{10}")) {
+//            tutorPhoneLayout.setError("Phone must be 10 digits");
+//            ok = false;
+//        }
         if (degree.equals("Select degree")) {
             Toast.makeText(this, "Please select a degree", Toast.LENGTH_SHORT).show();
-            ok = false;
+            return false;
         }
         if (!checkCourse1.isChecked() && !checkCourse2.isChecked() && !checkCourse3.isChecked()) {
             Toast.makeText(this, "Please select at least one course", Toast.LENGTH_SHORT).show();
-            ok = false;
+            return false;
         }
-        FirebaseManager.getInstance().registerTutor(new Tutor(email, password, true), password);
-        RegistrationRequest request = new RegistrationRequest(firstName, lastName, email, RegistrationRequest.Role.TUTOR, RegistrationRequest.Status.valueOf(status));
+        User user = new User(email,password);
+        Administrator.receiveRequest(user, RegistrationRequest.Role.TUTOR);
+        RegistrationRequest request = new RegistrationRequest(user.getFirstName(), user.getLastName(), email, RegistrationRequest.Role.TUTOR, RegistrationRequest.Status.valueOf(status));
         request.setId(email);
-        request.setPhone(phone);
+        request.setPhone(String.valueOf(user.getPhoneNumber()));
         request.setHighestDegree(degree);
         FirebaseManager.getInstance().addRegistrationRequest(request);
         return ok;
@@ -119,10 +122,10 @@ public class TutorRegisterActivity extends AppCompatActivity {
 
 
     private void clearErrors() {
-        tutorFirstNameLayout.setError(null);
-        tutorLastNameLayout.setError(null);
-        tutorEmailLayout.setError(null);
-        tutorPasswordLayout.setError(null);
-        tutorPhoneLayout.setError(null);
+//        tutorFirstNameLayout.setError(null);
+//        tutorLastNameLayout.setError(null);
+//        tutorEmailLayout.setError(null);
+//        tutorPasswordLayout.setError(null);
+//        tutorPhoneLayout.setError(null);
     }
 }
