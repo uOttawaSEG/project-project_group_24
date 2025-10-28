@@ -9,5 +9,5 @@ Shan, Ken // UI/UX
 Shanmuhesan, Abishan//testing my git push
 
 Admin:
-E-mail(account):
-password:  
+E-mail(account): adminEmail@gmail.com
+password: admin101
