@@ -21,9 +21,11 @@ public class User implements IUser
         this.email = email;
         this.password = pass;
         Map<String,Object> tmp = database.getUserData(email, "user");
-        firstName = String.valueOf(tmp.get("firstName"));
-        lastName = String.valueOf(tmp.get("lastName"));
-        phoneNumber = (long) tmp.get("phoneNumber");
+        if(tmp!=null) {
+            firstName = String.valueOf(tmp.get("firstName"));
+            lastName = String.valueOf(tmp.get("lastName"));
+            phoneNumber = (long) tmp.get("phoneNumber");
+        }
     }
     public User(String email,String pass,String firstName,String lastName,long phoneNumber)//register
     {

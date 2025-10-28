@@ -17,7 +17,7 @@ public class TutorRegisterActivity extends AppCompatActivity {
     private TextInputLayout tutorFirstNameLayout, tutorLastNameLayout, tutorEmailLayout,
             tutorPasswordLayout, tutorPhoneLayout;
     private TextInputEditText tutorFirstName, tutorLastName, tutorEmail, tutorPassword, tutorPhone;
-    private Spinner spinnerDegree;
+//    private Spinner spinnerDegree;
     private CheckBox checkCourse1, checkCourse2, checkCourse3;
     private Button btnTutorRegister;
     String email,password;
@@ -41,18 +41,18 @@ public class TutorRegisterActivity extends AppCompatActivity {
 //        tutorPassword = findViewById(R.id.tutorPassword);
 //        tutorPhone = findViewById(R.id.tutorPhone);
 
-        spinnerDegree = findViewById(R.id.spinnerDegree);
+//        spinnerDegree = findViewById(R.id.spinnerDegree);
         checkCourse1 = findViewById(R.id.checkCourse1);
         checkCourse2 = findViewById(R.id.checkCourse2);
         checkCourse3 = findViewById(R.id.checkCourse3);
         btnTutorRegister = findViewById(R.id.btnTutorRegister);
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item,
-                new String[]{"Select degree", "Bachelor", "Master", "PhD"});
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerDegree.setAdapter(adapter);
+//        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+//                android.R.layout.simple_spinner_item,
+//                new String[]{"Select degree", "Bachelor", "Master", "PhD"});
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinnerDegree.setAdapter(adapter);
 
 
         btnTutorRegister.setOnClickListener(v -> {
@@ -78,7 +78,7 @@ public class TutorRegisterActivity extends AppCompatActivity {
 //        String email = tutorEmail.getText().toString().trim();
 //        String password = tutorPassword.getText().toString().trim();
 //        String phone = tutorPhone.getText().toString().trim();
-        String degree = spinnerDegree.getSelectedItem().toString();
+//        String degree = spinnerDegree.getSelectedItem().toString();
         String status = "PENDING";
 
 //        if (firstName.isEmpty()) {
@@ -101,10 +101,10 @@ public class TutorRegisterActivity extends AppCompatActivity {
 //            tutorPhoneLayout.setError("Phone must be 10 digits");
 //            ok = false;
 //        }
-        if (degree.equals("Select degree")) {
-            Toast.makeText(this, "Please select a degree", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+//        if (degree.equals("Select degree")) {
+//            Toast.makeText(this, "Please select a degree", Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
         if (!checkCourse1.isChecked() && !checkCourse2.isChecked() && !checkCourse3.isChecked()) {
             Toast.makeText(this, "Please select at least one course", Toast.LENGTH_SHORT).show();
             return false;
@@ -114,7 +114,7 @@ public class TutorRegisterActivity extends AppCompatActivity {
         RegistrationRequest request = new RegistrationRequest(user.getFirstName(), user.getLastName(), email, RegistrationRequest.Role.TUTOR, RegistrationRequest.Status.valueOf(status));
         request.setId(email);
         request.setPhone(String.valueOf(user.getPhoneNumber()));
-        request.setHighestDegree(degree);
+//        request.setHighestDegree(degree);
         FirebaseManager.getInstance().addRegistrationRequest(request);
         return ok;
     }
