@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 //        });
 
         btnGeneral.setOnClickListener(v -> {
-            Intent i = new Intent(MainActivity.this, StudentRegisterActivity.class);
+            Intent i = new Intent(MainActivity.this, RegisterActivity.class);
             startActivity(i);
         });
 
