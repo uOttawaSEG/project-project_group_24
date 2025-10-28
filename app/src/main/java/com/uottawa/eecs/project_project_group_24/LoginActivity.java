@@ -17,6 +17,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.Map;
+
 public class LoginActivity extends AppCompatActivity {
 
     private EditText editLoginEmail;
@@ -108,6 +110,16 @@ public class LoginActivity extends AppCompatActivity {
                     "Your registration is still pending approval.\n" +
                             "Please try again later."
             );
+        }
+
+        if (role.equalsIgnoreCase("ADMIN")) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContainer, AdminRequestListFragment.newPending())
+                    .commit();
+        } else {
+            Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
+            i.putExtra("role", role);
+            startActivity(i);
         }
     }
 
