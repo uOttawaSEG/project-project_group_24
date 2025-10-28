@@ -24,7 +24,9 @@ public class RegistrationRequest {
 
     private Status status;           // "PENDING", "REJECTED", "APPROVED"
 
+    public RegistrationRequest(){
 
+    }
     public RegistrationRequest(String firstName, String lastName, String email, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;

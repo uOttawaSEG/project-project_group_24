@@ -1,4 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/container"
-    android:layout_width="match_parent" android:layout_height="match_parent"/>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/adminHomeRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FAFAFA"
+    tools:context=".AdminHomeActivity">
+
+    <!-- Header bar -->
+    <TextView
+        android:id="@+id/adminTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:padding="16dp"
+        android:text="Administrator Home"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <!-- Fragment container for AdminRequestListFragment -->
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:background="@android:color/white"
+        tools:ignore="MissingConstraints" />
+
+    <!-- Optional footer buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btnShowRejected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View Rejected"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/btnShowPending"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View Pending" />
+    </LinearLayout>
+
+</LinearLayout>
