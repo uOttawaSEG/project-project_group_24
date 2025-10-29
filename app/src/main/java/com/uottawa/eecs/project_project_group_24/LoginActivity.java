@@ -21,11 +21,12 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText editLoginEmail;
-    private EditText editLoginPassword;
-    private Button btnLogin;
-    private TextView loginMessage;
-    private ProgressBar loginProgress;
+    //adien - below every variables are just for UI/UX item IDs.
+    private EditText editLoginEmail; //aiden - email typing slot in login page.
+    private EditText editLoginPassword; //aiden - password typing slot in login page.
+    private Button btnLogin; // aiden - login button Id.
+    private TextView loginMessage; // aiden - console ID. if you typing wrong typing in login page, red message will come out
+    private ProgressBar loginProgress; // aiden - ?
 
     private FirebaseFirestore db;
 
@@ -47,10 +48,10 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(v -> attemptLogin());
     }
 
-    private void attemptLogin() {
+    private void attemptLogin() { //aiden - login method.
         loginMessage.setText("");
-        String email = editLoginEmail.getText().toString().trim();
-        String password = editLoginPassword.getText().toString().trim();
+        String email = editLoginEmail.getText().toString().trim(); //aiden - when user typing the email in the box, that will be stored in local variable here.
+        String password = editLoginPassword.getText().toString().trim(); //aiden - when user typing the password in the box, that will be stored in local variable here.
 
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             editLoginEmail.setError("Enter a valid email");
@@ -128,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if (role.equalsIgnoreCase("ADMIN")) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainer, AdminRequestListFragment.newPending())
+                    .replace(R.id.fragmentContainer, AdminRequestListFragment.newPending()) //aiden fragmentContainer is textbox id in UI
                     .commit();
         } else {
             Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
