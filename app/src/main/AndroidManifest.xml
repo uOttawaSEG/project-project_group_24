@@ -33,6 +33,7 @@
         <activity android:name=".TutorRegisterActivity" />
 
         <activity android:name=".AdminHomeActivity" />
+
     </application>
 
 </manifest>

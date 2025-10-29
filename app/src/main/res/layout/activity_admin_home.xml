@@ -20,17 +20,16 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
-    <!-- Fragment container for AdminRequestListFragment -->
+    <!-- Fragment container -->
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:padding="8dp"
-        android:background="@android:color/white"
-        tools:ignore="MissingConstraints" />
+        android:background="@android:color/white" />
 
-    <!-- Optional footer buttons -->
+    <!-- Footer buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

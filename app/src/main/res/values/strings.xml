@@ -11,8 +11,8 @@
     </string-array>
     <string-array name="degree_array">
         <item>@string/select_degree</item>
-        <item>Bachelor\'s Degree</item>
-        <item>Master\'s Degree</item>
+        <item>Bachelors Degree</item>
+        <item>Masters Degree</item>
     </string-array>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
