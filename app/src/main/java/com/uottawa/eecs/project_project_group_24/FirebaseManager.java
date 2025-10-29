@@ -55,14 +55,19 @@ public final class FirebaseManager {
         Log.e("Register", "Auth failed: " + errorMessage);
     }
 
+
     //when sending new registration to the database
     public void addRegistrationRequest(RegistrationRequest registrationRequest){
-                        db.collection("student")
-                                .document(registrationRequest.getId())
-                                .set(toMap(registrationRequest))
-                                .addOnSuccessListener(aVoid -> this.onSuccess())
-                                .addOnFailureListener(e -> this.onFailure(e.getMessage()));
+        if(registrationRequest.getId() == null) {
+            onFailure("RegistrationRequest ID is null");
+            return;
+        }
 
+        db.collection("registrationRequests") // use proper collection
+                .document(registrationRequest.getId())
+                .set(toMap(registrationRequest))
+                .addOnSuccessListener(aVoid -> onSuccess())
+                .addOnFailureListener(e -> onFailure(e.getMessage()));
     }
 
     //this is called when the administrator approves or rejects a request, this will update the status to firebase

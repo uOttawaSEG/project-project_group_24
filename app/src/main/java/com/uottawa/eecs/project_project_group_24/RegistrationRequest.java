@@ -83,7 +83,8 @@ public class RegistrationRequest {
     public void setCoursesOffered(List<String> coursesOffered) { this.coursesOffered = coursesOffered; }
 
     public String getStatus() { return status.name(); }
-    public void setStatus(String status) { this.status = Status.valueOf(status); }
+    //public void setStatus(String status) { this.status = Status.valueOf(status); }
+    public void setStatus(Status status) { this.status = status; }
 
     // ========= Helper =========
     public String getFullName() {

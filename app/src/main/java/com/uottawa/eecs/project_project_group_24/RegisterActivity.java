@@ -119,6 +119,11 @@ public class RegisterActivity extends AppCompatActivity {
 //        }
 
         User user = new User(email,password,firstName,lastName,Long.parseLong(phone));
+        RegistrationRequest request = new RegistrationRequest(firstName, lastName, email, RegistrationRequest.Role.TUTOR);
+        request.setId(email);
+        request.setPhone(phone);
+        request.setStatus(RegistrationRequest.Status.PENDING);
+        FirebaseManager.getInstance().addRegistrationRequest(request);
         logged_user = user;
 //        Student student = new Student(email, password, true);
 //        user.setFirstName(firstName);
