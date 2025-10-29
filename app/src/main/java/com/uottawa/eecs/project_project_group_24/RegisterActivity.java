@@ -93,7 +93,7 @@ public class RegisterActivity extends AppCompatActivity {
         String phone     = getText(editPhone);
 //      Object program   = spinnerProgram.getSelectedItem();
 
-        if (firstName.isEmpty()) {
+        if (firstName.isEmpty() ) {
             firstNameLayout.setError("First name required");
             return false;
         }
@@ -122,6 +122,14 @@ public class RegisterActivity extends AppCompatActivity {
         RegistrationRequest request = new RegistrationRequest(firstName, lastName, email, RegistrationRequest.Role.TUTOR);
         request.setId(email);
         request.setPhone(phone);
+        request.setId(user.getEmail());
+        request.setFirstName(user.getFirstName());
+        request.setLastName(user.getLastName());
+        request.setEmail(user.getEmail());
+        request.setPhone(String.valueOf(user.getPhoneNumber()));
+        request.setRole("TUTOR");
+        request.setStatus(RegistrationRequest.Status.PENDING);
+
         request.setStatus(RegistrationRequest.Status.PENDING);
         FirebaseManager.getInstance().addRegistrationRequest(request);
         logged_user = user;
