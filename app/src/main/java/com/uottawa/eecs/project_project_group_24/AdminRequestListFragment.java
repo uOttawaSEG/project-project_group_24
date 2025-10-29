@@ -236,5 +236,21 @@ public class AdminRequestListFragment extends Fragment
                             "Error updating status: " + e.getMessage(),
                             Toast.LENGTH_SHORT).show();
                 });
+        db.collection("user")
+                .document(req.getId())
+                .update("status", newStatus)
+                .addOnSuccessListener(unused -> {
+                    progress.setVisibility(View.GONE);
+                    Toast.makeText(getContext(), successMsg, Toast.LENGTH_SHORT).show();
+                    // here do not need remove adapter by ourself
+                    // because snapshotListener will do that -> startListeningForData()'s listenerReg
+                    // will make a new form adapter.submit(...)
+                })
+                .addOnFailureListener(e -> {
+                    progress.setVisibility(View.GONE);
+                    Toast.makeText(getContext(),
+                            "Error updating status: " + e.getMessage(),
+                            Toast.LENGTH_SHORT).show();
+                });
     }
 }

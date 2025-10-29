@@ -551,7 +551,7 @@ public final class FirebaseManager {
 
                             Administrator.getPendingRequests().Enqueue(convertToRequestObject(doc.getData()));
                         }
-                        Log.d("OTA_FIREBASE_REQUESTS", "Current cites in CA: ");
+                        Log.d("OTA_FIREBASE_REQUESTS", "Initialized firebase requests ");
                     }
                 });
 //        List pending = db.collection("registrationRequests")

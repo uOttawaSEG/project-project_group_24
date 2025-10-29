@@ -1,5 +1,8 @@
 package com.uottawa.eecs.project_project_group_24;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.List;
 
 /**
@@ -24,6 +27,7 @@ public class RegistrationRequest {
 
     private Status status;           // "PENDING", "REJECTED", "APPROVED"
 
+    CollectionReference req_db = FirebaseManager.getInstance().getDb().collection("registrationRequests");
     public RegistrationRequest(){
 
     }
@@ -37,10 +41,13 @@ public class RegistrationRequest {
 
     public void AcceptRequest()
     {
+
         status = Status.APPROVED;
+
     }
     public void RejectRequest()
     {
+
         status = Status.REJECTED;
     }
 

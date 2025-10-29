@@ -112,9 +112,10 @@ public class LoginActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
                         if (task.getResult().exists()){
-                            Log.d("OTA_LOGIN",task.getResult().getData().get("status").toString());
+
                             String state = null;
                             if(task.getResult().getData().get("status")!=null) state = task.getResult().getData().get("status").toString();
+                            Log.d("OTA_LOGIN",state);
                             if(state!=null&&state.equals("UNDECIDED"))
                             {
                                 Intent i = new Intent(LoginActivity.this, UserHomeActivity.class);
@@ -123,11 +124,25 @@ public class LoginActivity extends AppCompatActivity {
                                 i.putExtra("password",password);
                                 startActivity(i);
                             }
-                            else if(state!=null&&state.equals("Pending"))
+                            else if(state!=null&&state.equalsIgnoreCase("Pending"))
                             {
                                 Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
                                 i.putExtra("role","user");
                                 i.putExtra("state","waiting");
+                                startActivity(i);
+                            }
+                            else if (state!=null&&state.equalsIgnoreCase("Rejected")) {
+                                Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
+                                i.putExtra("role","user");
+                                i.putExtra("state","rejected");
+                                startActivity(i);
+                            }
+                            else if(state!=null&&state.equalsIgnoreCase("Approved"))
+                            {
+                                Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
+                                i.putExtra("role","user");
+                                i.putExtra("state","approved");
+                                startActivity(i);
                             }
                             else {
                                 Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
