@@ -7,4 +7,45 @@
     android:layout_height="match_parent"
     tools:context=".StudentRegisterActivity">
 
+    <TextView
+        android:id="@+id/studentText"
+        android:layout_width="208dp"
+        android:layout_height="39dp"
+        android:text="Student Registration"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="77dp"
+        tools:layout_editor_absoluteY="36dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="151dp">
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/programEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Software Eng, Business, e.t.c"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="178dp" />
+
+    <TextView
+        android:id="@+id/programOfStudyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Program of Study"
+        tools:layout_editor_absoluteX="102dp"
+        tools:layout_editor_absoluteY="113dp" />
+
+    <Button
+        android:id="@+id/btnRegisterAsStudent"
+        android:layout_width="401dp"
+        android:layout_height="52dp"
+        android:text="Register As Student"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="280dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
