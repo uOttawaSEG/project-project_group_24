@@ -215,6 +215,13 @@ public final class FirebaseManager {
         else if(user.getStatus()== User.requestStatus.RejectedTutor){
             map.put("status", "REJECTED");
         }
+        else if (user.getStatus() == User.requestStatus.Undecided) {
+            map.put("status","UNDECIDED");
+        }
+        else
+        {
+            map.put("status",null);
+        }
         return map;
     }
     //converts Course to a map to add to database

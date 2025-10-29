@@ -38,6 +38,7 @@ public class User implements IUser
         this.phoneNumber = phoneNumber;
         successful_login = true;
         requested_register = false;
+        status = requestStatus.Undecided;
 
     }
 

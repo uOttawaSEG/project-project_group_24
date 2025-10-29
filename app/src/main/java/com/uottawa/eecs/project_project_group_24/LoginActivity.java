@@ -37,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseFirestore db;
 
     private FirebaseManager fbManager;
-    String email;
+    String email,password;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
     private void attemptLogin() { //aiden - login method.
         loginMessage.setText("");
         email = editLoginEmail.getText().toString().trim(); //aiden - when user typing the email in the box, that will be stored in local variable here.
-        String password = editLoginPassword.getText().toString().trim(); //aiden - when user typing the password in the box, that will be stored in local variable here.
+        password = editLoginPassword.getText().toString().trim(); //aiden - when user typing the password in the box, that will be stored in local variable here.
 
         //aiden VALIDATION SESSION
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) { //aiden - typing error case.
@@ -112,9 +112,21 @@ public class LoginActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
                         if (task.getResult().exists()){
+                            Log.d("OTA_LOGIN",task.getResult().getData().get("status").toString());
+                            if(task.getResult().getData().get("status").toString().equals("UNDECIDED"))
+                            {
+                                Intent i = new Intent(LoginActivity.this, UserHomeActivity.class);
+                                i.putExtra("email",email);
+                                i.putExtra("role", "User");
+                                i.putExtra("password",password);
+                                startActivity(i);
+                            }
+                            else {
+                                Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
+                                i.putExtra("role","user");
+                                startActivity(i);
+                            }
 
-                            i.putExtra("role","user");
-                            startActivity(i);
                         } else{
 
                         }
