@@ -10,10 +10,18 @@ public class Administrator extends User{
         super(email,pass);
     }
 
+    public static RegistrationRequest receiveRequest(RegistrationRequest r)
+    {
+        PendingRequests.Enqueue(r);
+        database.addRegistrationRequest(r);
+        return r;
+    }
+
     public static RegistrationRequest receiveRequest(User u, RegistrationRequest.Role role)
     {
         RegistrationRequest tmp =new RegistrationRequest(u.getFirstName(),u.getLastName(),u.getEmail(), role);
         PendingRequests.Enqueue(tmp);
+        database.addRegistrationRequest(tmp);
         return tmp;
     }
 
