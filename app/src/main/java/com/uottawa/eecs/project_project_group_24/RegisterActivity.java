@@ -91,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
         String email     = getText(editEmail);
         String password  = getText(editPassword);
         String phone     = getText(editPhone);
-//        Object program   = spinnerProgram.getSelectedItem();
+//      Object program   = spinnerProgram.getSelectedItem();
 
         if (firstName.isEmpty()) {
             firstNameLayout.setError("First name required");
