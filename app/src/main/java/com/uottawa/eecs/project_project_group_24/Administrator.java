@@ -2,8 +2,8 @@ package com.uottawa.eecs.project_project_group_24;
 
 public class Administrator extends User{
     static FirebaseManager database = FirebaseManager.getInstance();
-    static Queue<RegistrationRequest> PendingRequests; //should get list of all pending registration requests
-    static Queue<RegistrationRequest> RejectedRequests; //should get list of all rejected registration requests
+    static Queue<RegistrationRequest> PendingRequests = new Queue<>(); //should get list of all pending registration requests
+    static Queue<RegistrationRequest> RejectedRequests = new Queue<>(); //should get list of all rejected registration requests
 
     public Administrator(String email, String pass) //Need to add login/sign up logic
     {
@@ -25,6 +25,11 @@ public class Administrator extends User{
         return tmp;
     }
 
+    public static void initializeRequests()
+    {
+
+    }
+
     public void registerRequest(Node<RegistrationRequest> n)
     {
         n.getElement().AcceptRequest();
@@ -36,11 +41,11 @@ public class Administrator extends User{
         RejectedRequests.Enqueue(n.removeNode().getElement());
     }
 
-    public Queue<RegistrationRequest> getPendingRequests() {
+    public static Queue<RegistrationRequest> getPendingRequests() {
         return PendingRequests;
     }
 
-    public Queue<RegistrationRequest> getRejectedRequests() {
+    public static Queue<RegistrationRequest> getRejectedRequests() {
         return RejectedRequests;
     }
 

@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseManager.getInstance().initializeRequests();
 
         Button btnLogin = findViewById(R.id.btnLoginMain);
         btnLogin.setOnClickListener(v -> {
@@ -68,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // firebase
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

@@ -1,5 +1,7 @@
 package com.uottawa.eecs.project_project_group_24;
 
+import android.util.Log;
+
 public class Queue<E> {
     Node<E> leader,tail;
     int size;
@@ -7,6 +9,11 @@ public class Queue<E> {
     {}
     public Node<E> Enqueue(E el)
     {
+        if(el==null)
+        {
+            Log.d("OTA_Queue","element is null");
+            return null;
+        }
         Node<E> tmp = new Node<>(el,null,null);
         if(leader==null)
         {
@@ -14,7 +21,7 @@ public class Queue<E> {
         }
         else
         {
-            tail.setNext(tmp);
+            if(tail!=null && tail.getNext()!=null)tail.setNext(tmp);
             tail = tmp;
         }
             size++;

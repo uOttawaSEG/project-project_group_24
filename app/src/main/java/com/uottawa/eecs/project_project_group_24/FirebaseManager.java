@@ -3,6 +3,7 @@ package com.uottawa.eecs.project_project_group_24;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -10,7 +11,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
@@ -350,8 +355,10 @@ public final class FirebaseManager {
             String highestDegree = (String) data.get("highestDegree");
             String[] cO = (String[]) data.get("coursesOffered");
             List<String> coursesOffered = new ArrayList<>();
-            for(int i = 0; i<cO.length; i++){
-                coursesOffered.add(cO[i]);
+            if(cO!=null) {
+                for (int i = 0; i < cO.length; i++) {
+                    coursesOffered.add(cO[i]);
+                }
             }
 
             request.setCoursesOffered(coursesOffered);
@@ -440,6 +447,23 @@ public final class FirebaseManager {
         }
         return tutor;
     }
+    public void finishUserData(User user)
+    {
+        db.collection("user").document(user.getEmail()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    if (task.getResult().exists()){
+                        user.setFirstName(task.getResult().get("firstName").toString());
+                        user.setLastName(task.getResult().get("lastName").toString());
+                        user.setPhoneNumber(Long.parseLong(task.getResult().get("phoneNumber").toString()));
+                    } else{
+
+                    }
+                }
+            }
+        });
+    }
     public Map<String,Object> getUserData(String email, String collectionName)
     {
         Map<String,Object> tmp = null;
@@ -497,5 +521,60 @@ public final class FirebaseManager {
 
     public FirebaseFirestore getDb() {
         return db;
+    }
+
+    public void makeQueueWithList(List<DocumentSnapshot> l)
+    {
+
+        for(int i =0;i<l.size();i++)
+        {
+            if(l.get(i) != null)
+            {
+                RegistrationRequest tmp = convertToRequestObject(l.get(i).getData());
+                Administrator.receiveRequest(tmp);
+            }
+        }
+    }
+
+
+    public void initializeRequests() {
+        db.collection("registrationRequests").
+                whereEqualTo("status","PENDING").addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w("OTA_FIREBASE_REQUESTS", "Listen failed.", e);
+                            return;
+                        }
+                        for(QueryDocumentSnapshot doc:value) {
+
+                            Administrator.getPendingRequests().Enqueue(convertToRequestObject(doc.getData()));
+                        }
+                        Log.d("OTA_FIREBASE_REQUESTS", "Current cites in CA: ");
+                    }
+                });
+//        List pending = db.collection("registrationRequests")
+//                .whereEqualTo("status","PENDING")
+//                .get()
+//                .getResult()
+//                .getDocuments();
+//        List rejected = db.collection("registrationRequests")
+//                .whereEqualTo("status","REJECTED")
+//                .get().getResult().getDocuments();
+//        if(pending!=null)makeQueueWithList(pending);
+//        if(rejected!=null)makeQueueWithList(rejected);
+//        db.collection("registrationRequests").whereEqualTo("status","PENDING").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    if (task.getResult().exists()){
+//                        admin = true;
+//                    } else{
+//                        admin = false;
+//                    }
+//                }
+//            }
+//        });
     }
 }

@@ -113,13 +113,21 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         if (task.getResult().exists()){
                             Log.d("OTA_LOGIN",task.getResult().getData().get("status").toString());
-                            if(task.getResult().getData().get("status").toString().equals("UNDECIDED"))
+                            String state = null;
+                            if(task.getResult().getData().get("status")!=null) state = task.getResult().getData().get("status").toString();
+                            if(state!=null&&state.equals("UNDECIDED"))
                             {
                                 Intent i = new Intent(LoginActivity.this, UserHomeActivity.class);
                                 i.putExtra("email",email);
                                 i.putExtra("role", "User");
                                 i.putExtra("password",password);
                                 startActivity(i);
+                            }
+                            else if(state!=null&&state.equals("Pending"))
+                            {
+                                Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
+                                i.putExtra("role","user");
+                                i.putExtra("state","waiting");
                             }
                             else {
                                 Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);

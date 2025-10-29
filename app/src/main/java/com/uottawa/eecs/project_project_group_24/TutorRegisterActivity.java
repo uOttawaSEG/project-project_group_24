@@ -2,6 +2,7 @@ package com.uottawa.eecs.project_project_group_24;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -79,7 +80,7 @@ public class TutorRegisterActivity extends AppCompatActivity {
 //        String password = tutorPassword.getText().toString().trim();
 //        String phone = tutorPhone.getText().toString().trim();
 //        String degree = spinnerDegree.getSelectedItem().toString();
-        String status = "PENDING";
+
 
 //        if (firstName.isEmpty()) {
 //            tutorFirstNameLayout.setError("First name required");
@@ -109,10 +110,12 @@ public class TutorRegisterActivity extends AppCompatActivity {
             Toast.makeText(this, "Please select at least one course", Toast.LENGTH_SHORT).show();
             return false;
         }
+        String status = "PENDING";
         User user = new User(email,password);
         RegistrationRequest request = new RegistrationRequest(user.getFirstName(), user.getLastName(), email, RegistrationRequest.Role.TUTOR, RegistrationRequest.Status.valueOf(status));
         request.setId(email);
         request.setPhone(String.valueOf(user.getPhoneNumber()));
+        Log.d("OTA_TUTORREG",String.valueOf(request==null));
         Administrator.receiveRequest(request);
 //        request.setHighestDegree(degree);
 //        FirebaseManager.getInstance().addRegistrationRequest(request);
