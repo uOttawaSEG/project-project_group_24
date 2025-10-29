@@ -13,6 +13,7 @@ public class User implements IUser
         AcceptedTutor,RejectedTutor, PendingTutor};
     long phoneNumber;
     private boolean requested_register;
+    private  boolean successful_login;
 
 
     //Calls on AuthenticateUser to login into account
@@ -25,6 +26,7 @@ public class User implements IUser
             firstName = String.valueOf(tmp.get("firstName"));
             lastName = String.valueOf(tmp.get("lastName"));
             phoneNumber = (long) tmp.get("phoneNumber");
+            successful_login = true;
         }
     }
     public User(String email,String pass,String firstName,String lastName,long phoneNumber)//register
@@ -34,6 +36,7 @@ public class User implements IUser
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
+        successful_login = true;
         requested_register = false;
 
     }
@@ -95,4 +98,7 @@ public class User implements IUser
         Administrator.receiveRequest(this,RegistrationRequest.Role.TUTOR);
     }
 
+    public boolean isLoggedIn() {
+        return successful_login;
+    }
 }

@@ -2,6 +2,7 @@ package com.uottawa.eecs.project_project_group_24;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -10,9 +11,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -31,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseFirestore db;
 
     private FirebaseManager fbManager;
+    String email;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void attemptLogin() { //aiden - login method.
         loginMessage.setText("");
-        String email = editLoginEmail.getText().toString().trim(); //aiden - when user typing the email in the box, that will be stored in local variable here.
+        email = editLoginEmail.getText().toString().trim(); //aiden - when user typing the email in the box, that will be stored in local variable here.
         String password = editLoginPassword.getText().toString().trim(); //aiden - when user typing the password in the box, that will be stored in local variable here.
 
         //aiden VALIDATION SESSION
@@ -85,7 +92,53 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(i);
         } else if (fbManager.getLoggedIn() == true) {
             Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
-            startActivity(i);
+            FirebaseFirestore tmp = fbManager.getDb();
+//            CollectionReference dbref;
+            db.collection("student").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        if (task.getResult().exists()){
+                            i.putExtra("role","student");
+                            startActivity(i);
+                        } else{
+
+                        }
+                    }
+                }
+            });
+            db.collection("user").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        if (task.getResult().exists()){
+
+                            i.putExtra("role","user");
+                            startActivity(i);
+                        } else{
+
+                        }
+                    }
+                }
+            });
+//            Log.d("CONSOLE","Not user");
+
+            db.collection("tutor").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        if (task.getResult().exists()){
+                            i.putExtra("role","tutor");
+                            startActivity(i);
+                        } else{
+
+                        }
+                    }
+                }
+            });
+
+
+//            startActivity(i);
         } else {
             // bad credentials!!!
         }

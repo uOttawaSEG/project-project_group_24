@@ -110,12 +110,12 @@ public class TutorRegisterActivity extends AppCompatActivity {
             return false;
         }
         User user = new User(email,password);
-        Administrator.receiveRequest(user, RegistrationRequest.Role.TUTOR);
         RegistrationRequest request = new RegistrationRequest(user.getFirstName(), user.getLastName(), email, RegistrationRequest.Role.TUTOR, RegistrationRequest.Status.valueOf(status));
         request.setId(email);
         request.setPhone(String.valueOf(user.getPhoneNumber()));
+        Administrator.receiveRequest(request);
 //        request.setHighestDegree(degree);
-        FirebaseManager.getInstance().addRegistrationRequest(request);
+//        FirebaseManager.getInstance().addRegistrationRequest(request);
         return ok;
     }
 

@@ -371,7 +371,7 @@ public final class FirebaseManager {
         if(status.equalsIgnoreCase("PENDING")){
             newuser = true;
         }
-        Student student = new Student(email, null, newuser);
+        Student student = new Student(email, null);
         student.setProgram(program);
         student.phoneNumber = phoneNumber;
         student.firstName = firstName;
@@ -431,9 +431,10 @@ public final class FirebaseManager {
     public Map<String,Object> getUserData(String email, String collectionName)
     {
         Map<String,Object> tmp = null;
-        DocumentSnapshot tmp2 = db.collection(collectionName)
+        Task<DocumentSnapshot> tmp3 = db.collection(collectionName)
                 .document(email)
-                .get().getResult();
+                .get();
+        DocumentSnapshot tmp2=tmp3.getResult();
         if(tmp2!=null) tmp = tmp2.getData();
         return tmp;
     }
@@ -482,4 +483,7 @@ public final class FirebaseManager {
         admin = false;
     }
 
+    public FirebaseFirestore getDb() {
+        return db;
+    }
 }
