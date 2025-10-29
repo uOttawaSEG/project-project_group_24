@@ -26,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText editLoginPassword; //aiden - password typing slot in login page.
     private Button btnLogin; // aiden - login button Id.
     private TextView loginMessage; // aiden - console ID. if you typing wrong typing in login page, red message will come out
-    private ProgressBar loginProgress; // aiden - ?
+    private ProgressBar loginProgress; // aiden - loading bar. while login take few times, it will shows up.
 
     private FirebaseFirestore db;
 
@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
-        btnLogin.setOnClickListener(v -> attemptLogin());
+        btnLogin.setOnClickListener(v -> attemptLogin()); //aiden - when login button is clicked, start the attemptLogin() method
     }
 
     private void attemptLogin() { //aiden - login method.
@@ -53,11 +53,12 @@ public class LoginActivity extends AppCompatActivity {
         String email = editLoginEmail.getText().toString().trim(); //aiden - when user typing the email in the box, that will be stored in local variable here.
         String password = editLoginPassword.getText().toString().trim(); //aiden - when user typing the password in the box, that will be stored in local variable here.
 
-        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        //aiden VALIDATION SESSION
+        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) { //aiden - typing error case.
             editLoginEmail.setError("Enter a valid email");
             return;
         }
-        if (password.isEmpty()) {
+        if (password.isEmpty()) { //aiden - typing error case2.
             editLoginPassword.setError("Enter your password");
             return;
         }
@@ -65,9 +66,9 @@ public class LoginActivity extends AppCompatActivity {
 
         loginProgress.setVisibility(View.VISIBLE);
         btnLogin.setEnabled(false);
-        fbManager = FirebaseManager.getInstance();
+        fbManager = FirebaseManager.getInstance(); //aiden - get the data from firebase.
 
-        fbManager.loginUser(email, password, this);
+        fbManager.loginUser(email, password, this); //aiden - send the instant variable to fb EMAIL, PASSWORD, and itself as object
         if (fbManager.getAdmin() == true) {
             Intent i = new Intent(LoginActivity.this, AdminHomeActivity.class);
             startActivity(i);
@@ -91,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    // what's this!?!?!?!
+    // what's this!?!?!?! -> adien: guess that will bonus mark contents. after user reject, the mail will send to user's email.
     private void handleLoginQueryResult(QuerySnapshot snap) {
         loginProgress.setVisibility(View.GONE);
         btnLogin.setEnabled(true);
