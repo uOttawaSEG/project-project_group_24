@@ -19,7 +19,7 @@ public class UserHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
         tutorbtn = findViewById(R.id.btnTutorRegister);
-        studentbtn = findViewById(R.id.btnStudentRegister);
+        studentbtn = findViewById(R.id.btnStudentRegister); //aiden - when user indentified as student.
 
         String password = getIntent().getStringExtra("password");
         String email = getIntent().getStringExtra("email");

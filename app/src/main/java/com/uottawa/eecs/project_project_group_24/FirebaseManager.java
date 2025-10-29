@@ -21,8 +21,8 @@ import java.util.ArrayList;
 //this class deals with the interactions with the database
 public final class FirebaseManager {
     private static FirebaseManager instance;
-    private FirebaseAuth auth;
-    private FirebaseFirestore db;
+    private FirebaseAuth auth; //aiden - object that get from local typing and will be used to compared with fb datas.
+    private FirebaseFirestore db; //firebase database itself
 
     private Boolean admin = false;
     private Boolean loggedIn = false;
@@ -39,19 +39,14 @@ public final class FirebaseManager {
         return instance;
     }
 
-    //needs to be implemented
-    public void onSuccess() {
-
-    }
-
-    public void onSuccess(User u) {
-
-    }
+    //needs to be implemented - not need til D2
+    public void onSuccess() {}
+    public void onSuccess(User u) {}
 
 
 
     //needs to be implemented
-    public void onFailure(String errorMessage){
+    public void onFailure(String errorMessage){ //adien - print to logcat that is failed case.
         Log.e("Register", "Auth failed: " + errorMessage);
     }
 
