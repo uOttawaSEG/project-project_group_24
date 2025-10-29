@@ -296,16 +296,17 @@ public final class FirebaseManager {
                 });
     }
 
-    public Boolean loginUser(String email, String password) {
+    public Boolean loginUser(String email, String password, LoginActivity activity) {
         Map<String, Object> userData = new HashMap<>();
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(authTask -> {
                     if (authTask.isSuccessful()) {
-                        isAdmin(email);
                         loggedIn = true;
+                        Log.w("FIREBASE", "Login Success");
                     } else {
                         this.onFailure(authTask.getException().getMessage());
                     }
+                    activity.loginCallback();
                 });
         return admin;
     }
