@@ -68,7 +68,8 @@ public class TutorRegisterActivity extends AppCompatActivity {
 
 
                 Intent i = new Intent(TutorRegisterActivity.this, WelcomeActivity.class);
-                i.putExtra("role", "Tutor");
+                i.putExtra("role", "user");
+                i.putExtra("state","waiting");
                 startActivity(i);
                 finish();
             }

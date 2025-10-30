@@ -14,6 +14,8 @@ public class Administrator extends User{
     {
         PendingRequests.Enqueue(r);
         database.addRegistrationRequest(r);
+        database.updateRegistrationStatus(r.getId(),r.getEmail(),"user","PENDING");
+
         return r;
     }
 
