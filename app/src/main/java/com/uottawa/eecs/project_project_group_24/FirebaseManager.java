@@ -561,6 +561,7 @@ public final class FirebaseManager {
                         Log.d("OTA_FIREBASE_REQUESTS", "Initialized firebase requests ");
                     }
                 });
+
 //        List pending = db.collection("registrationRequests")
 //                .whereEqualTo("status","PENDING")
 //                .get()

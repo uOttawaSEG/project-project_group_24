@@ -71,6 +71,7 @@ public class StudentRegisterActivity extends AppCompatActivity {
 
                 Intent i = new Intent(StudentRegisterActivity.this, WelcomeActivity.class);
                 i.putExtra("role", "Student");
+                i.putExtra("state","waiting");
                 startActivity(i);
                 finish();
             }

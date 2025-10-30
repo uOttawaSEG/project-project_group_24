@@ -54,6 +54,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")    // optional
     implementation("com.google.firebase:firebase-database") // Realtime Database
     implementation("com.google.firebase:firebase-auth")     // optional Auth
+//    implementation("com.google.firebase:firebase-admin:9.7.0")
 }
 
 //apply(plugin = "com.google.gms.google-services")
