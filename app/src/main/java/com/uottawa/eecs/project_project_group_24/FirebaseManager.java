@@ -340,7 +340,7 @@ public final class FirebaseManager {
                         "Database fetch failed: " + e.getMessage()));
     }
 
-    private RegistrationRequest convertToRequestObject(Map<String, Object> data) {
+    public RegistrationRequest convertToRequestObject(Map<String, Object> data) {
         String role = (String) data.get("role");
         String firstName = (String) data.get("firstName");
         String lastName = (String) data.get("lastName");
@@ -377,7 +377,7 @@ public final class FirebaseManager {
 
 
     //takes map from database and converts it to a student object
-    private Student convertToStudentObject(Map<String, Object> data) {
+    public Student convertToStudentObject(Map<String, Object> data) {
 
         String firstName = (String) data.get("firstName");
         String lastName = (String) data.get("lastName");
@@ -411,7 +411,7 @@ public final class FirebaseManager {
     }
 
     //takes map from database and converts it to a tutor object
-    private Tutor convertToTutorObject(Map<String, Object> data) {
+    public Tutor convertToTutorObject(Map<String, Object> data) {
         String firstName = (String) data.get("firstName");
         String lastName = (String) data.get("lastName");
         String email = (String) data.get("id");
@@ -420,9 +420,9 @@ public final class FirebaseManager {
         String status = (String) data.get("status");
 
         @SuppressWarnings("unchecked")
-        ArrayList<Course> coursesList =(ArrayList<Course>) data.get("courses");
-
-        Course[] courses = coursesList.toArray(new Course[0]);
+//        ArrayList<Course> coursesList =(ArrayList<Course>) data.get("courses");
+//
+//        Course[] courses = coursesList.toArray(new Course[0]);
         boolean newuser = false;
         if(status.equalsIgnoreCase("PENDING")){
             newuser = true;
@@ -432,7 +432,7 @@ public final class FirebaseManager {
         tutor.firstName = firstName;
         tutor.phoneNumber = phoneNumber;
         tutor.lastName = lastName;
-        tutor.courses = courses;
+       // tutor.courses = courses;
         tutor.setDegree(degree);
         if(status.equalsIgnoreCase("PENDING")){
             tutor.setStatus(User.requestStatus.PendingTutor);

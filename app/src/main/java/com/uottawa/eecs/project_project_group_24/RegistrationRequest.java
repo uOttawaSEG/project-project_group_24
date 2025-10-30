@@ -12,7 +12,7 @@ import java.util.List;
 public class RegistrationRequest {
 
     public enum Status { PENDING, REJECTED, APPROVED }
-    public enum Role{STUDENT,TUTOR}
+    public enum Role{STUDENT,TUTOR,USER}
 
     private String id;
     private String firstName;

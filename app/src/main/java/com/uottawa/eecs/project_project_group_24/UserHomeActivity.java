@@ -23,12 +23,18 @@ public class UserHomeActivity extends AppCompatActivity {
 
         String password = getIntent().getStringExtra("password");
         String email = getIntent().getStringExtra("email");
+        String firstName = getIntent().getStringExtra("firstName");
+        String lastName = getIntent().getStringExtra("lastName");
+        String phone = getIntent().getStringExtra("phone");
 
         tutorbtn.setOnClickListener(v -> {
             Intent i = new Intent(this, TutorRegisterActivity.class);
 
             i.putExtra("email",email);
             i.putExtra("password",password);
+            i.putExtra("phone", phone);
+            i.putExtra("lastName", lastName);
+            i.putExtra("firstName", firstName);
             startActivity(i);
         });
         studentbtn.setOnClickListener(v -> {
@@ -36,6 +42,9 @@ public class UserHomeActivity extends AppCompatActivity {
 
             i.putExtra("email",email);
             i.putExtra("password",password);
+            i.putExtra("phone", phone);
+            i.putExtra("lastName", lastName);
+            i.putExtra("firstName", firstName);
             startActivity(i);
         });
     }

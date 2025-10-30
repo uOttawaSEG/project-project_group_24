@@ -75,6 +75,10 @@ public class RegisterActivity extends AppCompatActivity {
                 i.putExtra("email",logged_user.getEmail());
                 i.putExtra("role", "User");
                 i.putExtra("password",logged_user.getPassword());
+                i.putExtra("firstName", logged_user.getFirstName());
+                i.putExtra("lastName", logged_user.getLastName());
+                i.putExtra("phone", String.valueOf(logged_user.getPhoneNumber()));
+
                 startActivity(i);
 
                 finish();
@@ -127,11 +131,11 @@ public class RegisterActivity extends AppCompatActivity {
         request.setLastName(user.getLastName());
         request.setEmail(user.getEmail());
         request.setPhone(String.valueOf(user.getPhoneNumber()));
-        request.setRole("TUTOR");
+        request.setRole("USER");
         request.setStatus(RegistrationRequest.Status.PENDING);
 
         request.setStatus(RegistrationRequest.Status.PENDING);
-        FirebaseManager.getInstance().addRegistrationRequest(request);
+       // FirebaseManager.getInstance().addRegistrationRequest(request);
         logged_user = user;
 //        Student student = new Student(email, password, true);
 //        user.setFirstName(firstName);
@@ -144,7 +148,7 @@ public class RegisterActivity extends AppCompatActivity {
 //        request.setProgramOfStudy((String)program);
 //        request.setId(email);
 //        request.setPhone(phone);
-//        FirebaseManager.getInstance().addRegistrationRequest(request);
+        FirebaseManager.getInstance().addRegistrationRequest(request);
         //student.StudentRegister();
         return true;
     }

@@ -13,15 +13,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Map;
+
 public class TutorRegisterActivity extends AppCompatActivity {
 
     private TextInputLayout tutorFirstNameLayout, tutorLastNameLayout, tutorEmailLayout,
             tutorPasswordLayout, tutorPhoneLayout;
     private TextInputEditText tutorFirstName, tutorLastName, tutorEmail, tutorPassword, tutorPhone;
-//    private Spinner spinnerDegree;
+    private Spinner spinnerDegree;
     private CheckBox checkCourse1, checkCourse2, checkCourse3;
     private Button btnTutorRegister;
-    String email,password;
+    String email,password, phone, firstName, lastName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,9 @@ public class TutorRegisterActivity extends AppCompatActivity {
         setContentView(R.layout.tutor_register);
         password = getIntent().getStringExtra("password");
         email = getIntent().getStringExtra("email");
+        firstName = getIntent().getStringExtra("firstName");
+        lastName = getIntent().getStringExtra("lastName");
+        phone = getIntent().getStringExtra("phone");
 
 //        tutorFirstNameLayout = findViewById(R.id.tutorFirstNameLayout);
 //        tutorLastNameLayout = findViewById(R.id.tutorLastNameLayout);
@@ -42,18 +47,18 @@ public class TutorRegisterActivity extends AppCompatActivity {
 //        tutorPassword = findViewById(R.id.tutorPassword);
 //        tutorPhone = findViewById(R.id.tutorPhone);
 
-//        spinnerDegree = findViewById(R.id.spinnerDegree);
+        spinnerDegree = findViewById(R.id.spinnerDegree);
         checkCourse1 = findViewById(R.id.checkCourse1);
         checkCourse2 = findViewById(R.id.checkCourse2);
         checkCourse3 = findViewById(R.id.checkCourse3);
         btnTutorRegister = findViewById(R.id.btnTutorRegister);
 
 
-//        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-//                android.R.layout.simple_spinner_item,
-//                new String[]{"Select degree", "Bachelor", "Master", "PhD"});
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinnerDegree.setAdapter(adapter);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item,
+                new String[]{"Select degree", "Bachelor", "Master", "PhD"});
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerDegree.setAdapter(adapter);
 
 
         btnTutorRegister.setOnClickListener(v -> {
@@ -79,7 +84,7 @@ public class TutorRegisterActivity extends AppCompatActivity {
 //        String email = tutorEmail.getText().toString().trim();
 //        String password = tutorPassword.getText().toString().trim();
 //        String phone = tutorPhone.getText().toString().trim();
-//        String degree = spinnerDegree.getSelectedItem().toString();
+        String degree = spinnerDegree.getSelectedItem().toString();
 
 
 //        if (firstName.isEmpty()) {
@@ -111,10 +116,23 @@ public class TutorRegisterActivity extends AppCompatActivity {
             return false;
         }
         String status = "PENDING";
-        User user = new User(email,password);
+
+        Tutor user = new Tutor(email, password, true);
+        user.setDegree(degree);
+        user.setPhoneNumber(Long.parseLong(phone));
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
         RegistrationRequest request = new RegistrationRequest(user.getFirstName(), user.getLastName(), email, RegistrationRequest.Role.TUTOR, RegistrationRequest.Status.valueOf(status));
+
+       // FirebaseManager.getInstance().registerTutor(user, password);
         request.setId(email);
         request.setPhone(String.valueOf(user.getPhoneNumber()));
+        request.setFirstName(user.getFirstName());
+        request.setLastName(user.getLastName());
+        request.setRole("TUTOR");
+        request.setHighestDegree(degree);
+        FirebaseManager.getInstance().addRegistrationRequest(request);
+
         Log.d("OTA_TUTORREG",String.valueOf(request==null));
         Administrator.receiveRequest(request);
 //        request.setHighestDegree(degree);
