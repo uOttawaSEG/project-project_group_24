@@ -17,8 +17,8 @@ public class WelcomeActivity extends AppCompatActivity {
         String role = getIntent().getStringExtra("role");
         String status = getIntent().getStringExtra("state");
         TextView text = findViewById(R.id.welcomeText);
-        Log.d("OTA_WELCOME",status);
-        if(status!=null&&status.equalsIgnoreCase("Pending"))
+        if(status!=null)Log.d("OTA_WELCOME",status);
+        if(status!=null&&status.equalsIgnoreCase("waiting"))
         {
             text.setText("Welcome! You are logged in but your application is still pending.");
         }
