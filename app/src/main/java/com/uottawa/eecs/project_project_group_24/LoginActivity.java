@@ -107,6 +107,19 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
             });
+            db.collection("tutor").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        if (task.getResult().exists()){
+                            i.putExtra("role","tutor");
+                            startActivity(i);
+                        } else{
+
+                        }
+                    }
+                }
+            });
             db.collection("user").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -158,19 +171,7 @@ public class LoginActivity extends AppCompatActivity {
             });
 //            Log.d("CONSOLE","Not user");
 
-            db.collection("tutor").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        if (task.getResult().exists()){
-                            i.putExtra("role","tutor");
-                            startActivity(i);
-                        } else{
 
-                        }
-                    }
-                }
-            });
 
 
 //            startActivity(i);
