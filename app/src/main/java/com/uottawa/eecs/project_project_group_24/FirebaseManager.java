@@ -94,6 +94,13 @@ public final class FirebaseManager {
                     .addOnSuccessListener(aVoid -> this.onSuccess())
                     .addOnFailureListener(e -> this.onFailure(e.getMessage()));
         }
+        else if(role.equalsIgnoreCase("user")){
+            db.collection("user")
+                    .document(email) // the document ID, e.g. johndoe67@gmail.com
+                    .update("status", newStatus)
+                    .addOnSuccessListener(aVoid -> this.onSuccess())
+                    .addOnFailureListener(e -> this.onFailure(e.getMessage()));
+        }
 
     }
     public void registerUser(User user,String password)
