@@ -38,28 +38,34 @@ public class MyAvailabilityFragment extends Fragment implements AvailabilityAdap
     private ProgressBar progress;
     private TextView emptyView;
 
-    @Nullable @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_my_availability, container, false);
 
         RecyclerView recycler = v.findViewById(R.id.recycler);
         progress = v.findViewById(R.id.progress);
         emptyView = v.findViewById(R.id.emptyView);
-        FloatingActionButton fab = v.findViewById(R.id.fabAdd);
+        FloatingActionButton fab = v.findViewById(R.id.fabAdd); // 在這裡取得 FAB
 
         tutorId = requireArguments().getString(ARG_TUTOR_ID, "TUTOR_DEMO");
         repo = new FirebaseAvailabilityRepository();
 
         adapter = new AvailabilityAdapter(this);
-        recycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        recycler.addItemDecoration(new DividerItemDecoration(getContext(), RecyclerView.VERTICAL));
+        recycler.setLayoutManager(new LinearLayoutManager(requireContext()));
+        recycler.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
         recycler.setAdapter(adapter);
 
-        fab.setOnClickListener(btn -> {
-            // after we will connect「add section dialog box」this is just a hint
-            Toast.makeText(getContext(), "Add Availability (coming next)", Toast.LENGTH_SHORT).show();
-        });
+        //  FAB Click → Open the Add Time Period dialog box
+        fab.setOnClickListener(btn ->
+                AddAvailabilityDialog.newInstance(tutorId, () -> {
+                    // After a successful addition,
+                    // the list will be automatically refreshed by Firebase listener,
+                    // so you don't need to do anything here.
+                }).show(getParentFragmentManager(), "add_availability")
+        );
 
         startListening();
         return v;
@@ -75,7 +81,7 @@ public class MyAvailabilityFragment extends Fragment implements AvailabilityAdap
             }
             @Override public void onError(String message) {
                 progress.setVisibility(View.GONE);
-                Toast.makeText(getContext(), "Load error: " + message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Load error: " + message, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -89,21 +95,22 @@ public class MyAvailabilityFragment extends Fragment implements AvailabilityAdap
         }
     }
 
-    // Adapter callbacks ===
-    @Override public void onDelete(AvailabilitySlot slot, int position) {
+    // === Button callbacks for list items ===
+    @Override
+    public void onDelete(AvailabilitySlot slot, int position) {
         repo.deleteSlot(tutorId, slot.id, new FirebaseAvailabilityRepository.OpCallback() {
             @Override public void onSuccess() {
-                Toast.makeText(getContext(), "Slot deleted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Slot deleted", Toast.LENGTH_SHORT).show();
             }
             @Override public void onError(String m) {
-                Toast.makeText(getContext(), "Delete failed: " + m, Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Delete failed: " + m, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    @Override public void onClick(AvailabilitySlot slot, int position) {
-        // after that can see detail or edit. a hint for now
-        Toast.makeText(getContext(), "Slot " + slot.courseCode, Toast.LENGTH_SHORT).show();
+    @Override
+    public void onClick(AvailabilitySlot slot, int position) {
+        // The behavior when clicking on a slot (first provide a hint, then allow editing/details).
+        Toast.makeText(requireContext(), "Slot " + slot.courseCode, Toast.LENGTH_SHORT).show();
     }
 }
-
