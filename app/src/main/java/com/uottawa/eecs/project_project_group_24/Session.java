@@ -1,20 +1,16 @@
 package com.uottawa.eecs.project_project_group_24;
 
-import java.util.Calendar;
-
 public class Session {
-    public enum SessStatus{PENDING,SCHEDULED,ONGOING,COMPLETE,CANCELLED}
-    static long count;
-    public final long id = count;
-    public final Calendar time = Calendar.getInstance();
-    Tutor tutor;
-    Student student;
-    SessStatus status;
+    public enum Status { PENDING, APPROVED, REJECTED, CANCELED, COMPLETED }
 
-    public Session(Tutor t, Student s)
-    {
-        tutor = t;
-        student = s;
-        status = SessStatus.PENDING;
-    }
+    public String id;          // firebase key
+    public String tutorId;
+    public String studentId;
+    public String studentName;
+    public String courseCode;
+    public long   startMillis; // 30 min
+    public int    durationMin = 30;
+    public Status status = Status.PENDING;
+
+    public Session() {}
 }

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" android:padding="12dp"
+    android:background="?attr/selectableItemBackground">
+
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="CSI2110 — Ken (Student)" android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/txtTime"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="Mon, Nov 10 • 14:00–14:30"/>
+
+    <TextView
+        android:id="@+id/txtStatus"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="Status: PENDING" android:layout_marginBottom="6dp"/>
+
+    <LinearLayout
+        android:id="@+id/actions"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:gravity="end" android:orientation="horizontal">
+
+        <Button android:id="@+id/btnReject"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Reject" android:layout_marginEnd="8dp"/>
+
+        <Button android:id="@+id/btnApprove"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Approve" android:layout_marginEnd="8dp"/>
+
+        <Button android:id="@+id/btnCancel"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Cancel"/>
+    </LinearLayout>
+</LinearLayout>
