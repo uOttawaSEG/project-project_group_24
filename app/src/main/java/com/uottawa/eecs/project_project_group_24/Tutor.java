@@ -4,6 +4,8 @@ public class Tutor extends User
 {
     String degree;
     Course[] courses;
+    Queue<Session> upcomingSessions,pastSessions,pendingSessions;
+    Queue<Slot> availableSlots;
     public Tutor(String email, String pass, boolean newuser)
     {
         super(email, pass);
@@ -11,6 +13,9 @@ public class Tutor extends User
             setStatus(requestStatus.PendingStudent);
             getDatabase().registerTutor(this, pass);
         }
+        availableSlots = new Queue<>();
+
+        //Should access database to initialize Session Queues
     }
 
     public String getDegree() {
@@ -21,5 +26,24 @@ public class Tutor extends User
         this.degree = degree;
     }
 
+    public void receiveRequest(Session session)
+    {
 
+    }
+
+    public Queue<Session> getPastSessions() {
+        return pastSessions;
+    }
+
+    public Queue<Session> getPendingSessions() {
+        return pendingSessions;
+    }
+
+    public Queue<Session> getUpcomingSessions() {
+        return upcomingSessions;
+    }
+
+    public Queue<Slot> getAvailableSlots() {
+        return availableSlots;
+    }
 }

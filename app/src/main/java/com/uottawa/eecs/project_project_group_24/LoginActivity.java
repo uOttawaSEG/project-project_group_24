@@ -93,82 +93,83 @@ public class LoginActivity extends AppCompatActivity {
         } else if (fbManager.getLoggedIn() == true) {
             Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
             FirebaseFirestore tmp = fbManager.getDb();
+            FirebaseManager.getInstance().login(email,i,this);
 //            CollectionReference dbref;
-            db.collection("student").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        if (task.getResult().exists()){
-                            i.putExtra("role","student");
-                            startActivity(i);
-                        } else{
-
-                        }
-                    }
-                }
-            });
-            db.collection("tutor").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        if (task.getResult().exists()){
-                            i.putExtra("role","tutor");
-                            startActivity(i);
-                        } else{
-
-                        }
-                    }
-                }
-            });
-            db.collection("user").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        if (task.getResult().exists()){
-
-                            String state = null;
-                            if(task.getResult().getData().get("status")!=null) state = task.getResult().getData().get("status").toString();
-                            Log.d("OTA_LOGIN",state);
-                            if(state!=null&&state.equals("UNDECIDED"))
-                            {
-                                Intent i = new Intent(LoginActivity.this, UserHomeActivity.class);
-                                i.putExtra("email",email);
-                                i.putExtra("role", "User");
-                                i.putExtra("password",password);
-                                startActivity(i);
-                            }
-                            else if(state!=null&&state.equalsIgnoreCase("Pending"))
-                            {
-                                Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
-                                i.putExtra("role","user");
-                                i.putExtra("state","waiting");
-                                startActivity(i);
-                            }
-                            else if (state!=null&&state.equalsIgnoreCase("Rejected")) {
-                                Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
-                                i.putExtra("role","user");
-                                i.putExtra("state","rejected");
-                                startActivity(i);
-                            }
-                            else if(state!=null&&state.equalsIgnoreCase("Approved"))
-                            {
-                                Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
-                                i.putExtra("role","user");
-                                i.putExtra("state","approved");
-                                startActivity(i);
-                            }
-                            else {
-                                Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
-                                i.putExtra("role","user");
-                                startActivity(i);
-                            }
-
-                        } else{
-
-                        }
-                    }
-                }
-            });
+//            db.collection("student").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                    if (task.isSuccessful()) {
+//                        if (task.getResult().exists()){
+//                            i.putExtra("role","student");
+//                            startActivity(i);
+//                        } else{
+//
+//                        }
+//                    }
+//                }
+//            });
+//            db.collection("tutor").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                    if (task.isSuccessful()) {
+//                        if (task.getResult().exists()){
+//                            i.putExtra("role","tutor");
+//                            startActivity(i);
+//                        } else{
+//
+//                        }
+//                    }
+//                }
+//            });
+//            db.collection("user").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                    if (task.isSuccessful()) {
+//                        if (task.getResult().exists()){
+//
+//                            String state = null;
+//                            if(task.getResult().getData().get("status")!=null) state = task.getResult().getData().get("status").toString();
+//                            Log.d("OTA_LOGIN",state);
+//                            if(state!=null&&state.equals("UNDECIDED"))
+//                            {
+//                                Intent i = new Intent(LoginActivity.this, UserHomeActivity.class);
+//                                i.putExtra("email",email);
+//                                i.putExtra("role", "User");
+//                                i.putExtra("password",password);
+//                                startActivity(i);
+//                            }
+//                            else if(state!=null&&state.equalsIgnoreCase("Pending"))
+//                            {
+//                                Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
+//                                i.putExtra("role","user");
+//                                i.putExtra("state","waiting");
+//                                startActivity(i);
+//                            }
+//                            else if (state!=null&&state.equalsIgnoreCase("Rejected")) {
+//                                Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
+//                                i.putExtra("role","user");
+//                                i.putExtra("state","rejected");
+//                                startActivity(i);
+//                            }
+//                            else if(state!=null&&state.equalsIgnoreCase("Approved"))
+//                            {
+//                                Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
+//                                i.putExtra("role","user");
+//                                i.putExtra("state","approved");
+//                                startActivity(i);
+//                            }
+//                            else {
+//                                Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
+//                                i.putExtra("role","user");
+//                                startActivity(i);
+//                            }
+//
+//                        } else{
+//
+//                        }
+//                    }
+//                }
+//            });
 //            Log.d("CONSOLE","Not user");
 
 

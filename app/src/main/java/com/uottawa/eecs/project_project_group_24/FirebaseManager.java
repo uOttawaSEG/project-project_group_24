@@ -1,11 +1,15 @@
 package com.uottawa.eecs.project_project_group_24;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -541,6 +545,159 @@ public final class FirebaseManager {
                 Administrator.receiveRequest(tmp);
             }
         }
+    }
+    //@params
+    public void moveCollections(String start, String end, String id)
+    {
+        db.collection(start).document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.getResult().exists())
+                {
+                    Map<String,Object> tmp = task.getResult().getData();
+                    if(tmp!=null)
+                    {
+                        tmp.put("id",id);
+                        db.collection(end).add(tmp);
+                        db.collection(start).document(id).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("OTA_FIREBASE", "DocumentSnapshot successfully deleted!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w("OTA_FIREBASE", "Error deleting document", e);
+                        }
+                    });
+
+                    }
+                }
+
+            }
+        });
+
+    }
+
+    public void sendUserInfo(DocumentSnapshot t,Intent i)
+    {
+        i.putExtra("password",String.valueOf(t.get("password")));
+        i.putExtra("firstName", String.valueOf(t.get("firstName")));
+        i.putExtra("lastName", String.valueOf(t.get("lastName")));
+        i.putExtra("phone", String.valueOf(String.valueOf(t.get("phoneNumber"))));
+    }
+
+
+    public void login(String email, Intent i, Activity a)
+    {
+//        Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
+        db.collection("student").whereEqualTo("email",email).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    Intent i = new Intent(a, WelcomeActivity.class);
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        i.putExtra("role", "student");
+                        sendUserInfo(document, i);
+                        a.startActivity(i);
+                    }
+            }
+        }});
+        db.collection("tutor").whereEqualTo("email",email).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    Intent i = new Intent(a, TutorHomeActivity.class);
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        i.putExtra("role", "tutor");
+                        sendUserInfo(document, i);
+                        a.startActivity(i);
+                    }
+                }
+            }});
+
+//        db.collection("student").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    if (task.getResult().exists()){
+//                        i.putExtra("role","student");
+//                        sendUserInfo(task.getResult(),i);
+//                        a.startActivity(i);
+//                    } else{
+//
+//                    }
+//                }
+//            }
+//        });
+//        db.collection("tutor").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    if (task.getResult().exists()){
+//                        i.putExtra("role","tutor");
+//                        sendUserInfo(task,i);
+//                        a.startActivity(i);
+//                    } else{
+//
+//                    }
+//                }
+//            }
+//        });
+        db.collection("user").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    if (task.getResult().exists()){
+
+                        String state = null;
+                        if(task.getResult().getData().get("status")!=null) state = task.getResult().getData().get("status").toString();
+                        Log.d("OTA_LOGIN",state);
+                        if(state!=null&&state.equals("UNDECIDED"))
+                        {
+                            Intent i = new Intent(a, UserHomeActivity.class);
+                            i.putExtra("email",email);
+                            i.putExtra("role", "User");
+                            sendUserInfo(task.getResult(),i);
+                            a.startActivity(i);
+                        }
+                        else if(state!=null&&state.equalsIgnoreCase("Pending"))
+                        {
+                            Intent i = new Intent(a, WelcomeActivity.class);
+                            i.putExtra("role","user");
+                            i.putExtra("state","waiting");
+                            sendUserInfo(task.getResult(),i);
+                            a.startActivity(i);
+                        }
+                        else if (state!=null&&state.equalsIgnoreCase("Rejected")) {
+                            Intent i = new Intent(a, WelcomeActivity.class);
+                            i.putExtra("role","user");
+                            i.putExtra("state","rejected");
+                            sendUserInfo(task.getResult(),i);
+                            a.startActivity(i);
+                        }
+                        else if(state!=null&&state.equalsIgnoreCase("Approved"))
+                        {
+                            Intent i = new Intent(a, WelcomeActivity.class);
+                            i.putExtra("role","user");
+                            i.putExtra("state","approved");
+                            sendUserInfo(task.getResult(),i);
+                            a.startActivity(i);
+                        }
+                        else {
+                            Intent i = new Intent(a, WelcomeActivity.class);
+                            i.putExtra("role","user");
+                            sendUserInfo(task.getResult(),i);
+                            a.startActivity(i);
+                        }
+
+                    } else{
+
+                    }
+                }
+            }
+        });
     }
 
 

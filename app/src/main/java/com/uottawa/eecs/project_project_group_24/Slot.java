@@ -5,6 +5,7 @@ import java.sql.Time;
 public class Slot {
     Tutor tutor;
     Time startTime,endTime;
+    Session session;
     public Slot(Tutor tutor, Time startTime)
     {
         this.tutor = tutor;
@@ -34,5 +35,13 @@ public class Slot {
 
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
+    public Session getSession() {
+        return session;
     }
 }

@@ -27,7 +27,7 @@ public class WelcomeActivity extends AppCompatActivity {
         }
         else{
             if (role == null) role = "Unknown";
-            text.setText("Welcome! You are logged in sucessfully");
+            text.setText("Welcome! You are logged in sucessfully as a "+role);
         }
         Button logoff = findViewById(R.id.btnLogoff);
         logoff.setOnClickListener(v -> {

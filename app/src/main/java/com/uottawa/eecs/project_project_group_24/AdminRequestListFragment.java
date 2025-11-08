@@ -252,5 +252,11 @@ public class AdminRequestListFragment extends Fragment
                             "Error updating status: " + e.getMessage(),
                             Toast.LENGTH_SHORT).show();
                 });
+        FirebaseManager dbmanage = FirebaseManager.getInstance();
+        if(newStatus.equalsIgnoreCase("Approved"))
+        {
+            if(req.getRole().equalsIgnoreCase("tutor")) dbmanage.moveCollections("user","tutor",req.getEmail());
+            if(req.getRole().equalsIgnoreCase("student")) dbmanage.moveCollections("user","student",req.getEmail());
+        }
     }
 }
