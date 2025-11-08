@@ -742,4 +742,13 @@ public final class FirebaseManager {
 //            }
 //        });
     }
+
+    ////////////////////////////////////////////
+    ///DELIVERABLE 3, please do not touch the code above
+    ////////////////////////////////////////
+
+    public void addSession(Session session){
+
+    }
+
 }
