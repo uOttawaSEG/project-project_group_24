@@ -47,7 +47,7 @@ public class FirebaseSessionsRepository {
     }
 
     public void cancel(String tutorId, String sessionId, final OpCallback cb) {
-        setStatus(tutorId, sessionId, Session.Status.CANCELED, cb);
+        setStatus(tutorId, sessionId, Session.Status.CANCELLED, cb);
     }
 
     // choose：add/create test data

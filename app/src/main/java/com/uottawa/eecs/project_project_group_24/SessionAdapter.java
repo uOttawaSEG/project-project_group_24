@@ -36,7 +36,7 @@ public class SessionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         for (Session s : all) {
             long end = s.startMillis + s.durationMin * 60_000L;
-            boolean isPast = end < nowMs || s.status == Session.Status.CANCELED || s.status == Session.Status.REJECTED || s.status == Session.Status.COMPLETED;
+            boolean isPast = end < nowMs || s.status == Session.Status.CANCELLED || s.status == Session.Status.REJECTED || s.status == Session.Status.COMPLETED;
             if (isPast) past.add(s); else upcoming.add(s);
         }
 
@@ -111,7 +111,7 @@ public class SessionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             status.setText("Status: " + s.status.name());
 
             // Upcoming only: show button。Past: hide action
-            boolean upcoming = !(s.status == Session.Status.CANCELED || s.status == Session.Status.REJECTED || s.status == Session.Status.COMPLETED)
+            boolean upcoming = !(s.status == Session.Status.CANCELLED || s.status == Session.Status.REJECTED || s.status == Session.Status.COMPLETED)
                     && (s.startMillis + s.durationMin * 60_000L) >= System.currentTimeMillis();
             actions.setVisibility(upcoming ? View.VISIBLE : View.GONE);
 
