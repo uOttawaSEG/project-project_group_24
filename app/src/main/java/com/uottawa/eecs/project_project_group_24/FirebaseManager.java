@@ -18,6 +18,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -590,8 +591,45 @@ public final class FirebaseManager {
     ///DELIVERABLE 3, please do not touch the code above
     ////////////////////////////////////////
 
-    public void addSession(Session session){
 
+    public Map<String, Object> toMap(Session session){
+        Map<String, Object> sessionMap = new HashMap<>();
+        sessionMap.put("studentName", session.studentName);
+        sessionMap.put("studentId", session.studentId);
+        sessionMap.put("tutorId", session.tutorId);
+        sessionMap.put("courseCode", session.courseCode);
+        sessionMap.put("id", session.id);
+
+        return sessionMap;
     }
+
+    public void addSession(Session session){
+        if(session.id == null) {
+            onFailure("Session ID is null");
+            return;
+        }
+
+        db.collection("session") // use proper collection
+                .document(session.id)
+                .set(toMap(session))
+                .addOnSuccessListener(aVoid -> onSuccess())
+                .addOnFailureListener(e -> onFailure(e.getMessage()));
+    }
+
+    public void getSessions(){}
+
+    public Session convertToSessionObject(Map<String, Object> sessionMap){
+        Session session = new Session();
+        session.id = (String) sessionMap.get("id");
+        session.courseCode = (String) sessionMap.get("courseCode");
+        session.studentName = (String) sessionMap.get("studentName");
+        session.tutorId = (String) sessionMap.get("tutorId");
+        session.studentId = (String) sessionMap.get("studentId");
+        session.setStatus((String) sessionMap.get("status"));
+        session.time =(Timestamp) sessionMap.get("startTime");//gonna fix it
+        return session;
+    }
+
+
 
 }

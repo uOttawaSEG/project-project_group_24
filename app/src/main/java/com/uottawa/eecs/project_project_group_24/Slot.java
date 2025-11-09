@@ -5,6 +5,7 @@ import java.sql.Time;
 public class Slot {
     Tutor tutor;
     Time startTime,endTime;
+
     public Slot(Tutor tutor, Time startTime)
     {
         this.tutor = tutor;
