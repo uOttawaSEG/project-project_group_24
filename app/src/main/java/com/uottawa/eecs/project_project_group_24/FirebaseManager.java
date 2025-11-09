@@ -323,6 +323,7 @@ public final class FirebaseManager {
                 });
     }
 
+
     public Boolean loginUser(String email, String password, LoginActivity activity) {
         Map<String, Object> userData = new HashMap<>();
         auth.signInWithEmailAndPassword(email, password)
@@ -333,8 +334,18 @@ public final class FirebaseManager {
                     } else {
                         this.onFailure(authTask.getException().getMessage());
                     }
+                    db.collection("admin").
+                            document(email).get().addOnSuccessListener(documentSnapshot -> {
+                                if (documentSnapshot.exists()) {
+                                    Log.d("FIREBASE_LOGIN","Admin successfully logged in");
+                                    Intent i = new Intent(activity, AdminHomeActivity.class);
+//                                    admin = true;
+                                    activity.startActivity(i);
+                                }
+                            });
                     activity.loginCallback();
                 });
+
         return admin;
     }
 
