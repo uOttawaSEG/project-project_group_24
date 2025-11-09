@@ -74,9 +74,9 @@ public class TutorRegisterActivity extends AppCompatActivity {
                 finish();
             }
         });
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, MyAvailabilityFragment.newInstance("TUTOR_DEMO"))// TODO: change to real LoginID
-                .commit();
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.container, MyAvailabilityFragment.newInstance("TUTOR_DEMO"))// TODO: change to real LoginID
+//                .commit();
 
     }
 

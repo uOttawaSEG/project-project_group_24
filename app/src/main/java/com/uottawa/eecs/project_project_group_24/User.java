@@ -40,6 +40,7 @@ public class User implements IUser
         successful_login = true;
         requested_register = false;
         status = requestStatus.Undecided;
+//        RealTimeDatabase.user_data.child(email).setValue(this);
 
     }
 

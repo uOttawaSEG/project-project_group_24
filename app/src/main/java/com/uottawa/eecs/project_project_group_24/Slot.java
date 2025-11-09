@@ -5,7 +5,11 @@ import java.sql.Time;
 public class Slot {
     Tutor tutor;
     Time startTime,endTime;
+<<<<<<< HEAD
 
+=======
+    Session session;
+>>>>>>> e0b3be2b12222a0e9bd4670da4d266fcf2708d62
     public Slot(Tutor tutor, Time startTime)
     {
         this.tutor = tutor;
@@ -35,5 +39,13 @@ public class Slot {
 
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
+    public Session getSession() {
+        return session;
     }
 }

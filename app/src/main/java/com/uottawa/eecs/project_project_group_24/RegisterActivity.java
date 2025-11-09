@@ -1,6 +1,7 @@
 package com.uottawa.eecs.project_project_group_24;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -78,7 +79,7 @@ public class RegisterActivity extends AppCompatActivity {
                 i.putExtra("firstName", logged_user.getFirstName());
                 i.putExtra("lastName", logged_user.getLastName());
                 i.putExtra("phone", String.valueOf(logged_user.getPhoneNumber()));
-
+                Log.d("OTA_REGISTER","phone number is "+String.valueOf(logged_user.getPhoneNumber()));
                 startActivity(i);
 
                 finish();
@@ -126,11 +127,11 @@ public class RegisterActivity extends AppCompatActivity {
         RegistrationRequest request = new RegistrationRequest(firstName, lastName, email, RegistrationRequest.Role.TUTOR);
         request.setId(email);
         request.setPhone(phone);
-        request.setId(user.getEmail());
-        request.setFirstName(user.getFirstName());
-        request.setLastName(user.getLastName());
-        request.setEmail(user.getEmail());
-        request.setPhone(String.valueOf(user.getPhoneNumber()));
+        request.setId(email);
+        request.setFirstName(firstName);
+        request.setLastName(lastName);
+        request.setEmail(email);
+//        request.setPhone(String.valueOf(phone));
         request.setRole("USER");
         request.setStatus(RegistrationRequest.Status.PENDING);
 

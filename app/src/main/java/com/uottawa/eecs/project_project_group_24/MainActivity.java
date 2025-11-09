@@ -13,6 +13,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import android.util.Log;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button btnGeneral;
     private FirebaseFirestore db;
+    DatabaseReference user_database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 //        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        user_database = FirebaseDatabase.getInstance().getReference();
         FirebaseManager.getInstance().initializeRequests();
 
         Button btnLogin = findViewById(R.id.btnLoginMain);
@@ -78,4 +82,11 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
     }
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+
+    }
+
 }
