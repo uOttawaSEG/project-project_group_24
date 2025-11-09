@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/adminHomeRoot"
     android:layout_width="match_parent"
@@ -27,9 +28,12 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:padding="8dp"
-        android:background="@android:color/white" />
+        android:background="@android:color/white" >
+
+    </FrameLayout>
 
     <!-- Footer buttons -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,6 +53,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="View Pending" />
+
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btnLogoff2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Log off"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/welcomeText" />
 
 </LinearLayout>

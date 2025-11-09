@@ -178,6 +178,8 @@ public class LoginActivity extends AppCompatActivity {
 
 //            startActivity(i);
         } else {
+            Toast t = Toast.makeText(this,"UserName or Password is Incorrect",1000);
+            t.show();
             // bad credentials!!!
         }
         finish();
