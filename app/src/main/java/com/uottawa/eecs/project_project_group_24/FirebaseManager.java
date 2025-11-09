@@ -23,6 +23,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +53,8 @@ public final class FirebaseManager {
     //needs to be implemented - not need til D2
     public void onSuccess() {}
     public void onSuccess(User u) {}
+
+    public void onSuccess(List<Session> session) {}
 
 
 
@@ -300,7 +303,7 @@ public final class FirebaseManager {
                         this.onSuccess(tutor);
 
                     } else {
-                        this.onSuccess(null);
+                        this.onSuccess();
                     }
                 })
                 .addOnFailureListener(e -> this.onFailure(
@@ -345,7 +348,7 @@ public final class FirebaseManager {
                         Student student = convertToStudentObject(documentSnapshot.getData());
                         this.onSuccess(student);
                     } else {
-                        this.onSuccess(null);
+                        this.onSuccess();
                     }
                 })
                 .addOnFailureListener(e -> this.onFailure(
@@ -773,7 +776,31 @@ public final class FirebaseManager {
                 .addOnFailureListener(e -> onFailure(e.getMessage()));
     }
 
-    public void getSessions(){}
+    public void getSessions(String tutorId) {
+        db.collection("session")
+                .whereEqualTo("tutorId", tutorId)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (!querySnapshot.isEmpty()) {
+
+                        List<Session> sessions = new ArrayList<>();
+
+                        for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                            // Convert using your helper method
+                            Session session = convertToSessionObject(doc.getData());
+                            sessions.add(session);
+                        }
+
+                        this.onSuccess(sessions);
+
+                    } else {
+                        this.onSuccess(Collections.emptyList()); // Return empty list instead of null
+                    }
+                })
+                .addOnFailureListener(e ->
+                        this.onFailure("Failed to fetch sessions: " + e.getMessage()));
+    }
+
 
     public Session convertToSessionObject(Map<String, Object> sessionMap){
         Session session = new Session();
