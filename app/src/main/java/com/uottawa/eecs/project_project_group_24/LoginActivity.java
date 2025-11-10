@@ -76,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
         fbManager = FirebaseManager.getInstance(); //aiden - get the data from firebase.
 
         fbManager.loginUser(email, password, this); //aiden - send the instant variable to fb EMAIL, PASSWORD, and itself as object
+
         if (fbManager.getAdmin() == true) {
             Intent i = new Intent(LoginActivity.this, AdminHomeActivity.class);
             startActivity(i);
@@ -177,6 +178,8 @@ public class LoginActivity extends AppCompatActivity {
 
 //            startActivity(i);
         } else {
+            Toast t = Toast.makeText(this,"UserName or Password is Incorrect",1000);
+            t.show();
             // bad credentials!!!
         }
         finish();

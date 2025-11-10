@@ -1,5 +1,6 @@
 package com.uottawa.eecs.project_project_group_24;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -38,6 +39,14 @@ public class AdminHomeActivity extends AppCompatActivity {
                         .replace(R.id.container, AdminRequestListFragment.newPending())
                         .commit();
             }
+        });
+        Button logoff = findViewById(R.id.btnLogoff2);
+        logoff.setOnClickListener(v -> {
+            FirebaseManager fbmanager = FirebaseManager.getInstance();
+            fbmanager.logout();
+            Intent i = new Intent(AdminHomeActivity.this, MainActivity.class);
+            startActivity(i);
+            finish();
         });
     }
 }

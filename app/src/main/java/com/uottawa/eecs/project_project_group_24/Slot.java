@@ -6,11 +6,16 @@ import java.sql.Timestamp;
 public class Slot {
     Tutor tutor;
     Time startTime,endTime;
+<<<<<<< HEAD
     static int count = 0;
     String id;
     Timestamp time;
     Session session;
     public Slot(Tutor tutor, Timestamp time)
+=======
+    Session session;
+    public Slot(Tutor tutor, Time startTime)
+>>>>>>> f1cf0cfb3eb036ecaa8431bcedb7c8430805f47c
     {
         this.id = String.valueOf(count);
         count ++;

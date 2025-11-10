@@ -1,6 +1,9 @@
 package com.uottawa.eecs.project_project_group_24;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
@@ -34,5 +37,13 @@ public class TutorHomeActivity extends AppCompatActivity {
                 tab.setText(position == 0 ? "My Availability" : "My Sessions");
             }
         }).attach();
+        Button logoff = findViewById(R.id.btnLogoff3);
+        logoff.setOnClickListener(v -> {
+            FirebaseManager fbmanager = FirebaseManager.getInstance();
+            fbmanager.logout();
+            Intent i = new Intent(TutorHomeActivity.this, MainActivity.class);
+            startActivity(i);
+            finish();
+        });
     }
 }

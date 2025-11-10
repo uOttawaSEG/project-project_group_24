@@ -173,6 +173,10 @@ public class AddAvailabilityDialog extends BottomSheetDialogFragment {
         slot.durationMin = SLOT_MIN;
         slot.courseCode = courseSel.toString();
 
+
+
+
+
         repo.addSlot(tutorId, slot, new FirebaseAvailabilityRepository.OpCallback() {
             @Override public void onSuccess() {
                 setBusy(false);

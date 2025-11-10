@@ -40,11 +40,11 @@ public class MainActivity extends AppCompatActivity {
             Intent i = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(i);
         });
-        Button btnAdmin = findViewById(R.id.adminButton);
-        btnAdmin.setOnClickListener(v -> {
-            Intent i = new Intent(MainActivity.this, AdminHomeActivity.class);
-            startActivity(i);
-        });
+//        Button btnAdmin = findViewById(R.id.adminButton);
+//        btnAdmin.setOnClickListener(v -> {
+//            Intent i = new Intent(MainActivity.this, AdminHomeActivity.class);
+//            startActivity(i);
+//        });
 
 
 //        btnStudent = findViewById(R.id.btnStudent);
