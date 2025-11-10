@@ -2,6 +2,7 @@ package com.uottawa.eecs.project_project_group_24;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -13,7 +14,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 public class TutorHomeActivity extends AppCompatActivity {
 
-    public static final String EXTRA_TUTOR_ID = "extra_tutor_id";
+    public static final String EXTRA_TUTOR_ID = "email";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +23,9 @@ public class TutorHomeActivity extends AppCompatActivity {
 
         String tutorId = getIntent().getStringExtra(EXTRA_TUTOR_ID);
         if (tutorId == null || tutorId.isEmpty()) tutorId = "TUTOR_DEMO"; // fallback for test
+        tutorId = tutorId.replaceAll("\\.","");
+//        tutorId ="OWO";
+        Log.d("OTA_TUTORHOME","Tutor Id is "+tutorId);
 
         MaterialToolbar tb = findViewById(R.id.toolbar);
         setSupportActionBar(tb);

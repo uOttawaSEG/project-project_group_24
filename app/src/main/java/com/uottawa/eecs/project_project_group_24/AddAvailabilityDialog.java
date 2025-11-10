@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import androidx.annotation.NonNull;
@@ -24,6 +25,7 @@ public class AddAvailabilityDialog extends BottomSheetDialogFragment {
     private static final String ARG_TUTOR_ID = "tutor_id";
 
     public static AddAvailabilityDialog newInstance(String tutorId, Callback cb) {
+        Log.d("OTA_TUTORAVAILABILTY","init tutorId is "+tutorId);
         AddAvailabilityDialog d = new AddAvailabilityDialog();
         Bundle b = new Bundle(); b.putString(ARG_TUTOR_ID, tutorId); d.setArguments(b);
         d.callback = cb;
@@ -60,6 +62,7 @@ public class AddAvailabilityDialog extends BottomSheetDialogFragment {
         progress = v.findViewById(R.id.progress);
 
         tutorId = requireArguments().getString(ARG_TUTOR_ID, "TUTOR_DEMO");
+        Log.d("OTA_TUTORAVAILABILTY","Tutor Id is "+tutorId);
         repo = new FirebaseAvailabilityRepository();
 
         setupCourseSpinner();
@@ -172,6 +175,7 @@ public class AddAvailabilityDialog extends BottomSheetDialogFragment {
         slot.startMillis = newStart;
         slot.durationMin = SLOT_MIN;
         slot.courseCode = courseSel.toString();
+        slot.tutorId = tutorId;
 
 
 

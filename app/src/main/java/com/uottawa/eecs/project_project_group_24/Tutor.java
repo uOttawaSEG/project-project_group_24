@@ -14,7 +14,7 @@ public class Tutor extends User
             getDatabase().registerTutor(this, pass);
         }
         availableSlots = new Queue<>();
-
+        FirebaseManager.getInstance().getSessions(email);
         //Should access database to initialize Session Queues
     }
 

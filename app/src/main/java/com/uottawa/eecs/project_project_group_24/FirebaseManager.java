@@ -597,6 +597,7 @@ public final class FirebaseManager {
 
     public void sendUserInfo(DocumentSnapshot t,Intent i)
     {
+        i.putExtra("email",String.valueOf(t.get("email")));
         i.putExtra("password",String.valueOf(t.get("password")));
         i.putExtra("firstName", String.valueOf(t.get("firstName")));
         i.putExtra("lastName", String.valueOf(t.get("lastName")));

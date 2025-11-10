@@ -20,7 +20,7 @@ import java.util.List;
 
 public class MyAvailabilityFragment extends Fragment implements AvailabilityAdapter.Listener {
 
-    private static final String ARG_TUTOR_ID = "tutor_id";
+    private static final String ARG_TUTOR_ID = "email";
 
     public static MyAvailabilityFragment newInstance(String tutorId) {
         MyAvailabilityFragment f = new MyAvailabilityFragment();
@@ -52,6 +52,7 @@ public class MyAvailabilityFragment extends Fragment implements AvailabilityAdap
 
         tutorId = requireArguments().getString(ARG_TUTOR_ID, "TUTOR_DEMO");
         repo = new FirebaseAvailabilityRepository();
+        tutorId = tutorId.replaceAll("\\.","");
 
         adapter = new AvailabilityAdapter(this);
         recycler.setLayoutManager(new LinearLayoutManager(requireContext()));

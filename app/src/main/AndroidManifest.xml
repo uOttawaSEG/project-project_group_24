@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RegisterActivity">
         <activity
+            android:name=".StudentHomeActivity"
+            android:exported="false" />
+        <activity
             android:name=".StudentRegisterActivity"
             android:exported="false" />
         <activity
@@ -31,11 +34,8 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".WelcomeActivity" />
         <activity android:name=".TutorRegisterActivity" />
-
         <activity android:name=".AdminHomeActivity" />
         <activity android:name=".TutorHomeActivity" />
-
-
     </application>
 
 </manifest>

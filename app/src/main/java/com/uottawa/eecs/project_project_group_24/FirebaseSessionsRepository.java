@@ -40,6 +40,7 @@ public class FirebaseSessionsRepository {
         return v;
     }
 
+
     public void setStatus(String tutorId, String sessionId, Session.Status status, final OpCallback cb) {
         root.child(tutorId).child(sessionId).child("status").setValue(status.name())
                 .addOnSuccessListener(v -> cb.onSuccess())
