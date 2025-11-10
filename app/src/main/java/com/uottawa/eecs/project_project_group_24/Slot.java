@@ -5,15 +5,12 @@ import java.sql.Time;
 public class Slot {
     Tutor tutor;
     Time startTime,endTime;
-    boolean auto;
     Session session;
-    String CourseCode;
-    public Slot(Tutor tutor, Time startTime, boolean auto)
+    public Slot(Tutor tutor, Time startTime)
     {
         this.tutor = tutor;
         this.startTime = startTime;
         this.endTime = new Time(startTime.getTime()+(1000*30));
-        this.auto = auto;
     }
 
     public Time getStartTime() {

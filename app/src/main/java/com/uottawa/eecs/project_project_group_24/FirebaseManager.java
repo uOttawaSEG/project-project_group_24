@@ -290,7 +290,7 @@ public final class FirebaseManager {
     }
 
 //fetches tutor from database given email
-    private void fetchTutorProfile(String email) {
+    public void fetchTutorProfile(String email) {
 
         db.collection("tutor")
                 .document(email)
@@ -349,22 +349,7 @@ public final class FirebaseManager {
         return admin;
     }
 
-    //fetches student from database given email
-    private void fetchStudentProfile(String email) {
-        db.collection("student")
-                .document(email)
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        Student student = convertToStudentObject(documentSnapshot.getData());
-                        this.onSuccess(student);
-                    } else {
-                        this.onSuccess();
-                    }
-                })
-                .addOnFailureListener(e -> this.onFailure(
-                        "Database fetch failed: " + e.getMessage()));
-    }
+
 
     public RegistrationRequest convertToRequestObject(Map<String, Object> data) {
         String role = (String) data.get("role");
@@ -824,6 +809,25 @@ public final class FirebaseManager {
         session.setStatus((String) sessionMap.get("status"));
         session.time =(Timestamp) sessionMap.get("startTime");//gonna fix it
         return session;
+    }
+
+
+    //fetches student from database given email
+    //call this when tutor wants to see informaiton about a student
+    public void fetchStudentProfile(String email) {
+        db.collection("student")
+                .document(email)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Student student = convertToStudentObject(documentSnapshot.getData());
+                        this.onSuccess(student);
+                    } else {
+                        this.onSuccess();
+                    }
+                })
+                .addOnFailureListener(e -> this.onFailure(
+                        "Database fetch failed: " + e.getMessage()));
     }
 
 
