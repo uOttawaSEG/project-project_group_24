@@ -1,20 +1,29 @@
 package com.uottawa.eecs.project_project_group_24;
 
 import java.sql.Time;
+import java.sql.Timestamp;
 
 public class Slot {
     Tutor tutor;
     Time startTime,endTime;
-<<<<<<< HEAD
-
-=======
+    static int count = 0;
+    String id;
+    Timestamp time;
     Session session;
->>>>>>> e0b3be2b12222a0e9bd4670da4d266fcf2708d62
-    public Slot(Tutor tutor, Time startTime)
+    public Slot(Tutor tutor, Timestamp time)
     {
+        this.id = String.valueOf(count);
+        count ++;
         this.tutor = tutor;
-        this.startTime = startTime;
-        this.endTime = new Time(startTime.getTime()+(1000*30));
+        this.time = time;
+
+    }
+
+    public Slot(Tutor tutor, Timestamp time, String id)
+    {
+        this.id = id;
+        this.tutor = tutor;
+        this.time = time;
     }
 
     public Time getStartTime() {
