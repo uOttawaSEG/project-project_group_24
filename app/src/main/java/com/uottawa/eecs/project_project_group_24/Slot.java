@@ -6,11 +6,13 @@ public class Slot {
     Tutor tutor;
     Time startTime,endTime;
     Session session;
-    public Slot(Tutor tutor, Time startTime)
+    String manualApproval;
+    public Slot(Tutor tutor, Time startTime, String manualApproval)
     {
         this.tutor = tutor;
         this.startTime = startTime;
         this.endTime = new Time(startTime.getTime()+(1000*30));
+        this.manualApproval = manualApproval;
     }
 
     public Time getStartTime() {
