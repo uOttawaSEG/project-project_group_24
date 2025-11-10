@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:fillViewport="true"
@@ -24,11 +25,14 @@
             android:layout_height="wrap_content"
             android:text="Date"
             android:layout_marginTop="12dp" />
+
         <Button
             android:id="@+id/btnPickDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Pick a date" />
+            android:backgroundTint="#000000"
+            android:text="Pick a date"
+            app:cornerRadius="0dp" />
 
         <!-- Time -->
         <TextView
@@ -36,11 +40,14 @@
             android:layout_height="wrap_content"
             android:text="Start time (30 mins)"
             android:layout_marginTop="12dp" />
+
         <Button
             android:id="@+id/btnPickTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Pick a time" />
+            android:backgroundTint="#000000"
+            android:text="Pick a time"
+            app:cornerRadius="0dp" />
 
         <!-- Course -->
         <TextView
@@ -71,14 +78,18 @@
                 android:id="@+id/btnCancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="#000000"
                 android:text="Cancel"
-                android:layout_marginEnd="8dp" />
+                app:cornerRadius="0dp" />
 
             <Button
                 android:id="@+id/btnSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Save" />
+                android:backgroundTint="#000000"
+                android:text="Save"
+                app:cornerRadius="0dp" />
         </LinearLayout>
 
         <ProgressBar

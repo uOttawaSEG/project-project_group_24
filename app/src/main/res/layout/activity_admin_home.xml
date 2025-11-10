@@ -45,14 +45,18 @@
             android:id="@+id/btnShowRejected"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="#000000"
             android:text="View Rejected"
-            android:layout_marginEnd="8dp" />
+            app:cornerRadius="0dp" />
 
         <Button
             android:id="@+id/btnShowPending"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="View Pending" />
+            android:backgroundTint="#000000"
+            android:text="View Pending"
+            app:cornerRadius="0dp" />
 
     </LinearLayout>
 
@@ -60,8 +64,10 @@
         android:id="@+id/btnLogoff2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_margin="10dp"
+        android:backgroundTint="#000000"
         android:text="Log off"
+        app:cornerRadius="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/welcomeText" />
