@@ -1,5 +1,7 @@
 package com.uottawa.eecs.project_project_group_24;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import com.google.firebase.database.*;
 import java.util.ArrayList;
@@ -54,10 +56,19 @@ public class FirebaseSessionsRepository {
     // choose：add/create test data
     public void add(String tutorId, Session s, final OpCallback cb) {
         DatabaseReference ref = root.child(tutorId).push();
+        Log.d("OTA_FIREBASESESSIONS",ref.toString());
         s.tutorId = tutorId;
+        Log.d("OTA_FIREBASESESSIONS",tutorId.toString());
         ref.setValue(s)
-                .addOnSuccessListener(v -> cb.onSuccess())
-                .addOnFailureListener(e -> cb.onError(e.getMessage()));
+                .addOnSuccessListener(v -> {
+                    Log.d("OTA_FIREBASESESSIONS","SUCCESS");
+                    cb.onSuccess();
+                })
+                .addOnFailureListener(e ->
+                {
+                    Log.d("OTA_FIREBASESESSIONS",String.valueOf(e.getMessage()));
+                    cb.onError(e.getMessage());
+                });
     }
 }
 

@@ -597,7 +597,7 @@ public final class FirebaseManager {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    Intent i = new Intent(a, WelcomeActivity.class);
+                    Intent i = new Intent(a, StudentHomeActivity.class);
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         i.putExtra("role", "student");
                         sendUserInfo(document, i);
@@ -751,11 +751,12 @@ public final class FirebaseManager {
 
     public Map<String, Object> toMap(Session session){
         Map<String, Object> sessionMap = new HashMap<>();
-        sessionMap.put("studentName", session.studentName);
-        sessionMap.put("studentId", session.studentId);
+        sessionMap.put("studentName", session.getStudentName());
+        sessionMap.put("studentId", session.getStudentId());
         sessionMap.put("tutorId", session.tutorId);
-        sessionMap.put("courseCode", session.courseCode);
+        sessionMap.put("courseCode", session.getCourseCode());
         sessionMap.put("id", session.id);
+        sessionMap.put("startTime",session.getStartMillis());
 
         return sessionMap;
     }
@@ -801,13 +802,14 @@ public final class FirebaseManager {
 
     public Session convertToSessionObject(Map<String, Object> sessionMap){
         Session session = new Session();
-        session.id = (String) sessionMap.get("id");
+        session.setId((String) sessionMap.get("id"));
         session.courseCode = (String) sessionMap.get("courseCode");
         session.studentName = (String) sessionMap.get("studentName");
         session.tutorId = (String) sessionMap.get("tutorId");
         session.studentId = (String) sessionMap.get("studentId");
         session.setStatus((String) sessionMap.get("status"));
-        session.time =(Timestamp) sessionMap.get("startTime");//gonna fix it
+        session.startMillis = Long.parseLong((String)sessionMap.get("startTime"));
+//        session.time =(Timestamp) sessionMap.get("startTime");//gonna fix it
         return session;
     }
 
