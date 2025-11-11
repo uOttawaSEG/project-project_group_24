@@ -757,6 +757,7 @@ public final class FirebaseManager {
         sessionMap.put("courseCode", session.getCourseCode());
         sessionMap.put("id", session.id);
         sessionMap.put("startTime",session.getStartMillis());
+        sessionMap.put("startMillis", session.startMillis);
 
         return sessionMap;
     }

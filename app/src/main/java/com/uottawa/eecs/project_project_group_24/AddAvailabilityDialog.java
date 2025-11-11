@@ -37,6 +37,9 @@ public class AddAvailabilityDialog extends BottomSheetDialogFragment {
 
     private Button btnPickDate, btnPickTime, btnSave, btnCancel;
     private Spinner spinnerCourse;
+    private Spinner spinnerCourse2;
+
+
     private TextView txtError;
     private ProgressBar progress;
 
@@ -56,6 +59,7 @@ public class AddAvailabilityDialog extends BottomSheetDialogFragment {
         btnPickDate = v.findViewById(R.id.btnPickDate);
         btnPickTime = v.findViewById(R.id.btnPickTime);
         spinnerCourse = v.findViewById(R.id.spinnerCourse);
+        spinnerCourse2 = v.findViewById(R.id.spinnerCourse2);
         btnSave = v.findViewById(R.id.btnSave);
         btnCancel = v.findViewById(R.id.btnCancel);
         txtError = v.findViewById(R.id.txtError);
@@ -66,6 +70,7 @@ public class AddAvailabilityDialog extends BottomSheetDialogFragment {
         repo = new FirebaseAvailabilityRepository();
 
         setupCourseSpinner();
+        setupManualSpinner();
         setupPickers();
         btnCancel.setOnClickListener(vw -> dismiss());
         btnSave.setOnClickListener(vw -> onSave());
@@ -84,6 +89,19 @@ public class AddAvailabilityDialog extends BottomSheetDialogFragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCourse.setAdapter(adapter);
         spinnerCourse.setSelection(0);
+
+
+    }
+
+    private void setupManualSpinner(){
+        ArrayAdapter<Boolean> adapter2 = new ArrayAdapter<>(
+                requireContext(), android.R.layout.simple_spinner_item,
+                new Boolean[]{true, false}
+        );
+
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCourse2.setAdapter(adapter2);
+        spinnerCourse2.setSelection(0);
     }
 
     private void setupPickers() {
@@ -147,6 +165,12 @@ public class AddAvailabilityDialog extends BottomSheetDialogFragment {
             return;
         }
 
+        Object manual = spinnerCourse2.getSelectedItem();
+        if (manual == null || "Select course".equals(manual.toString())) {
+            setError("Would you like manual or automatic session approval?");
+            return;
+        }
+
         long startMillis = picked.getTimeInMillis();
         long now = System.currentTimeMillis();
         if (startMillis < now) {
@@ -176,6 +200,7 @@ public class AddAvailabilityDialog extends BottomSheetDialogFragment {
         slot.durationMin = SLOT_MIN;
         slot.courseCode = courseSel.toString();
         slot.tutorId = tutorId;
+        slot.manualApproval = manual.toString();
 
 
 
@@ -202,6 +227,7 @@ public class AddAvailabilityDialog extends BottomSheetDialogFragment {
         btnPickDate.setEnabled(!b);
         btnPickTime.setEnabled(!b);
         spinnerCourse.setEnabled(!b);
+        spinnerCourse2.setEnabled(!b);
     }
 
     private void setError(String m) { txtError.setText(m); }
