@@ -165,7 +165,7 @@ public class AddAvailabilityDialog extends BottomSheetDialogFragment {
             return;
         }
 
-        Object manual = spinnerCourse.getSelectedItem();
+        Object manual = spinnerCourse2.getSelectedItem();
         if (manual == null || "Select course".equals(manual.toString())) {
             setError("Would you like manual or automatic session approval?");
             return;
@@ -227,6 +227,7 @@ public class AddAvailabilityDialog extends BottomSheetDialogFragment {
         btnPickDate.setEnabled(!b);
         btnPickTime.setEnabled(!b);
         spinnerCourse.setEnabled(!b);
+        spinnerCourse2.setEnabled(!b);
     }
 
     private void setError(String m) { txtError.setText(m); }
