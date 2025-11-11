@@ -31,10 +31,15 @@ public class SessionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void submit(List<Session> all, long nowMs) {
         display.clear();
 
+        List<Session> pending = new ArrayList<>();
         List<Session> upcoming = new ArrayList<>();
         List<Session> past     = new ArrayList<>();
 
         for (Session s : all) {
+            if (s.status == Session.Status.PENDING) {
+                pending.add(s);
+                continue;
+            }
             long end = s.startMillis + s.durationMin * 60_000L;
             boolean isPast = end < nowMs || s.status == Session.Status.CANCELLED || s.status == Session.Status.REJECTED || s.status == Session.Status.COMPLETED;
             if (isPast) past.add(s); else upcoming.add(s);
@@ -42,8 +47,10 @@ public class SessionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         // arrange by time
         Comparator<Session> byStart = Comparator.comparingLong(a -> a.startMillis);
+        Collections.sort(pending, byStart);
         Collections.sort(upcoming, byStart);
         Collections.sort(past, byStart);
+
 
         if (!upcoming.isEmpty()) {
             display.add("Upcoming Sessions");
