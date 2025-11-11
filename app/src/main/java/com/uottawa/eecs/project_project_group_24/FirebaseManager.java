@@ -756,6 +756,7 @@ public final class FirebaseManager {
         sessionMap.put("tutorId", session.tutorId);
         sessionMap.put("courseCode", session.courseCode);
         sessionMap.put("id", session.id);
+        sessionMap.put("startMillis", session.startMillis);
 
         return sessionMap;
     }
@@ -807,7 +808,7 @@ public final class FirebaseManager {
         session.tutorId = (String) sessionMap.get("tutorId");
         session.studentId = (String) sessionMap.get("studentId");
         session.setStatus((String) sessionMap.get("status"));
-        session.time =(Timestamp) sessionMap.get("startTime");//gonna fix it
+        session.startMillis =(Long) sessionMap.get("startMillis");
         return session;
     }
 

@@ -38,6 +38,8 @@ public class AddAvailabilityDialog extends BottomSheetDialogFragment {
     private Button btnPickDate, btnPickTime, btnSave, btnCancel;
     private Spinner spinnerCourse;
     private Spinner spinnerCourse2;
+
+
     private TextView txtError;
     private ProgressBar progress;
 
@@ -68,6 +70,7 @@ public class AddAvailabilityDialog extends BottomSheetDialogFragment {
         repo = new FirebaseAvailabilityRepository();
 
         setupCourseSpinner();
+        setupManualSpinner();
         setupPickers();
         btnCancel.setOnClickListener(vw -> dismiss());
         btnSave.setOnClickListener(vw -> onSave());
@@ -87,6 +90,10 @@ public class AddAvailabilityDialog extends BottomSheetDialogFragment {
         spinnerCourse.setAdapter(adapter);
         spinnerCourse.setSelection(0);
 
+
+    }
+
+    private void setupManualSpinner(){
         ArrayAdapter<Boolean> adapter2 = new ArrayAdapter<>(
                 requireContext(), android.R.layout.simple_spinner_item,
                 new Boolean[]{true, false}
