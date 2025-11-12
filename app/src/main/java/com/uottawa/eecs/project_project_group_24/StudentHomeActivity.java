@@ -34,7 +34,7 @@ public class StudentHomeActivity extends AppCompatActivity {
             FirebaseSessionsRepository db = new FirebaseSessionsRepository();
 //            db.add("lnoceda@gmailcom");
             Log.d("OTA_STUDENTHOME","Created Database obj.");
-            Timestamp time = new Timestamp(Long.parseLong("1762863900000"));
+            Timestamp time = new Timestamp(Long.parseLong("1763863900000"));
             Log.d("OTA_STUDENTHOME","Timestamp is "+time.toString());
             AvailabilitySlot slot = new AvailabilitySlot();
             slot.setManualApproval("true");
@@ -42,10 +42,10 @@ public class StudentHomeActivity extends AppCompatActivity {
             slot.setCourseCode("ITI1121");
             slot.setDurationMin(30);
             slot.setTutorId("vidu@gmail.com");
-            slot.setStartMillis(Long.parseLong("1762863900000"));
+            slot.setStartMillis(Long.parseLong("1763863900000"));
 
             if(Session.isAvailable(slot, slot.getStartMillis())){
-                Session session = new Session("-OdpT5BBi4fB6wN0iiWd", "teststudent", "jane doe", "CSI2110",time, "APPROVED", slot) ;
+                Session session = new Session("-OdpT5BBi4fB6wN0iiWd", "teststudent", "zackd films", "CSI2110",time, "PENDING", slot) ;
 
 
                 db.add("vidu@gmailcom", session, new FirebaseSessionsRepository.OpCallback() {
