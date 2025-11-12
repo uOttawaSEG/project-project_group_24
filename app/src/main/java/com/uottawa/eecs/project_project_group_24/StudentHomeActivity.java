@@ -36,17 +36,30 @@ public class StudentHomeActivity extends AppCompatActivity {
             Log.d("OTA_STUDENTHOME","Created Database obj.");
             Timestamp time = new Timestamp(Long.parseLong("1762863900000"));
             Log.d("OTA_STUDENTHOME","Timestamp is "+time.toString());
-            db.add("lnoceda@gmailcom", new Session("test", "teststudent", "jane doe", "ITI1121",time, "PENDING"), new FirebaseSessionsRepository.OpCallback() {
-                @Override
-                public void onSuccess() {
-                    Log.d("OTA_STUDENTHOME","SUCCESS");
-                }
+            AvailabilitySlot slot = new AvailabilitySlot();
+            slot.setManualApproval("true");
+            slot.setId( "-OdpT5BBi4fB6wN0iiWd");
+            slot.setCourseCode("ITI1121");
+            slot.setDurationMin(30);
+            slot.setTutorId("vidu@gmail.com");
+            slot.setStartMillis(Long.parseLong("1762863900000"));
 
-                @Override
-                public void onError(String message) {
-                    Log.d("OTA_STUDENTHOME",message);
-                }
-            });
+            if(Session.isAvailable(slot, slot.getStartMillis())){
+                Session session = new Session("-OdpT5BBi4fB6wN0iiWd", "teststudent", "jane doe", "CSI2110",time, "APPROVED", slot) ;
+
+
+                db.add("vidu@gmailcom", session, new FirebaseSessionsRepository.OpCallback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.d("OTA_STUDENTHOME","SUCCESS");
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        Log.d("OTA_STUDENTHOME",message);
+                    }
+                });
+            }
         });
     }
 }

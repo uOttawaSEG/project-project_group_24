@@ -808,7 +808,7 @@ public final class FirebaseManager {
         session.studentName = (String) sessionMap.get("studentName");
         session.tutorId = (String) sessionMap.get("tutorId");
         session.studentId = (String) sessionMap.get("studentId");
-        session.setStatus((String) sessionMap.get("status"));
+        session.setTheStatus((String) sessionMap.get("status"));
         session.startMillis = Long.parseLong((String)sessionMap.get("startTime"));
 //        session.time =(Timestamp) sessionMap.get("startTime");//gonna fix it
         return session;

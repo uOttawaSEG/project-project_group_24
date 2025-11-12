@@ -26,6 +26,11 @@ public class Session {
         sessionCount++;
     }
 
+    public static boolean isAvailable(AvailabilitySlot slot, long time){
+        return  slot.getStartMillis()==time;
+
+    }
+
     public Session(String id) {
         this.id = id;
     }
@@ -42,7 +47,22 @@ public class Session {
 //        Log.d("OTA_SESSION",String.valueOf(time.getTime()));
         this.startMillis = time.getTime();
 
-        setStatus(status);
+        setTheStatus(status);
+    }
+
+    public Session(String tutorId, String studentId, String studentName, String courseCode, Timestamp time, String  status, AvailabilitySlot slot){
+        this.id = String.valueOf(sessionCount);
+        sessionCount++;
+        this.tutorId = tutorId;
+        this.studentId = studentId;
+        this.studentName = studentName;
+        this.courseCode = courseCode;
+//        this.time = time;
+        Log.d("OTA_SESSION",String.valueOf(time.getTime()));
+//        Log.d("OTA_SESSION",String.valueOf(time.getTime()));
+        this.startMillis = time.getTime();
+
+        setStatus(status, slot.getManualApproval());
     }
 
     public Session(String id, String tutorId, String studentId, String studentName, String courseCode, Timestamp time, String status){
@@ -54,10 +74,10 @@ public class Session {
 //        this.time = time;
         this.startMillis = time.getTime();
 
-        setStatus(status);
+        setTheStatus(status);
     }
 
-    public void setStatus(String status){
+    public void setTheStatus(String status){
 
 
         if(status.equalsIgnoreCase("approved")){
@@ -81,6 +101,19 @@ public class Session {
 
         }
     }
+
+    public void setStatus(String status, String manual){
+        if(manual.equalsIgnoreCase("false")){
+            this.status = Status.APPROVED;
+        }
+
+
+        else{
+            setTheStatus(status);
+
+        }
+    }
+
 
     public void setId(String id) {
         this.id = id;
