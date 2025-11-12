@@ -61,6 +61,11 @@ public class SessionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             display.addAll(past);
         }
 
+        if (!pending.isEmpty()) {
+            display.add("Pending Sessions");
+            display.addAll(pending);
+        }
+
         notifyDataSetChanged();
     }
 
