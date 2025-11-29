@@ -116,35 +116,44 @@ public class SearchSlotsFragment extends Fragment {
 
                     // Use course documents to create a "fake" AvailabilitySlot to display
                     AvailabilitySlot slot = new AvailabilitySlot();
-                    slot.id         = doc.getId();          // doc id in course
+                    slot.id = doc.getId();          // doc id in course
                     slot.courseCode = doc.getId();          // use doc id as courseCode
                     // Read the tutor reference from the course file
                     DocumentReference tutorRef = doc.getDocumentReference("tutor");
-                    if (tutorRef != null) {
-                        // If your tutor file ID is your email address,
-                        // you'll get "newTutor@gmail.com" here.
-                        slot.tutorId = tutorRef.getId();
-                        tutorRef.get().addOnSuccessListener(tutorInfo ->{
-                            if(tutorInfo.exists()){
-                                slot.tutorName = (String)tutorInfo.get("firstName") + " " + (String)tutorInfo.get("lastName");
-                            }
-                        });
-                    } else {
-                        slot.tutorId = "Unknown tutor";
-                        slot.tutorName = "Unknown tutor";
-                    }
-                    // There's no time field,
-                    // so I'll just use the current time for now (just for UI display purposes).
-                    slot.startMillis = System.currentTimeMillis();
-                    slot.durationMin = 30;
+                    if (tutorRef == null) {
+                        slot.tutorId = "Unknown";
+                        slot.tutorName = "Unknown";
 
-                    slotList.add(slot);
-                    adapter.notifyDataSetChanged();
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(getContext(),
-                            "Failed to load course: " + e.getMessage(),
-                            Toast.LENGTH_SHORT).show();
+                        slotList.add(slot);
+                        adapter.notifyDataSetChanged();
+                        return;
+                    }
+
+                    tutorRef.get()
+                            .addOnSuccessListener(tutorInfo -> {
+                                slot.tutorId = tutorRef.getId();
+
+                                if (tutorInfo.exists()) {
+                                    String fName = tutorInfo.getString("firstName");
+                                    String lName = tutorInfo.getString("lastName");
+                                    slot.tutorName = fName + " " + lName;
+                                } else {
+                                    slot.tutorName = "Unknown Tutor";
+                                }
+                                // There's no time field,
+                                // so I'll just use the current time for now (just for UI display purposes).
+                                slot.startMillis = System.currentTimeMillis();
+                                slot.durationMin = 30;
+
+                                slotList.add(slot);
+                                adapter.notifyDataSetChanged();
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(getContext(),
+                                        "Failed to load tutor info: " + e.getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                            });
+
                 });
     }
 
@@ -224,3 +233,6 @@ public class SearchSlotsFragment extends Fragment {
     }
 
 }
+
+
+
