@@ -2,7 +2,6 @@ package com.uottawa.eecs.project_project_group_24;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -11,33 +10,29 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.DocumentSnapshot;
-
-import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-    //adien - below every variables are just for UI/UX item IDs.
-    private EditText editLoginEmail; //aiden - email typing slot in login page.
-    private EditText editLoginPassword; //aiden - password typing slot in login page.
-    private Button btnLogin; // aiden - login button Id.
-    private TextView loginMessage; // aiden - console ID. if you typing wrong typing in login page, red message will come out
-    private ProgressBar loginProgress; // aiden - loading bar. while login take few times, it will shows up.
+    // UI element
+    private EditText editLoginEmail;
+    private EditText editLoginPassword;
+    private Button btnLogin;
+    private TextView loginMessage;
+    private ProgressBar loginProgress;
 
+    // Firebase
     private FirebaseFirestore db;
-
     private FirebaseManager fbManager;
-    String email,password;
+
+    // Temporarily save login information
+    String email, password;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,183 +47,181 @@ public class LoginActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
-        btnLogin.setOnClickListener(v -> attemptLogin()); //aiden - when login button is clicked, start the attemptLogin() method
+        btnLogin.setOnClickListener(v -> attemptLogin());
     }
 
-    private void attemptLogin() { //aiden - login method.
+    private void attemptLogin() {
         loginMessage.setText("");
-        email = editLoginEmail.getText().toString().trim(); //aiden - when user typing the email in the box, that will be stored in local variable here.
-        password = editLoginPassword.getText().toString().trim(); //aiden - when user typing the password in the box, that will be stored in local variable here.
+        email = editLoginEmail.getText().toString().trim();
+        password = editLoginPassword.getText().toString().trim();
 
-        //aiden VALIDATION SESSION
-        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) { //aiden - typing error case.
+        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             editLoginEmail.setError("Enter a valid email");
             return;
         }
-        if (password.isEmpty()) { //aiden - typing error case2.
+        if (password.isEmpty()) {
             editLoginPassword.setError("Enter your password");
             return;
         }
-        
 
         loginProgress.setVisibility(View.VISIBLE);
         btnLogin.setEnabled(false);
-        fbManager = FirebaseManager.getInstance(); //aiden - get the data from firebase.
 
-        fbManager.loginUser(email, password, this); //aiden - send the instant variable to fb EMAIL, PASSWORD, and itself as object
-
-        if (fbManager.getAdmin() == true) {
-            Intent i = new Intent(LoginActivity.this, AdminHomeActivity.class);
-            startActivity(i);
-        } else if (fbManager.getLoggedIn() == true) {
-            Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
-            startActivity(i);
-        }
-
+        fbManager = FirebaseManager.getInstance();
+        fbManager.loginUser(email, password, this); // 成功後會呼叫 loginCallback()
     }
 
+    /** After login verification is complete, FirebaseManager will call... */
     public void loginCallback() {
-        if (fbManager.getAdmin() == true) {
-            Intent i = new Intent(LoginActivity.this, AdminHomeActivity.class);
-            startActivity(i);
-        } else if (fbManager.getLoggedIn() == true) {
-            Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
-            FirebaseFirestore tmp = fbManager.getDb();
-            FirebaseManager.getInstance().login(email,i,this);
-//            CollectionReference dbref;
-//            db.collection("student").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                    if (task.isSuccessful()) {
-//                        if (task.getResult().exists()){
-//                            i.putExtra("role","student");
-//                            startActivity(i);
-//                        } else{
-//
-//                        }
-//                    }
-//                }
-//            });
-//            db.collection("tutor").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                    if (task.isSuccessful()) {
-//                        if (task.getResult().exists()){
-//                            i.putExtra("role","tutor");
-//                            startActivity(i);
-//                        } else{
-//
-//                        }
-//                    }
-//                }
-//            });
-//            db.collection("user").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                    if (task.isSuccessful()) {
-//                        if (task.getResult().exists()){
-//
-//                            String state = null;
-//                            if(task.getResult().getData().get("status")!=null) state = task.getResult().getData().get("status").toString();
-//                            Log.d("OTA_LOGIN",state);
-//                            if(state!=null&&state.equals("UNDECIDED"))
-//                            {
-//                                Intent i = new Intent(LoginActivity.this, UserHomeActivity.class);
-//                                i.putExtra("email",email);
-//                                i.putExtra("role", "User");
-//                                i.putExtra("password",password);
-//                                startActivity(i);
-//                            }
-//                            else if(state!=null&&state.equalsIgnoreCase("Pending"))
-//                            {
-//                                Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
-//                                i.putExtra("role","user");
-//                                i.putExtra("state","waiting");
-//                                startActivity(i);
-//                            }
-//                            else if (state!=null&&state.equalsIgnoreCase("Rejected")) {
-//                                Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
-//                                i.putExtra("role","user");
-//                                i.putExtra("state","rejected");
-//                                startActivity(i);
-//                            }
-//                            else if(state!=null&&state.equalsIgnoreCase("Approved"))
-//                            {
-//                                Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
-//                                i.putExtra("role","user");
-//                                i.putExtra("state","approved");
-//                                startActivity(i);
-//                            }
-//                            else {
-//                                Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
-//                                i.putExtra("role","user");
-//                                startActivity(i);
-//                            }
-//
-//                        } else{
-//
-//                        }
-//                    }
-//                }
-//            });
-//            Log.d("CONSOLE","Not user");
-
-
-
-
-//            startActivity(i);
-        } else {
-            Toast t = Toast.makeText(this,"UserName or Password is Incorrect",1000);
-            t.show();
-            // bad credentials!!!
-        }
-        finish();
-    }
-
-    // what's this!?!?!?! -> adien: guess that will bonus mark contents. after user reject, the mail will send to user's email.
-    private void handleLoginQueryResult(QuerySnapshot snap) {
         loginProgress.setVisibility(View.GONE);
         btnLogin.setEnabled(true);
 
-        if (snap == null || snap.isEmpty()) {
-            loginMessage.setText("No account found. Please register first.");
+        // 1) Admin
+        if (fbManager.getAdmin()) {
+            Intent i = new Intent(LoginActivity.this, AdminHomeActivity.class);
+            startActivity(i);
+            finish();
             return;
         }
 
-        DocumentSnapshot doc = snap.getDocuments().get(0);
-
-        String status = safeString(doc.getString("status")); // APPROVED / REJECTED / PENDING
-        String role   = safeString(doc.getString("role"));   // STUDENT / TUTOR
-
-        if (status.equalsIgnoreCase("APPROVED")) {
-            // APPROVED: (WelcomeActivity)
-            Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
-            i.putExtra("role", role.equalsIgnoreCase("TUTOR") ? "Tutor" : "Student");
-            startActivity(i);
-
-        } else if (status.equalsIgnoreCase("REJECTED")) {
-            // REJECTED: show reject message + fake phone number
-            loginMessage.setText(
-                    "Your registration was rejected.\n" +
-                            "Please contact 613-123-4567 for assistance."
-            );
-
-        } else {
-            // PENDING: show message
-            loginMessage.setText(
-                    "Your registration is still pending approval.\n" +
-                            "Please try again later."
-            );
+        // 2) check the regular user log in successfully
+        if (!fbManager.getLoggedIn()) {
+            Toast.makeText(this,
+                    "UserName or Password is Incorrect",
+                    Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        if (role.equalsIgnoreCase("ADMIN")) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainer, AdminRequestListFragment.newPending()) //aiden fragmentContainer is textbox id in UI
-                    .commit();
+        // 3) Successfully logged in (not admin)
+        // → First check the student collection (using the field id = email).
+        db.collection("student")
+                .whereEqualTo("id", email)     //  Change to column search
+                .limit(1)
+                .get()
+                .addOnCompleteListener(this::handleStudentQuery);
+    }
+
+    /** Query the results of the student collection (QuerySnapshot) */
+    private void handleStudentQuery(Task<QuerySnapshot> task) {
+        if (task.isSuccessful()
+                && task.getResult() != null
+                && !task.getResult().isEmpty()) {
+
+            DocumentSnapshot doc = task.getResult().getDocuments().get(0);
+
+            String firstName = safeString(doc.getString("firstName"));
+            String lastName  = safeString(doc.getString("lastName"));
+            String fullName  = (firstName + " " + lastName).trim();
+            String status    = safeString(doc.getString("status"));
+
+            if (!status.isEmpty() && !"APPROVED".equalsIgnoreCase(status)) {
+                loginMessage.setText(
+                        "Your student registration is " + status + ".\nPlease wait for approval."
+                );
+                return;
+            }
+
+            // Student OK → Enter StudentHomeActivity
+            Intent i = new Intent(LoginActivity.this, StudentHomeActivity.class);
+            i.putExtra(StudentHomeActivity.EXTRA_STUDENT_ID, email);
+            i.putExtra(StudentHomeActivity.EXTRA_STUDENT_NAME, fullName);
+            startActivity(i);
+            finish();
+            return;
+        }
+
+        // Cannot find student → Find tutor
+        db.collection("tutor")
+                .whereEqualTo("id", email)     // 同樣用 id 欄位
+                .limit(1)
+                .get()
+                .addOnCompleteListener(this::handleTutorQuery);
+    }
+
+    /** Search results for tutor collection */
+    private void handleTutorQuery(Task<QuerySnapshot> task) {
+        if (task.isSuccessful()
+                && task.getResult() != null
+                && !task.getResult().isEmpty()) {
+
+            DocumentSnapshot doc = task.getResult().getDocuments().get(0);
+
+            String firstName = safeString(doc.getString("firstName"));
+            String lastName  = safeString(doc.getString("lastName"));
+            String fullName  = (firstName + " " + lastName).trim();
+            String status    = safeString(doc.getString("status"));
+
+            if (!status.isEmpty() && !"APPROVED".equalsIgnoreCase(status)) {
+                loginMessage.setText(
+                        "Your tutor registration is " + status + ".\nPlease wait for approval."
+                );
+                return;
+            }
+
+            // Tutor OK → Enter TutorHomeActivity
+            Intent i = new Intent(LoginActivity.this, TutorHomeActivity.class);
+            i.putExtra("TUTOR_EMAIL", email);
+            i.putExtra("TUTOR_NAME", fullName);
+            startActivity(i);
+            finish();
+            return;
+        }
+
+        // Not a student or a tutor → Search user collection
+        db.collection("user")
+                .whereEqualTo("id", email)     // 一樣用 id 欄位，如果 user 裡的欄位名稱不同請改
+                .limit(1)
+                .get()
+                .addOnCompleteListener(this::handleUserQuery);
+    }
+
+    /** Results of querying user collection */
+    private void handleUserQuery(Task<QuerySnapshot> task) {
+        if (!task.isSuccessful()
+                || task.getResult() == null
+                || task.getResult().isEmpty()) {
+
+            // If none of the three collections can be found,
+            // it will be assumed that the account does not exist.
+            Toast.makeText(this,
+                    "Account info not found. Please register again.",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        DocumentSnapshot doc = task.getResult().getDocuments().get(0);
+        String status = safeString(doc.getString("status")); // UNDECIDED / Pending / Rejected / Approved
+
+        if (status.equalsIgnoreCase("UNDECIDED")) {
+            Intent i = new Intent(LoginActivity.this, UserHomeActivity.class);
+            i.putExtra("email", email);
+            i.putExtra("role", "User");
+            i.putExtra("password", password);
+            startActivity(i);
+            finish();
+        } else if (status.equalsIgnoreCase("Pending")) {
+            Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
+            i.putExtra("role", "user");
+            i.putExtra("state", "waiting");
+            startActivity(i);
+            finish();
+        } else if (status.equalsIgnoreCase("Rejected")) {
+            Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
+            i.putExtra("role", "user");
+            i.putExtra("state", "rejected");
+            startActivity(i);
+            finish();
+        } else if (status.equalsIgnoreCase("Approved")) {
+            Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
+            i.putExtra("role", "user");
+            i.putExtra("state", "approved");
+            startActivity(i);
+            finish();
         } else {
             Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
-            i.putExtra("role", role);
+            i.putExtra("role", "user");
             startActivity(i);
+            finish();
         }
     }
 

@@ -1,65 +1,72 @@
 package com.uottawa.eecs.project_project_group_24;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import java.sql.Timestamp;
 
 public class StudentHomeActivity extends AppCompatActivity {
-    Button btnTestSess;
+
+    public static final String EXTRA_STUDENT_ID   = "EXTRA_STUDENT_ID";
+    public static final String EXTRA_STUDENT_NAME = "EXTRA_STUDENT_NAME";
+
+    private String studentId;
+    private String studentName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("OTA_STUDENTHOME","Creating layout...");
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_student_home);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        // Retrieve student information uploaded during login
+        studentId   = getIntent().getStringExtra(EXTRA_STUDENT_ID);
+        studentName = getIntent().getStringExtra(EXTRA_STUDENT_NAME);
+
+        Button btnTabSearch   = findViewById(R.id.btnTabSearch);
+        Button btnTabSessions = findViewById(R.id.btnTabSessions);
+        Button btnLogout      = findViewById(R.id.btnLogout);
+
+        btnTabSearch.setOnClickListener(v -> showSearchFragment());
+        btnTabSessions.setOnClickListener(v -> showSessionsFragment());
+
+        // Logout button: Returns to LoginActivity and clears the back stack.
+        btnLogout.setOnClickListener(v -> {
+            // If you have a real signOut
+            // (such as FirebaseAuth/FirebaseManager), you can call it here.
+            // FirebaseAuth.getInstance().signOut();
+            // FirebaseManager.getInstance().logout(); (if we have this method)
+
+            Intent intent = new Intent(StudentHomeActivity.this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    | Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
         });
-        Log.d("OTA_STUDENTHOME","Created Layout.");
-        btnTestSess = findViewById(R.id.TestSess);
-        Log.d("OTA_STUDENTHOME",String.valueOf(btnTestSess!=null));
-        Log.d("OTA_STUDENTHOME",String.valueOf(btnTestSess));
-        btnTestSess.setOnClickListener(v ->{
-            Log.d("OTA_STUDENTHOME","Creating Database obj...");
-            FirebaseSessionsRepository db = new FirebaseSessionsRepository();
-//            db.add("lnoceda@gmailcom");
-            Log.d("OTA_STUDENTHOME","Created Database obj.");
-            Timestamp time = new Timestamp(Long.parseLong("1763863900000"));
-            Log.d("OTA_STUDENTHOME","Timestamp is "+time.toString());
-            AvailabilitySlot slot = new AvailabilitySlot();
-            slot.setManualApproval("true");
-            slot.setId( "-OdpT5BBi4fB6wN0iiWd");
-            slot.setCourseCode("ITI1121");
-            slot.setDurationMin(30);
-            slot.setTutorId("vidu@gmail.com");
-            slot.setStartMillis(Long.parseLong("1763863900000"));
 
-            if(Session.isAvailable(slot, slot.getStartMillis())){
-                Session session = new Session("-OdpT5BBi4fB6wN0iiWd", "teststudent", "zackd films", "CSI2110",time, "PENDING", slot) ;
+        if (savedInstanceState == null) {
+            showSearchFragment();
+        }
+    }
 
+    private void showSearchFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(
+                        R.id.student_fragment_container,
+                        SearchSlotsFragment.newInstance(studentId, studentName)
+                )
+                .commit();
+    }
 
-                db.add("vidu@gmailcom", session, new FirebaseSessionsRepository.OpCallback() {
-                    @Override
-                    public void onSuccess() {
-                        Log.d("OTA_STUDENTHOME","SUCCESS");
-                    }
-
-                    @Override
-                    public void onError(String message) {
-                        Log.d("OTA_STUDENTHOME",message);
-                    }
-                });
-            }
-        });
+    private void showSessionsFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(
+                        R.id.student_fragment_container,
+                        StudentSessionsFragment.newInstance(studentId)
+                )
+                .commit();
     }
 }
