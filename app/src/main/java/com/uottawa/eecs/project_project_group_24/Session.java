@@ -14,6 +14,7 @@ public class Session {
     public String studentId;
     public String studentName;
     public String courseCode;
+    public int rating;
 
 //    public Timestamp time;
     public long   startMillis; // 30 min
@@ -24,6 +25,16 @@ public class Session {
     public Session() {
         this.id = String.valueOf(sessionCount);
         sessionCount++;
+    }
+
+    public void setRating(int r) {
+        if (r > 5 || r < 0) {
+            this.rating = 5;
+        }
+
+        else{
+            this.rating = r;
+        }
     }
 
     public static boolean isAvailable(AvailabilitySlot slot, long time){

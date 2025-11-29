@@ -6,6 +6,8 @@ public class Tutor extends User
     Course[] courses;
     Queue<Session> upcomingSessions,pastSessions,pendingSessions;
     Queue<Slot> availableSlots;
+    int averageRating;
+    int numOfRatings;
     public Tutor(String email, String pass, boolean newuser)
     {
         super(email, pass);
@@ -16,6 +18,13 @@ public class Tutor extends User
         availableSlots = new Queue<>();
         FirebaseManager.getInstance().getSessions(email);
         //Should access database to initialize Session Queues
+    }
+
+    public void setAverageRating(int newRating){
+        this.averageRating*=numOfRatings;
+        this.averageRating+= newRating;
+        this.numOfRatings++;
+        this.averageRating/=numOfRatings;
     }
 
     public String getDegree() {
