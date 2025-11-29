@@ -11,6 +11,7 @@ public class Session {
 
     public String id;          // firebase key
     public String tutorId;
+    public String tutorName;
     public String studentId;
     public String studentName;
     public String courseCode;

@@ -47,7 +47,7 @@ public class AvailableSlotsAdapter
                 new SimpleDateFormat("EEE MMM dd • HH:mm", Locale.getDefault());
 
         String info = fmt.format(d)
-                + " — Tutor: " + s.tutorId
+                + " — Tutor: " + s.tutorName
                 + " • " + s.courseCode;
 
         holder.txtInfo.setText(info);

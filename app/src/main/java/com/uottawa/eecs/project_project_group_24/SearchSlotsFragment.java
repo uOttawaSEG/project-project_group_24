@@ -1,7 +1,10 @@
 package com.uottawa.eecs.project_project_group_24;
 
+import static android.content.ContentValues.TAG;
+
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,8 +124,14 @@ public class SearchSlotsFragment extends Fragment {
                         // If your tutor file ID is your email address,
                         // you'll get "newTutor@gmail.com" here.
                         slot.tutorId = tutorRef.getId();
+                        tutorRef.get().addOnSuccessListener(tutorInfo ->{
+                            if(tutorInfo.exists()){
+                                slot.tutorName = (String)tutorInfo.get("firstName") + " " + (String)tutorInfo.get("lastName");
+                            }
+                        });
                     } else {
                         slot.tutorId = "Unknown tutor";
+                        slot.tutorName = "Unknown tutor";
                     }
                     // There's no time field,
                     // so I'll just use the current time for now (just for UI display purposes).
@@ -176,6 +185,7 @@ public class SearchSlotsFragment extends Fragment {
                     s.courseCode  = slot.courseCode;  // this is course doc id（e.g. "0"）
                     s.startMillis = slot.startMillis;
                     s.durationMin = slot.durationMin;
+                    s.tutorName = slot.tutorName;
                     s.status      = Session.Status.PENDING;
 
                     db.collection("session")
