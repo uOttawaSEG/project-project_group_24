@@ -92,13 +92,14 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // 3) Successfully logged in (not admin)
-        // → First check the student collection (using the field id = email).
-        db.collection("student")
-                .whereEqualTo("id", email)     //  Change to column search
-                .limit(1)
-                .get()
-                .addOnCompleteListener(this::handleStudentQuery);
+        fbManager.login(email,new Intent(LoginActivity.this, MainActivity.class),this);
+//        // 3) Successfully logged in (not admin)
+//        // → First check the student collection (using the field id = email).
+//        db.collection("student")
+//                .whereEqualTo("id", email)     //  Change to column search
+//                .limit(1)
+//                .get()
+//                .addOnCompleteListener(this::handleStudentQuery);
     }
 
     /** Query the results of the student collection (QuerySnapshot) */
