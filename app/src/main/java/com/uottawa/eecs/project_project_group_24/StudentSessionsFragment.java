@@ -39,8 +39,21 @@ public class StudentSessionsFragment extends Fragment
         // empty constructor required
     }
 
-    public void onRateSession(Session s){
+    class OpInstance implements FirebaseManager.OpCallback{
 
+        @Override
+        public void onSuccess() {
+            Log.d(TAG, "onSuccess: ");
+        }
+
+        @Override
+        public void onError(String message) {
+            Log.d(TAG, "onError: ");
+        }
+    }
+
+    public void onRateSession(Session s){
+        
     }
 
     public static StudentSessionsFragment newInstance(String studentId) {

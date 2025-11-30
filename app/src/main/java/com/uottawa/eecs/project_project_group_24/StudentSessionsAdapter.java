@@ -76,6 +76,11 @@ public class StudentSessionsAdapter
 
             holder.tvStatus.setText("");
             holder.btnRate.setVisibility(View.GONE);
+            holder.btnRate.setOnClickListener(v -> {
+                if(listener != null){
+                    listener.onRateSession(s);
+                }
+            });
 
         }
 
