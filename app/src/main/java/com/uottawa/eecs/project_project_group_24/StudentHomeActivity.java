@@ -8,8 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class StudentHomeActivity extends AppCompatActivity {
 
-    public static final String EXTRA_STUDENT_ID   = "EXTRA_STUDENT_ID";
-    public static final String EXTRA_STUDENT_NAME = "EXTRA_STUDENT_NAME";
+    public static final String EXTRA_STUDENT_ID   = "email";
+    public static final String EXTRA_STUDENT_NAME = "firstName";
 
     private String studentId;
     private String studentName;
