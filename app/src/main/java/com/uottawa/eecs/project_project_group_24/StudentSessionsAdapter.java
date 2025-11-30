@@ -67,12 +67,19 @@ public class StudentSessionsAdapter
 
         if (s.status != null) {
             holder.tvStatus.setText(s.status.name());
+            if(s.status==Session.Status.COMPLETED){
+                holder.btnRate.setText("Rate");
+                holder.btnRate.setVisibility(View.VISIBLE);
+
+            }
         } else {
+
             holder.tvStatus.setText("");
+            holder.btnRate.setVisibility(View.GONE);
+
         }
 
         // Rate We'll add the features later; let's hide the buttons first.
-        holder.btnRate.setVisibility(View.GONE);
 
         // Cancel Display rules：
         // - PENDING: Available anytime cancel

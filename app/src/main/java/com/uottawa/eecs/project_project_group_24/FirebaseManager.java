@@ -43,6 +43,8 @@ public final class FirebaseManager {
         void onError(String message);
     }
 
+
+
     private FirebaseManager() {
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -61,10 +63,9 @@ public final class FirebaseManager {
             return;
         }
 
-        // 1. Query the 'tutor' collection to find the document matching the email.
         db.collection("tutor")
                 .whereEqualTo("email", tutor.getEmail())
-                .limit(1) // Limit to 1, assuming email is a unique field
+                .limit(1)
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
                     if (querySnapshot.isEmpty()) {
@@ -72,14 +73,11 @@ public final class FirebaseManager {
                         return;
                     }
 
-                    // Get the document reference of the matched tutor
                     QueryDocumentSnapshot document = (QueryDocumentSnapshot) querySnapshot.getDocuments().get(0);
 
-                    // 2. Prepare the update data.
                     Map<String, Object> updates = new HashMap<>();
                     updates.put("averageRating", tutor.averageRating);
 
-                    // 3. Use the update() method on the document reference to change the field.
                     document.getReference().update(updates)
                             .addOnSuccessListener(aVoid -> callback.onSuccess())
                             .addOnFailureListener(e -> callback.onError("Failed to update rating: " + e.getMessage()));
