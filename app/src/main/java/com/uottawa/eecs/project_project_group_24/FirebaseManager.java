@@ -38,6 +38,11 @@ public final class FirebaseManager {
     private Boolean admin = false;
     private Boolean loggedIn = false;
 
+    public interface OpCallback {
+        void onSuccess();
+        void onError(String message);
+    }
+
     private FirebaseManager() {
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -48,6 +53,41 @@ public final class FirebaseManager {
             instance = new FirebaseManager();
         }
         return instance;
+    }
+
+    public void newRating(Tutor tutor, OpCallback callback) {
+        if (tutor.getEmail() == null || tutor.getEmail().isEmpty()) {
+            callback.onError("Tutor email cannot be null or empty.");
+            return;
+        }
+
+        // 1. Query the 'tutor' collection to find the document matching the email.
+        db.collection("tutor")
+                .whereEqualTo("email", tutor.getEmail())
+                .limit(1) // Limit to 1, assuming email is a unique field
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (querySnapshot.isEmpty()) {
+                        callback.onError("No tutor found with email: " + tutor.getEmail());
+                        return;
+                    }
+
+                    // Get the document reference of the matched tutor
+                    QueryDocumentSnapshot document = (QueryDocumentSnapshot) querySnapshot.getDocuments().get(0);
+
+                    // 2. Prepare the update data.
+                    Map<String, Object> updates = new HashMap<>();
+                    updates.put("averageRating", tutor.averageRating);
+
+                    // 3. Use the update() method on the document reference to change the field.
+                    document.getReference().update(updates)
+                            .addOnSuccessListener(aVoid -> callback.onSuccess())
+                            .addOnFailureListener(e -> callback.onError("Failed to update rating: " + e.getMessage()));
+
+                })
+                .addOnFailureListener(e -> {
+                    callback.onError("Failed to query tutor document: " + e.getMessage());
+                });
     }
 
     //needs to be implemented - not need til D2

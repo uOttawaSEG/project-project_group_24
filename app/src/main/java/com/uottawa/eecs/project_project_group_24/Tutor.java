@@ -20,11 +20,14 @@ public class Tutor extends User
         //Should access database to initialize Session Queues
     }
 
-    public void setAverageRating(int newRating){
+    public void setAverageRating(int newRating, FirebaseManager.OpCallback callback){
         this.averageRating*=numOfRatings;
         this.averageRating+= newRating;
         this.numOfRatings++;
         this.averageRating/=numOfRatings;
+        FirebaseManager.getInstance().newRating(this, callback);
+
+
     }
 
     public String getDegree() {

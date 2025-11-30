@@ -13,7 +13,7 @@ public class FirebaseSessionsRepository {
         void onLoaded(List<Session> list);
         void onError(String message);
     }
-    public interface OpCallback {
+    public interface OpCallback extends FirebaseManager.OpCallback {
         void onSuccess();
         void onError(String message);
     }

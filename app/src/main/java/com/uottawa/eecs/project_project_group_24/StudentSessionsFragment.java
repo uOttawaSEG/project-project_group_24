@@ -39,6 +39,10 @@ public class StudentSessionsFragment extends Fragment
         // empty constructor required
     }
 
+    public void onRateSession(Session s){
+
+    }
+
     public static StudentSessionsFragment newInstance(String studentId) {
         StudentSessionsFragment f = new StudentSessionsFragment();
         Bundle args = new Bundle();

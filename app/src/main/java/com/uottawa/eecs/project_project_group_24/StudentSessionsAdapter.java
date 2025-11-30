@@ -23,6 +23,7 @@ public class StudentSessionsAdapter
     public interface OnSessionActionListener {
         void onCancelSession(Session session);
         // If you want to rate it later, you can add `onRateSession(Session s)`.
+        void onRateSession(Session s);
     }
 
     private List<Session> sessions;

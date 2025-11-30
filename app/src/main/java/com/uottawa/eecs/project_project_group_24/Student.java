@@ -13,7 +13,9 @@ public class Student extends User
         getDatabase().loginStudent(email,pass);
     }
 
-    public void rateTutor(Tutor t){}
+    public void rateTutor(Tutor t, int rating, FirebaseManager.OpCallback callback){
+        t.setAverageRating(rating, callback);
+    }
 
     public String getProgram() {
         return program;
