@@ -1,7 +1,10 @@
 package com.uottawa.eecs.project_project_group_24;
 
+import static android.content.ContentValues.TAG;
+
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -113,29 +116,44 @@ public class SearchSlotsFragment extends Fragment {
 
                     // Use course documents to create a "fake" AvailabilitySlot to display
                     AvailabilitySlot slot = new AvailabilitySlot();
-                    slot.id         = doc.getId();          // doc id in course
+                    slot.id = doc.getId();          // doc id in course
                     slot.courseCode = doc.getId();          // use doc id as courseCode
                     // Read the tutor reference from the course file
                     DocumentReference tutorRef = doc.getDocumentReference("tutor");
-                    if (tutorRef != null) {
-                        // If your tutor file ID is your email address,
-                        // you'll get "newTutor@gmail.com" here.
-                        slot.tutorId = tutorRef.getId();
-                    } else {
-                        slot.tutorId = "Unknown tutor";
-                    }
-                    // There's no time field,
-                    // so I'll just use the current time for now (just for UI display purposes).
-                    slot.startMillis = System.currentTimeMillis();
-                    slot.durationMin = 30;
+                    if (tutorRef == null) {
+                        slot.tutorId = "Unknown";
+                        slot.tutorName = "Unknown";
 
-                    slotList.add(slot);
-                    adapter.notifyDataSetChanged();
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(getContext(),
-                            "Failed to load course: " + e.getMessage(),
-                            Toast.LENGTH_SHORT).show();
+                        slotList.add(slot);
+                        adapter.notifyDataSetChanged();
+                        return;
+                    }
+
+                    tutorRef.get()
+                            .addOnSuccessListener(tutorInfo -> {
+                                slot.tutorId = tutorRef.getId();
+
+                                if (tutorInfo.exists()) {
+                                    String fName = tutorInfo.getString("firstName");
+                                    String lName = tutorInfo.getString("lastName");
+                                    slot.tutorName = fName + " " + lName;
+                                } else {
+                                    slot.tutorName = "Unknown Tutor";
+                                }
+                                // There's no time field,
+                                // so I'll just use the current time for now (just for UI display purposes).
+                                slot.startMillis = System.currentTimeMillis();
+                                slot.durationMin = 30;
+
+                                slotList.add(slot);
+                                adapter.notifyDataSetChanged();
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(getContext(),
+                                        "Failed to load tutor info: " + e.getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                            });
+
                 });
     }
 
@@ -176,6 +194,7 @@ public class SearchSlotsFragment extends Fragment {
                     s.courseCode  = slot.courseCode;  // this is course doc id（e.g. "0"）
                     s.startMillis = slot.startMillis;
                     s.durationMin = slot.durationMin;
+                    s.tutorName = slot.tutorName;
                     s.status      = Session.Status.PENDING;
 
                     db.collection("session")
@@ -214,3 +233,6 @@ public class SearchSlotsFragment extends Fragment {
     }
 
 }
+
+
+

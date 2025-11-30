@@ -1,6 +1,9 @@
 package com.uottawa.eecs.project_project_group_24;
 
+import static android.content.ContentValues.TAG;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +22,7 @@ import com.google.firebase.firestore.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Displays all sessions currently logged in for the student
- */
+
 public class StudentSessionsFragment extends Fragment
         implements StudentSessionsAdapter.OnSessionActionListener {
 
@@ -35,7 +36,7 @@ public class StudentSessionsFragment extends Fragment
     private FirebaseFirestore db;
 
     public StudentSessionsFragment() {
-        // must be empty
+        // empty constructor required
     }
 
     public static StudentSessionsFragment newInstance(String studentId) {
@@ -55,6 +56,7 @@ public class StudentSessionsFragment extends Fragment
 
         rvSessions = view.findViewById(R.id.rvStudentSessions);
         rvSessions.setLayoutManager(new LinearLayoutManager(getContext()));
+
         adapter = new StudentSessionsAdapter(sessionList, this);
         rvSessions.setAdapter(adapter);
 
@@ -77,18 +79,26 @@ public class StudentSessionsFragment extends Fragment
             return;
         }
 
+        Log.d(TAG, "Loading sessions for student: " + studentId);
+
         db.collection("session")
                 .whereEqualTo("studentId", studentId)
-                .orderBy("startMillis", Query.Direction.DESCENDING) // 最近的在上面
+                .orderBy("startMillis", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
                     sessionList.clear();
+
                     for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
                         Session s = doc.toObject(Session.class);
                         if (s == null) continue;
+
+                        // Assign Firestore doc ID so cancellation works
                         s.id = doc.getId();
+                        s.studentName = (String)doc.get("firstName") + (String)doc.get("lastName");
+
                         sessionList.add(s);
                     }
+
                     adapter.setSessions(sessionList);
 
                     if (sessionList.isEmpty()) {
@@ -97,14 +107,14 @@ public class StudentSessionsFragment extends Fragment
                                 Toast.LENGTH_SHORT).show();
                     }
                 })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(getContext(),
-                            "Failed to load sessions: " + e.getMessage(),
-                            Toast.LENGTH_SHORT).show();
-                });
+                .addOnFailureListener(e -> Toast.makeText(
+                        getContext(),
+                        "Failed to load sessions: " + e.getMessage(),
+                        Toast.LENGTH_SHORT).show()
+                );
     }
 
-    // ==== Cancel logic ====
+    // ===== Cancel session =====
 
     @Override
     public void onCancelSession(Session session) {
@@ -115,8 +125,6 @@ public class StudentSessionsFragment extends Fragment
             return;
         }
 
-        // PENDING can be cancelled at any time;
-        // 24-hour checks for APPROVED are displayed on the adapter control.
         db.collection("session")
                 .document(session.id)
                 .update("status", Session.Status.CANCELLED.name())
@@ -124,12 +132,12 @@ public class StudentSessionsFragment extends Fragment
                     Toast.makeText(getContext(),
                             "Session cancelled.",
                             Toast.LENGTH_SHORT).show();
-                    loadSessionsFromFirestore(); // 重新載入列表
+                    loadSessionsFromFirestore(); // reload list
                 })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(getContext(),
-                            "Failed to cancel: " + e.getMessage(),
-                            Toast.LENGTH_SHORT).show();
-                });
+                .addOnFailureListener(e -> Toast.makeText(
+                        getContext(),
+                        "Failed to cancel: " + e.getMessage(),
+                        Toast.LENGTH_SHORT).show()
+                );
     }
 }

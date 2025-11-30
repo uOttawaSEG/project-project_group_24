@@ -6,7 +6,7 @@ public class AvailabilitySlot {
     public long startMillis;     // start time(UTC ms)
     public int durationMin = 30; // fixed 30 mins
     public String courseCode;    // e.g: "CSI2110"
-
+    public String tutorName;
     public String manualApproval;//yes or no
     public AvailabilitySlot() {} // Firebase need no parameterless constructor
 
