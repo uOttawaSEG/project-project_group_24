@@ -94,6 +94,7 @@ public class StudentSessionsFragment extends Fragment
 
                         // Assign Firestore doc ID so cancellation works
                         s.id = doc.getId();
+                        s.studentName = (String)doc.get("firstName") + (String)doc.get("lastName");
 
                         sessionList.add(s);
                     }

@@ -20,6 +20,7 @@ import java.util.List;
 public class MySessionsFragment extends Fragment implements SessionAdapter.Listener {
 
     private static final String ARG_TUTOR_ID = "tutor_id";
+    private static final String ARG_TUTOR_NAME = "tutorName";
 
     public static MySessionsFragment newInstance(String tutorId) {
         MySessionsFragment f = new MySessionsFragment();
@@ -28,6 +29,7 @@ public class MySessionsFragment extends Fragment implements SessionAdapter.Liste
     }
 
     private String tutorId;
+    private String tutorName;
     private SessionAdapter adapter;
     private FirebaseSessionsRepository repo;
     private ValueEventListener live;
@@ -45,6 +47,7 @@ public class MySessionsFragment extends Fragment implements SessionAdapter.Liste
         empty = v.findViewById(R.id.emptyView);
 
         tutorId = requireArguments().getString(ARG_TUTOR_ID, "TUTOR_DEMO");
+        tutorName = requireArguments().getString(ARG_TUTOR_NAME, "TUTOR_NAME");
         repo = new FirebaseSessionsRepository();
 
         adapter = new SessionAdapter(this);

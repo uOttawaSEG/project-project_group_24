@@ -52,7 +52,7 @@ public class StudentSessionsAdapter
         Session s = sessions.get(position);
 
         holder.tvCourseCode.setText(s.courseCode != null ? s.courseCode : "");
-        holder.tvTutorName.setText(s.tutorId != null ? s.tutorId : "");
+        holder.tvTutorName.setText(s.tutorName != null ? s.tutorName : "");
 
         // time
         if (s.startMillis > 0) {
