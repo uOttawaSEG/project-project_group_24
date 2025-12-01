@@ -21,13 +21,13 @@ public class Tutor extends User
     }
 
     public void setAverageRating(int newRating, FirebaseManager.OpCallback callback){
-        this.averageRating*=numOfRatings;
-        this.averageRating+= newRating;
+
+        double currentTotalSum = (double)this.averageRating * this.numOfRatings;
+        double newTotalSum = currentTotalSum + newRating;
         this.numOfRatings++;
-        this.averageRating/=numOfRatings;
+        double newAverage = newTotalSum / this.numOfRatings;
+        this.averageRating = (int) Math.round(newAverage);
         FirebaseManager.getInstance().newRating(this, callback);
-
-
     }
 
     public String getDegree() {

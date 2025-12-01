@@ -39,7 +39,6 @@ public class StudentSessionsFragment extends Fragment
     private FirebaseFirestore db; // Firestore instance
 
     public StudentSessionsFragment() {
-        // empty constructor required
     }
 
     // --- Helper Method to replicate FirebaseManager logic (Necessary for the rating flow) ---
@@ -60,13 +59,11 @@ public class StudentSessionsFragment extends Fragment
         // Retrieve rating fields
         Object avgRatingObj = data.get("averageRating");
         int averageRating = (avgRatingObj instanceof Long) ? ((Long) avgRatingObj).intValue() : 0;
-
         Object numOfRatingsObj = data.get("numOfRatings");
         int numOfRatings = (numOfRatingsObj instanceof Long) ? ((Long) numOfRatingsObj).intValue() : 0;
 
-        boolean newuser = (status != null && status.equalsIgnoreCase("PENDING"));
 
-        Tutor tutor = new Tutor(email, null, newuser);
+        Tutor tutor = new Tutor(email, null, false);
 
         tutor.firstName = firstName;
         tutor.phoneNumber = phoneNumber;
@@ -114,13 +111,11 @@ public class StudentSessionsFragment extends Fragment
             studentId = getArguments().getString(ARG_STUDENT_ID);
         }
 
-        // 💥 THIS CALL REQUIRES THE METHOD BELOW 💥
         loadSessionsFromFirestore();
 
         return view;
     }
 
-    // ⭐ METHOD FIX: DEFINITION OF loadSessionsFromFirestore()
     private void loadSessionsFromFirestore() {
         if (studentId == null || studentId.isEmpty()) {
             Toast.makeText(getContext(),
@@ -139,9 +134,7 @@ public class StudentSessionsFragment extends Fragment
                     sessionList.clear();
 
                     for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
-                        // Assuming your Session model has a no-arg constructor and setters/public fields
-                        // that allow .toObject(Session.class) to work, or you use a helper function.
-                        Session s = doc.toObject(Session.class);
+                       Session s = doc.toObject(Session.class);
                         if (s == null) continue;
 
                         s.id = doc.getId();
@@ -230,23 +223,23 @@ public class StudentSessionsFragment extends Fragment
      */
     private void updateTutorAverageRating(String tutorId, int ratingInt) {
 
-        // Change from .document(tutorId) to a query based on the 'id' field within the tutor document
+        // Use the tutorId directly as the document ID, as it is a Firebase Hash ID key.
         db.collection("tutor")
-                .whereEqualTo("id", tutorId) // <--- Query the 'tutor' documents by the field that holds the ID.
-                .limit(1) // Assuming 'id' is unique, limit to one result
+                .document(tutorId)
                 .get()
-                .addOnSuccessListener(querySnapshot -> {
-                    if (!querySnapshot.isEmpty()) {
-
-                        // We found the tutor document via the query
-                        DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
 
                         // 1. Get the data map
                         Map<String, Object> data = documentSnapshot.getData();
-                        String tutorEmail = (String) data.get("email"); // Get the email needed for the Tutor object
+
+                        // Use the email field from the document for the Tutor object construction
+                        String tutorEmail = (String) data.get("email");
 
                         if (tutorEmail == null) {
-                            Toast.makeText(getContext(), "Tutor document is missing an email field.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(),
+                                    "Tutor document is missing an email field.",
+                                    Toast.LENGTH_LONG).show();
                             return;
                         }
 
@@ -255,13 +248,12 @@ public class StudentSessionsFragment extends Fragment
 
                         // 3. Call the tutor's method to calculate and save the new average rating
                         tutor.setAverageRating(ratingInt, new FirebaseManager.OpCallback() {
-                            // ... (onSuccess and onError implementation remains the same)
                             @Override
                             public void onSuccess() {
                                 Toast.makeText(getContext(),
                                         "Tutor average rating updated!",
                                         Toast.LENGTH_LONG).show();
-                                loadSessionsFromFirestore();
+                                loadSessionsFromFirestore(); // Reload list
                             }
 
                             @Override
@@ -272,8 +264,10 @@ public class StudentSessionsFragment extends Fragment
                             }
                         });
                     } else {
-                        Log.d(TAG, "\n\n\n\n\n\ntutor id:  " + tutorId);
-                        Toast.makeText(getContext(), "Tutor data not found using ID: " + tutorId, Toast.LENGTH_LONG).show();
+                        // This indicates the Hash ID passed was not found as a document key.
+                        Toast.makeText(getContext(),
+                                "Error: Tutor document not found using Hash ID: " + tutorId,
+                                Toast.LENGTH_LONG).show();
                     }
                 })
                 .addOnFailureListener(e -> {
