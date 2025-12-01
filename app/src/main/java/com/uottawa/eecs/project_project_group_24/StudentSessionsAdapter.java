@@ -22,8 +22,7 @@ public class StudentSessionsAdapter
 
     public interface OnSessionActionListener {
         void onCancelSession(Session session);
-        // If you want to rate it later, you can add `onRateSession(Session s)`.
-        void onRateSession(Session s);
+        void onRateSession(Session s); // Listener for rating
     }
 
     private List<Session> sessions;
@@ -67,29 +66,30 @@ public class StudentSessionsAdapter
 
         if (s.status != null) {
             holder.tvStatus.setText(s.status.name());
-            if(s.status==Session.Status.COMPLETED){
+
+            // --- RATING BUTTON LOGIC ---
+            if(s.status == Session.Status.COMPLETED){
                 holder.btnRate.setText("Rate");
                 holder.btnRate.setVisibility(View.VISIBLE);
 
+                // Set the click listener here for completed sessions
+                holder.btnRate.setOnClickListener(v -> {
+                    if(listener != null){
+                        listener.onRateSession(s);
+                    }
+                });
+            } else {
+                holder.btnRate.setVisibility(View.GONE);
+                holder.btnRate.setOnClickListener(null); // Clear listener
             }
-        } else {
 
+        } else {
             holder.tvStatus.setText("");
             holder.btnRate.setVisibility(View.GONE);
-            holder.btnRate.setOnClickListener(v -> {
-                if(listener != null){
-                    listener.onRateSession(s);
-                }
-            });
-
+            holder.btnRate.setOnClickListener(null); // Clear listener
         }
 
-        // Rate We'll add the features later; let's hide the buttons first.
-
-        // Cancel Display rules：
-        // - PENDING: Available anytime cancel
-        // - APPROVED: If there are more than 24 hours left until the start time, you can cancel.
-        // - Other statuses: Not displayed
+        // Cancel Display rules (Existing Logic)...
         if (s.status == Session.Status.PENDING ||
                 (s.status == Session.Status.APPROVED &&
                         isMoreThan24HoursAway(s.startMillis))) {

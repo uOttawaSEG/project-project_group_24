@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,10 +22,12 @@ import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 public class StudentSessionsFragment extends Fragment
-        implements StudentSessionsAdapter.OnSessionActionListener {
+        implements StudentSessionsAdapter.OnSessionActionListener,
+        RateSessionDialog.RateSessionListener {
 
     private static final String ARG_STUDENT_ID = "ARG_STUDENT_ID";
 
@@ -33,28 +36,55 @@ public class StudentSessionsFragment extends Fragment
     private StudentSessionsAdapter adapter;
     private final List<Session> sessionList = new ArrayList<>();
 
-    private FirebaseFirestore db;
+    private FirebaseFirestore db; // Firestore instance
 
     public StudentSessionsFragment() {
         // empty constructor required
     }
 
-    class OpInstance implements FirebaseManager.OpCallback{
+    // --- Helper Method to replicate FirebaseManager logic (Necessary for the rating flow) ---
 
-        @Override
-        public void onSuccess() {
-            Log.d(TAG, "onSuccess: ");
-        }
+    /**
+     * Helper method: Must replicate logic from FirebaseManager.convertToTutorObject
+     * to fetch Tutor data when directly accessing Firestore.
+     */
+    public Tutor convertToTutorObject(Map<String, Object> data, String email) {
+        String firstName = (String) data.get("firstName");
+        String lastName = (String) data.get("lastName");
+        String degree = (String) data.get("degree");
 
-        @Override
-        public void onError(String message) {
-            Log.d(TAG, "onError: ");
+        Object phoneNumberObj = data.get("phoneNumber");
+        long phoneNumber = (phoneNumberObj instanceof Long) ? (Long) phoneNumberObj : 0L;
+        String status = (String) data.get("status");
+
+        // Retrieve rating fields
+        Object avgRatingObj = data.get("averageRating");
+        int averageRating = (avgRatingObj instanceof Long) ? ((Long) avgRatingObj).intValue() : 0;
+
+        Object numOfRatingsObj = data.get("numOfRatings");
+        int numOfRatings = (numOfRatingsObj instanceof Long) ? ((Long) numOfRatingsObj).intValue() : 0;
+
+        boolean newuser = (status != null && status.equalsIgnoreCase("PENDING"));
+
+        Tutor tutor = new Tutor(email, null, newuser);
+
+        tutor.firstName = firstName;
+        tutor.phoneNumber = phoneNumber;
+        tutor.lastName = lastName;
+        tutor.averageRating = averageRating;
+        tutor.numOfRatings = numOfRatings;
+        tutor.setDegree(degree);
+
+        if(status != null && status.equalsIgnoreCase("PENDING")){
+            tutor.setStatus(User.requestStatus.PendingTutor);
+        } else if(status != null && status.equalsIgnoreCase("ACCEPTED")){
+            tutor.setStatus(User.requestStatus.AcceptedTutor);
+        } else if(status != null && status.equalsIgnoreCase("REJECTED")){
+            tutor.setStatus(User.requestStatus.RejectedTutor);
         }
+        return tutor;
     }
 
-    public void onRateSession(Session s){
-        
-    }
 
     public static StudentSessionsFragment newInstance(String studentId) {
         StudentSessionsFragment f = new StudentSessionsFragment();
@@ -69,6 +99,7 @@ public class StudentSessionsFragment extends Fragment
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        // Assuming R.layout.fragment_student_sessions is correct
         View view = inflater.inflate(R.layout.fragment_student_sessions, container, false);
 
         rvSessions = view.findViewById(R.id.rvStudentSessions);
@@ -83,11 +114,13 @@ public class StudentSessionsFragment extends Fragment
             studentId = getArguments().getString(ARG_STUDENT_ID);
         }
 
+        // 💥 THIS CALL REQUIRES THE METHOD BELOW 💥
         loadSessionsFromFirestore();
 
         return view;
     }
 
+    // ⭐ METHOD FIX: DEFINITION OF loadSessionsFromFirestore()
     private void loadSessionsFromFirestore() {
         if (studentId == null || studentId.isEmpty()) {
             Toast.makeText(getContext(),
@@ -106,13 +139,12 @@ public class StudentSessionsFragment extends Fragment
                     sessionList.clear();
 
                     for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                        // Assuming your Session model has a no-arg constructor and setters/public fields
+                        // that allow .toObject(Session.class) to work, or you use a helper function.
                         Session s = doc.toObject(Session.class);
                         if (s == null) continue;
 
-                        // Assign Firestore doc ID so cancellation works
                         s.id = doc.getId();
-                        s.studentName = (String)doc.get("firstName") + (String)doc.get("lastName");
-
                         sessionList.add(s);
                     }
 
@@ -131,7 +163,7 @@ public class StudentSessionsFragment extends Fragment
                 );
     }
 
-    // ===== Cancel session =====
+    // ===== Cancel session (Existing) =====
 
     @Override
     public void onCancelSession(Session session) {
@@ -156,5 +188,96 @@ public class StudentSessionsFragment extends Fragment
                         "Failed to cancel: " + e.getMessage(),
                         Toast.LENGTH_SHORT).show()
                 );
+    }
+
+    // ===== Rate session (Implementation) =====
+
+    @Override // From StudentSessionsAdapter.OnSessionActionListener
+    public void onRateSession(Session s){
+        if (s.id == null || s.tutorId == null) {
+            Toast.makeText(getContext(), "Session or Tutor ID is missing.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // This dialog uses the IDs from your session list item
+        RateSessionDialog dialog = RateSessionDialog.newInstance(s.id, s.tutorId, s.tutorName);
+        dialog.setRateSessionListener(this);
+
+        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+        dialog.show(ft, "RateSessionDialogTag");
+    }
+
+    @Override // From RateSessionDialog.RateSessionListener
+    public void onRatingSubmitted(String sessionId, String tutorId, float rating) {
+        int ratingInt = Math.round(rating); // Convert float (e.g., 4.5) to nearest int (e.g., 5)
+
+        // 1. Update the session document to record the rating
+        db.collection("session").document(sessionId)
+                .update("studentRating", ratingInt)
+                .addOnSuccessListener(aVoid -> {
+                    // 2. Session rated, now fetch the Tutor and update average rating
+                    updateTutorAverageRating(tutorId, ratingInt);
+                })
+                .addOnFailureListener(e -> Toast.makeText(
+                        getContext(),
+                        "Failed to update session rating: " + e.getMessage(),
+                        Toast.LENGTH_LONG).show()
+                );
+    }
+
+    /**
+     * Fetches the tutor document directly from Firestore and calls setAverageRating.
+     */
+    private void updateTutorAverageRating(String tutorId, int ratingInt) {
+
+        // Change from .document(tutorId) to a query based on the 'id' field within the tutor document
+        db.collection("tutor")
+                .whereEqualTo("id", tutorId) // <--- Query the 'tutor' documents by the field that holds the ID.
+                .limit(1) // Assuming 'id' is unique, limit to one result
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (!querySnapshot.isEmpty()) {
+
+                        // We found the tutor document via the query
+                        DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+
+                        // 1. Get the data map
+                        Map<String, Object> data = documentSnapshot.getData();
+                        String tutorEmail = (String) data.get("email"); // Get the email needed for the Tutor object
+
+                        if (tutorEmail == null) {
+                            Toast.makeText(getContext(), "Tutor document is missing an email field.", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        // 2. Convert data to Tutor object using local helper
+                        Tutor tutor = convertToTutorObject(data, tutorEmail);
+
+                        // 3. Call the tutor's method to calculate and save the new average rating
+                        tutor.setAverageRating(ratingInt, new FirebaseManager.OpCallback() {
+                            // ... (onSuccess and onError implementation remains the same)
+                            @Override
+                            public void onSuccess() {
+                                Toast.makeText(getContext(),
+                                        "Tutor average rating updated!",
+                                        Toast.LENGTH_LONG).show();
+                                loadSessionsFromFirestore();
+                            }
+
+                            @Override
+                            public void onError(String message) {
+                                Toast.makeText(getContext(),
+                                        "Failed to update tutor average rating: " + message,
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    } else {
+                        Log.d(TAG, "\n\n\n\n\n\ntutor id:  " + tutorId);
+                        Toast.makeText(getContext(), "Tutor data not found using ID: " + tutorId, Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), "Failed to fetch tutor data: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
     }
 }
