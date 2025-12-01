@@ -5,7 +5,7 @@ public class Tutor extends User
     String degree;
     Course[] courses;
     Queue<Session> upcomingSessions,pastSessions,pendingSessions;
-    Queue<Slot> availableSlots;
+    Queue<AvailabilitySlot> availableSlots;
     int averageRating;
     int numOfRatings;
     public Tutor(String email, String pass, boolean newuser)
@@ -55,7 +55,7 @@ public class Tutor extends User
         return upcomingSessions;
     }
 
-    public Queue<Slot> getAvailableSlots() {
+    public Queue<AvailabilitySlot> getAvailableSlots() {
         return availableSlots;
     }
 }
