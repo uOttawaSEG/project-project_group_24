@@ -656,34 +656,7 @@ public final class FirebaseManager {
                 }
             }});
 
-//        db.collection("student").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    if (task.getResult().exists()){
-//                        i.putExtra("role","student");
-//                        sendUserInfo(task.getResult(),i);
-//                        a.startActivity(i);
-//                    } else{
-//
-//                    }
-//                }
-//            }
-//        });
-//        db.collection("tutor").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    if (task.getResult().exists()){
-//                        i.putExtra("role","tutor");
-//                        sendUserInfo(task,i);
-//                        a.startActivity(i);
-//                    } else{
-//
-//                    }
-//                }
-//            }
-//        });
+
         db.collection("user").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
