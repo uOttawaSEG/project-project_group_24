@@ -24,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText editLoginEmail;
     private EditText editLoginPassword;
     private Button btnLogin;
+    private Button btnLoginBack;
     private TextView loginMessage;
     private ProgressBar loginProgress;
 
@@ -42,12 +43,14 @@ public class LoginActivity extends AppCompatActivity {
         editLoginEmail = findViewById(R.id.editLoginEmail);
         editLoginPassword = findViewById(R.id.editLoginPassword);
         btnLogin = findViewById(R.id.btnLogin);
+        btnLoginBack = findViewById(R.id.btnLoginBack);
         loginMessage = findViewById(R.id.loginMessage);
         loginProgress = findViewById(R.id.loginProgress);
 
         db = FirebaseFirestore.getInstance();
 
         btnLogin.setOnClickListener(v -> attemptLogin());
+        btnLoginBack.setOnClickListener(v -> finish());
     }
 
     private void attemptLogin() {

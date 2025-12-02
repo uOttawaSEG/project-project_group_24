@@ -23,6 +23,8 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputEditText editFirstName, editLastName, editEmail, editPassword, editPhone, editRole;
     private Spinner spinnerProgram;
     private Button btnRegister;
+
+    private Button btnRegisterBack;
     User logged_user;
 
     @Override
@@ -50,6 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 //        spinnerProgram  = findViewById(R.id.spinnerProgram);
         btnRegister     = findViewById(R.id.btnRegister);
+        btnRegisterBack = findViewById(R.id.btnRegisterBack);
     }
 
 //    private void setupProgramSpinner() {
@@ -79,12 +82,15 @@ public class RegisterActivity extends AppCompatActivity {
                 i.putExtra("firstName", logged_user.getFirstName());
                 i.putExtra("lastName", logged_user.getLastName());
                 i.putExtra("phone", String.valueOf(logged_user.getPhoneNumber()));
+
                 Log.d("OTA_REGISTER","phone number is "+String.valueOf(logged_user.getPhoneNumber()));
                 startActivity(i);
 
                 finish();
             }
         });
+
+        btnRegisterBack.setOnClickListener(v -> finish());
     }
 
     private boolean processForm() {

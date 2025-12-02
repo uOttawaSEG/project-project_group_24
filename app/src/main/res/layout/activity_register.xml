@@ -97,5 +97,14 @@
             android:text="Register"
             app:cornerRadius="0dp" />
 
+        <Button
+            android:id="@+id/btnRegisterBack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            android:backgroundTint="#000000"
+            android:text="Back"
+            app:cornerRadius="0dp" />
+
     </LinearLayout>
 </ScrollView>
